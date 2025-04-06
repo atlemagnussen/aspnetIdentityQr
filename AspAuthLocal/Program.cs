@@ -8,10 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
 
-var DbPath = Path.Join(@"C:/temp", "aspnetauth.db");
-var connectionString = $"Data Source={DbPath}";
+// var DbPath = Path.Join(@"C:/temp", "aspnetauth.db");
+// var connectionString = $"Data Source={DbPath}";
+var connectionString = builder.Configuration.GetValue<string>("ConnectionStrings:AuthDb");
 
-services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
+services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
