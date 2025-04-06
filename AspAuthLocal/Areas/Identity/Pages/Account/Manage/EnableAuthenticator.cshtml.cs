@@ -180,7 +180,7 @@ namespace AspAuthLocal.Areas.Identity.Pages.Account.Manage
             return string.Format(
                 CultureInfo.InvariantCulture,
                 AuthenticatorUriFormat,
-                _urlEncoder.Encode("Atles Identity"),
+                _urlEncoder.Encode("AuthGuru"),
                 _urlEncoder.Encode(email),
                 unformattedKey);
         }
