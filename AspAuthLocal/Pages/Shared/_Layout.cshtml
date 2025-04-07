@@ -16,14 +16,8 @@
                 <img class="logo" src="/icon.svg" alt="auth logo">
             </a>
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-page="/Index">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-page="/Privacy">Privacy</a>
-                </li>
+                <partial name="_LoginPartial" />
             </ul>
-            <partial name="_LoginPartial" />
         </nav>
     </header>
     <main role="main">

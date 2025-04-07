@@ -2,7 +2,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 497.124 497.131">
 	<style>
 		* {
-			fill: #ffafd4;
+			fill: rgb(109 94 15);;
 		}
 	</style>
 	<polygon points="269.458,168.295 254.677,157.561 381.412,65.483 307.271,293.624 289.005,293.624 
