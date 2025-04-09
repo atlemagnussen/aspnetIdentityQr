@@ -23,10 +23,17 @@ button {
         color: var(--md-sys-color-on-secondary-container);
     }
 }
-
-body main input {
+input {
+    background-image: none !important;
     padding: 0.5rem 0.3rem;
     border-radius: 0.4rem;
+}
+input:is(:autofill) {
+    /* background-clip: text; */
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+  }
+body main input {
     background-color: var(--md-sys-color-secondary-container);
     color: var(--md-sys-color-on-secondary-container);
     border: 1px solid var(--md-sys-color-outline);
