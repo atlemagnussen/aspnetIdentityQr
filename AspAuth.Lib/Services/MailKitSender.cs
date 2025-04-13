@@ -1,5 +1,6 @@
 ﻿using MimeKit;
 using MailKit.Net.Smtp;
+using AspAuth.Liv.Models;
 
 namespace AspAuth.Lib.Services;
 
@@ -10,6 +11,10 @@ public class MailKitSender : IDisposable
     private readonly string FromUser;
     private readonly MailboxAddress FromAddress;
     private readonly SmtpClient SmtpClient;
+
+    public MailKitSender(EmailSettings settings) : this(settings.Server, settings.Port, settings.From, settings.Password)
+    {
+    }
 
     public MailKitSender(string server, int port, string fromUser, string password)
     {

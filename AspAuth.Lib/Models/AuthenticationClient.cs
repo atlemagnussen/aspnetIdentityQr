@@ -1,4 +1,4 @@
-namespace AspAuthLocal.Models;
+namespace AspAuth.Liv.Models;
 
 public record AuthenticationClient
 {

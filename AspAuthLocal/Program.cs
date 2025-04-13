@@ -1,10 +1,8 @@
+using AspAuth.Liv.Models;
 using AspAuthLocal.Data;
-using AspAuthLocal.Models;
 using AspAuthLocal.Services;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +13,9 @@ var configGoogle = configuration.GetSection("Authentication:Google");
 var googleSettings = configGoogle.Get<AuthenticationClient>();
 if (googleSettings is null)
     throw new ApplicationException("missing Google settings");
+
+var configEmail = configuration.GetSection("Email");
+services.Configure<EmailSettings>(configEmail);
 
 // var DbPath = Path.Join(@"C:/temp", "aspnetauth.db");
 // var connectionString = $"Data Source={DbPath}";

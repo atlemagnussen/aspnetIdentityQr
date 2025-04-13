@@ -1,11 +1,19 @@
 using System.Text.Encodings.Web;
 using AspAuth.Lib.Services;
+using AspAuth.Liv.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 
 namespace AspAuthLocal.Services;
 
 public class AuthEmailSender : IEmailSender<IdentityUser>
 {
+    private readonly EmailSettings _emailSettings;
+
+    public AuthEmailSender(IOptions<EmailSettings> options)
+    {
+        _emailSettings = options.Value;
+    }
     public async Task SendConfirmationLinkAsync(IdentityUser user, string email, string confirmationLink)
     {
         var subject = "Confirm your email";
@@ -26,7 +34,7 @@ public class AuthEmailSender : IEmailSender<IdentityUser>
 
     private async Task SendMail(string to, string subject, string body)
     {
-        using var client = new MailKitSender("mx.atle.guru", 587, "hello@atle.guru", "xx");
+        using var client = new MailKitSender(_emailSettings);
         await client.SendMail(to, subject, body);
     }
 }
