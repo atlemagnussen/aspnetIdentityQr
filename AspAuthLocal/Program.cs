@@ -1,4 +1,6 @@
 using AspAuthLocal.Data;
+using AspAuthLocal.Models;
+using AspAuthLocal.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +9,12 @@ using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
+var configuration = builder.Configuration;
+
+var configGoogle = configuration.GetSection("Authentication:Google");
+var googleSettings = configGoogle.Get<AuthenticationClient>();
+if (googleSettings is null)
+    throw new ApplicationException("missing Google settings");
 
 // var DbPath = Path.Join(@"C:/temp", "aspnetauth.db");
 // var connectionString = $"Data Source={DbPath}";
@@ -18,7 +26,12 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 var authBuilder = services.AddAuthentication();
 //services.AddAuthorization(options =>
-
+services.AddAuthentication()
+    .AddGoogle(google => {
+        google.ClientId = googleSettings.ClientId ?? throw new ApplicationException("missing google ClientId");
+        google.ClientSecret = googleSettings.ClientSecret ?? throw new ApplicationException("missing google ClientSecret");
+        google.CallbackPath = "/signin-google";
+    });
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 {
@@ -28,7 +41,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 
-
+services.AddTransient<IEmailSender<IdentityUser>, AuthEmailSender>();
 //authBuilder.AddOpenIdConnect("AzureAD", "Azure Active Directory", options =>
 //{
 //    options.SignInScheme = "idsrv.external";
