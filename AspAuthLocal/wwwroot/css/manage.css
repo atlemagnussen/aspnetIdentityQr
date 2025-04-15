@@ -1,12 +1,13 @@
 div.manage-view-layout {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 1rem;
     .manage-menu {
-        flex: 30% 1 1;
+        flex: 1 0 29%;
     }
     .manage-content {
-        flex: 70% 1 1;
+        flex: 1 0 69%;
     }
 }
 ul.manage-nav {
@@ -30,5 +31,12 @@ ul.manage-nav {
             color: var(--md-sys-color-on-tertiary-container);
             border: 1px solid var(--md-sys-color-outline);
         }
+    }
+}
+
+.input-group {
+    padding: 0.2rem;
+    input {
+        width: 15rem;
     }
 }
