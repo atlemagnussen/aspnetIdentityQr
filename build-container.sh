@@ -1,2 +1,2 @@
-podman build --tag atlmag/aspAuth:1.0 .
+podman build -f AspAuth.Local/Containerfile --tag atlmag/aspauth:1.0 .
 
