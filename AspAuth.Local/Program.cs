@@ -73,7 +73,7 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-app.SetPublicUrl(builder.Configuration);
+// app.SetPublicUrl(builder.Configuration);
 
 if (app.Environment.IsDevelopment())
 {
@@ -81,6 +81,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
+    app.UseForwardedHeaders();
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
