@@ -1,4 +1,5 @@
 using AspAuth.Liv.Models;
+using AspAuth.Local;
 using AspAuth.Local.Data;
 using AspAuth.Local.Services;
 using Microsoft.AspNetCore.Identity;
@@ -68,6 +69,7 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
+app.SetPublicUrl(builder.Configuration);
 
 if (app.Environment.IsDevelopment())
 {
