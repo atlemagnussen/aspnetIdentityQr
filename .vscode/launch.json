@@ -5,7 +5,7 @@
             "name": "AspNetLocalDebug Debug",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}/AspAuthLocal/AspAuthLocal.csproj"
+            "projectPath": "${workspaceFolder}/AspAuth.Local/AspAuth.Local.csproj"
         }
     ]
 }

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspAuthLocal", "AspAuthLocal\AspAuthLocal.csproj", "{1A8B0C4F-FF52-4251-81C8-B33476ED579E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspAuth.Local", "AspAuth.Local\AspAuth.Local.csproj", "{1A8B0C4F-FF52-4251-81C8-B33476ED579E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspAuth.ConsoleApp", "AspAuth.ConsoleApp\AspAuth.ConsoleApp.csproj", "{24C3921B-9F1B-46E8-B099-6F84744FA182}"
 EndProject
