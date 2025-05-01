@@ -11,6 +11,12 @@ dotnet ef database update
 package add Microsoft.Identity.Web
 dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL --version 8.0.11
 
+
+dotnet add package Microsoft.AspNetCore.DataProtection.EntityFrameworkCore --version 8.0.15
+
+dotnet ef migrations add InitialDataProtection --context DataProtectionContext
+dotnet ef database update --context DataProtectionContext
+
 ## clear
 
 drop table public."AspNetRoleClaims"

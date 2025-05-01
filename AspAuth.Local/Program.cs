@@ -21,8 +21,12 @@ services.Configure<EmailSettings>(configEmail);
 // var DbPath = Path.Join(@"C:/temp", "aspnetauth.db");
 // var connectionString = $"Data Source={DbPath}";
 var connectionString = builder.Configuration.GetValue<string>("ConnectionStrings:AuthDb");
+if (string.IsNullOrWhiteSpace(connectionString))
+    throw new ApplicationException("no connection string!!!");
 
 services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+
+services.AddDataProtection(connectionString);
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
