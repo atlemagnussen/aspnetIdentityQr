@@ -1,3 +1,7 @@
+ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
+
+or app.UseForwardedHeaders();
+
 https://accounts.google.com/o/oauth2/v2/auth?
 client_id=1040005845226-vvb28kp0bfnn9h67h25bfn75i08still.apps.googleusercontent.com
 &scope=openid%20profile%20email
