@@ -1,3 +1,4 @@
+using AspAuth.Liv.Models;
 using AspAuth.Local.Data;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ public static class HostingExtensions
 
         services.AddDataProtection()
             .PersistKeysToDbContext<DataProtectionContext>()
-            .SetApplicationName("digiLean");
+            .SetApplicationName("aspauth");
     }
     public static WebApplication SetPublicUrl(this WebApplication app, IConfiguration configuration)
     {
@@ -36,5 +37,10 @@ public static class HostingExtensions
         });
 
         return app;
+    }
+
+    public static void AddConfig(this WebApplicationBuilder builder)
+    {
+        builder.Services.Configure<AuthenticationSettings>(builder.Configuration.GetSection("Authentication"));
     }
 }
