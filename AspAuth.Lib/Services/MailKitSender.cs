@@ -1,6 +1,6 @@
 ﻿using MimeKit;
 using MailKit.Net.Smtp;
-using AspAuth.Liv.Models;
+using AspAuth.Lib.Models;
 
 namespace AspAuth.Lib.Services;
 

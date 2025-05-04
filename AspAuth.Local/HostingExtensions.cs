@@ -1,4 +1,4 @@
-using AspAuth.Liv.Models;
+using AspAuth.Lib.Models;
 using AspAuth.Local.Data;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
