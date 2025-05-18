@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace AspAuth.Local;
+namespace AspAuth.Lib.Data;
 
 public class DataProtectionContext : DbContext, IDataProtectionKeyContext
 {

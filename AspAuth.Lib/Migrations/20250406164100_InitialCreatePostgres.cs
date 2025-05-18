@@ -1,10 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace AspAuth.Local.Migrations
+namespace AspAuth.Lib.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreatePostgres : Migration

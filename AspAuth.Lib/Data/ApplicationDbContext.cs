@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace AspAuth.Local.Data
+namespace AspAuth.Lib.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

@@ -3,7 +3,7 @@ using AspAuth.Lib.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
-namespace AspAuth.Local.Services;
+namespace AspAuth.Lib.Services;
 
 public class AuthEmailSender : IEmailSender<IdentityUser>
 {

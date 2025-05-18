@@ -1,21 +1,7 @@
-using AspAuth.Lib.Models;
-using AspAuth.Local.Data;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.EntityFrameworkCore;
-
 namespace AspAuth.Local;
 
 public static class HostingExtensions
 {
-    public static void AddDataProtection(this IServiceCollection services, string connectionString)
-    {
-        services.AddDbContext<DataProtectionContext>(options =>
-            options.UseNpgsql(connectionString));
-
-        services.AddDataProtection()
-            .PersistKeysToDbContext<DataProtectionContext>()
-            .SetApplicationName("aspauth");
-    }
     public static WebApplication SetPublicUrl(this WebApplication app, IConfiguration configuration)
     {
         if (app.Environment.IsDevelopment())
@@ -37,10 +23,5 @@ public static class HostingExtensions
         });
 
         return app;
-    }
-
-    public static void AddConfig(this WebApplicationBuilder builder)
-    {
-        builder.Services.Configure<AuthenticationSettings>(builder.Configuration.GetSection("Authentication"));
     }
 }

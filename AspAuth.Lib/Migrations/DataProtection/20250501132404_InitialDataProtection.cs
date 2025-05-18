@@ -3,7 +3,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace AspAuth.Local.Migrations.DataProtection
+namespace AspAuth.Lib.Migrations.DataProtection
 {
     /// <inheritdoc />
     public partial class InitialDataProtection : Migration
