@@ -17,6 +17,8 @@ dotnet add package Microsoft.AspNetCore.DataProtection.EntityFrameworkCore --ver
 dotnet ef migrations add InitialDataProtection --context DataProtectionContext
 dotnet ef database update --context DataProtectionContext
 
+
+dotnet ef migrations add InitialIdentityServerConfiguration --context ConfigurationDbContext
 ## clear
 
 drop table public."AspNetRoleClaims"

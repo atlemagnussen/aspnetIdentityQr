@@ -26,15 +26,13 @@ public static class AspNetIdentitySetup
         
         // var DbPath = Path.Join(@"C:/temp", "aspnetauth.db");
         // var connectionString = $"Data Source={DbPath}";
-        var connectionString = builder.Configuration.GetValue<string>("ConnectionStrings:AuthDb");
-        if (string.IsNullOrWhiteSpace(connectionString))
-            throw new ApplicationException("no connection string!!!");
+        var connectionString = configuration.GetAuthConnectionString();
 
         services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
 
         services.AddDataProtectionAuth(connectionString);
 
-        builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+        services.AddDatabaseDeveloperPageExceptionFilter();
 
         //var authBuilder = services.AddAuthentication();
         //services.AddAuthorization(options =>
@@ -45,7 +43,7 @@ public static class AspNetIdentitySetup
                 google.CallbackPath = "/signin-google";
             });
 
-        builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+        services.AddDefaultIdentity<IdentityUser>(options =>
         {
             options.SignIn.RequireConfirmedAccount = false;
             options.Password.RequireNonAlphanumeric = false;
@@ -55,7 +53,7 @@ public static class AspNetIdentitySetup
 
         services.AddTransient<IEmailSender<IdentityUser>, AuthEmailSender>();
 
-        builder.Services.Configure<AuthenticationSettings>(builder.Configuration.GetSection("Authentication"));
+        services.Configure<AuthenticationSettings>(builder.Configuration.GetSection("Authentication"));
     }
 
     public static void AddDataProtectionAuth(this IServiceCollection services, string connectionString)

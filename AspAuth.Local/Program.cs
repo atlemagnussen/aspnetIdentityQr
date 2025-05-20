@@ -6,9 +6,11 @@ builder.ConfigureAspNetIdentity();
 builder.ConfigureIdentityServer();
 builder.Services.AddRazorPages();
 
+
 var app = builder.Build();
 
 app.InitializeDatabase();
+
 // app.SetPublicUrl(builder.Configuration);
 
 if (app.Environment.IsDevelopment())
@@ -26,6 +28,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseIdentityServer();
 
 app.UseAuthorization();
 
