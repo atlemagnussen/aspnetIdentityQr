@@ -6,11 +6,12 @@ dotnet tool update --global dotnet-ef
 
 dotnet ef migrations add InitialCreatePostgres
 
-dotnet ef database update
+dotnet ef migrations add AddCryptoSigningKeys --project ../AspAuth.Lib -c ApplicationDbContext
+
+dotnet ef database update -c ApplicationDbContext
 
 package add Microsoft.Identity.Web
 dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL --version 8.0.11
-
 
 dotnet add package Microsoft.AspNetCore.DataProtection.EntityFrameworkCore --version 8.0.15
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using AspAuth.Lib.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace AspAuth.Lib.Data
@@ -9,5 +10,7 @@ namespace AspAuth.Lib.Data
             : base(options)
         {
         }
+        
+        public DbSet<CryptoSigningKey> SigningKeys { get; set; }
     }
 }

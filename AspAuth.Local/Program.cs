@@ -4,12 +4,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.ConfigureAspNetIdentity();
 builder.ConfigureIdentityServer();
-builder.Services.AddRazorPages();
 
+builder.Services.LoadServices();
+
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-//app.InitializeDatabase();
+// app.InitializeDatabase();
 
 // app.SetPublicUrl(builder.Configuration);
 

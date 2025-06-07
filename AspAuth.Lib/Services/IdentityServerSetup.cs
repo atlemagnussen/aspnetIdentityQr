@@ -17,7 +17,10 @@ public static class IdentityServerSetup
         var migrationsAssembly = typeof(IdentityServerSetup).Assembly.GetName().Name;
         string connectionString = configuration.GetAuthConnectionString();
 
-        builder.Services.AddIdentityServer()
+        builder.Services.AddIdentityServer(idopts =>
+        {
+            idopts.KeyManagement.Enabled = false;
+        })
             .AddConfigurationStore(options =>
             {
                 options.ConfigureDbContext = b => b.UseNpgsql(connectionString,
@@ -52,38 +55,40 @@ public static class IdentityServerSetup
     }
     public static void InitializeDatabase(this IApplicationBuilder app)
     {
-        using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>()!.CreateScope())
-        {
-            serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+        using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>()!.CreateScope();
 
-            var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-            context.Database.Migrate();
-            if (!context.Clients.Any())
-            {
-                foreach (var client in Config.Clients)
-                {
-                    context.Clients.Add(client.ToEntity());
-                }
-                context.SaveChanges();
-            }
+        //serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
 
-            if (!context.IdentityResources.Any())
-            {
-                foreach (var resource in Config.IdentityResources)
-                {
-                    context.IdentityResources.Add(resource.ToEntity());
-                }
-                context.SaveChanges();
-            }
+        var keyService = serviceScope.ServiceProvider.GetRequiredService<CryptoKeyService>();
+        keyService.CreateAndSaveNewKey();
 
-            if (!context.ApiScopes.Any())
-            {
-                foreach (var apiScope in Config.ApiScopes)
-                {
-                    context.ApiScopes.Add(apiScope.ToEntity());
-                }
-                context.SaveChanges();
-            }
-        }
+        // var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+        // context.Database.Migrate();
+        // if (!context.Clients.Any())
+        // {
+        //     foreach (var client in Config.Clients)
+        //     {
+        //         context.Clients.Add(client.ToEntity());
+        //     }
+        //     context.SaveChanges();
+        // }
+
+        // if (!context.IdentityResources.Any())
+        // {
+        //     foreach (var resource in Config.IdentityResources)
+        //     {
+        //         context.IdentityResources.Add(resource.ToEntity());
+        //     }
+        //     context.SaveChanges();
+        // }
+
+        // if (!context.ApiScopes.Any())
+        // {
+        //     foreach (var apiScope in Config.ApiScopes)
+        //     {
+        //         context.ApiScopes.Add(apiScope.ToEntity());
+        //     }
+        //     context.SaveChanges();
+        // }
     }
 }

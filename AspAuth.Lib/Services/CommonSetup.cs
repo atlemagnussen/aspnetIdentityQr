@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AspAuth.Lib.Services;
 
@@ -10,5 +11,10 @@ public static class CommonSetup
         if (string.IsNullOrWhiteSpace(connectionString))
             throw new ApplicationException("no connection string!!!");
         return connectionString;
+    }
+
+    public static void LoadServices(this IServiceCollection services)
+    {
+        services.AddScoped<CryptoKeyService>();
     }
 }

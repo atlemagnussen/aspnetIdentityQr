@@ -28,11 +28,17 @@ public static class AspNetIdentitySetup
         // var connectionString = $"Data Source={DbPath}";
         var connectionString = configuration.GetAuthConnectionString();
 
-        services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddDbContext<ApplicationDbContext>(opt =>
+        {
+            opt.UseNpgsql(connectionString, o =>
+            {
+                o.ConfigureDataSource(ds => ds.EnableDynamicJson());
+            });
+        });
 
         services.AddDataProtectionAuth(connectionString);
 
-        services.AddDatabaseDeveloperPageExceptionFilter();
+        //services.AddDatabaseDeveloperPageExceptionFilter();
 
         //var authBuilder = services.AddAuthentication();
         //services.AddAuthorization(options =>
