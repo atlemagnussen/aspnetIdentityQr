@@ -18,7 +18,11 @@ dotnet ef migrations add InitialDataProtection --context DataProtectionContext
 dotnet ef database update --context DataProtectionContext
 
 
-dotnet ef migrations add InitialIdentityServerConfiguration --context ConfigurationDbContext
+dotnet ef migrations add InitialIdentityServerConfiguration --project ../AspAuth.Lib -c ConfigurationDbContext
+dotnet ef migrations add InitialIdentityServerOperational --project ../AspAuth.Lib -c PersistedGrantDbContext
+
+dotnet ef database update -c ConfigurationDbContext
+dotnet ef database update -c PersistedGrantDbContext
 ## clear
 
 drop table public."AspNetRoleClaims"
