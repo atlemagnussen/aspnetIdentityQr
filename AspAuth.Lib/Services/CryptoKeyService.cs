@@ -1,5 +1,6 @@
 using AspAuth.Lib.Data;
 using AspAuth.Lib.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspAuth.Lib.Services;
 
@@ -24,5 +25,13 @@ public class CryptoKeyService
 
         _dbContext.SigningKeys.Add(signingKey);
         _dbContext.SaveChanges();
+    }
+
+    public async Task<CryptoSigningKey> GetPrimaryKey()
+    {
+        var key = await _dbContext.SigningKeys.FirstOrDefaultAsync();
+        if (key is null)
+            throw new ApplicationException("No key!");
+        return key;
     }
 }

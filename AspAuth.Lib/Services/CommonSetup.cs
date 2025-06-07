@@ -1,3 +1,4 @@
+using Duende.IdentityServer.Stores;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,5 +17,8 @@ public static class CommonSetup
     public static void LoadServices(this IServiceCollection services)
     {
         services.AddScoped<CryptoKeyService>();
+
+        services.AddScoped<ISigningCredentialStore, LocalSigningCredentialStore>();
+        services.AddScoped<IValidationKeysStore, LocalValidationKeysStore>();
     }
 }

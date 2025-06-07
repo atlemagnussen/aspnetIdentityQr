@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AspAuth.Lib.Services;
 
@@ -17,7 +18,7 @@ public static class IdentityServerSetup
         var migrationsAssembly = typeof(IdentityServerSetup).Assembly.GetName().Name;
         string connectionString = configuration.GetAuthConnectionString();
 
-        builder.Services.AddIdentityServer(idopts =>
+        var idsvrBuilder = builder.Services.AddIdentityServer(idopts =>
         {
             idopts.KeyManagement.Enabled = false;
         })
@@ -32,6 +33,9 @@ public static class IdentityServerSetup
                     sql => sql.MigrationsAssembly(migrationsAssembly));
             })
             .AddAspNetIdentity<IdentityUser>();
+
+
+        //builder.Services.AddKeysFromDb(idsvrBuilder);
 
         var authenticationBuilder = builder.Services.AddAuthentication();
 
@@ -53,6 +57,12 @@ public static class IdentityServerSetup
         //     };
         // });
     }
+
+    private static void AddKeysFromDb(this IServiceCollection services, IIdentityServerBuilder builder)
+    {
+        //idsvrBuilder.AddSigningCredential(key, SecurityAlgorithms.RsaSha256);
+    }
+
     public static void InitializeDatabase(this IApplicationBuilder app)
     {
         using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>()!.CreateScope();
