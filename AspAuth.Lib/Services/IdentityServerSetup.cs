@@ -63,42 +63,48 @@ public static class IdentityServerSetup
         //idsvrBuilder.AddSigningCredential(key, SecurityAlgorithms.RsaSha256);
     }
 
+    public static void CreateNewKey(this IApplicationBuilder app)
+    {
+        using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>()!.CreateScope();
+        var keyService = serviceScope.ServiceProvider.GetRequiredService<CryptoKeyService>();
+        keyService.CreateAndSaveNewKey();
+    }
+
     public static void InitializeDatabase(this IApplicationBuilder app)
     {
         using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>()!.CreateScope();
 
-        //serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+        serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
 
-        var keyService = serviceScope.ServiceProvider.GetRequiredService<CryptoKeyService>();
-        keyService.CreateAndSaveNewKey();
+        
 
-        // var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+        var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
         // context.Database.Migrate();
-        // if (!context.Clients.Any())
-        // {
-        //     foreach (var client in Config.Clients)
-        //     {
-        //         context.Clients.Add(client.ToEntity());
-        //     }
-        //     context.SaveChanges();
-        // }
+        if (!context.Clients.Any())
+        {
+            foreach (var client in Config.Clients)
+            {
+                context.Clients.Add(client.ToEntity());
+            }
+            context.SaveChanges();
+        }
 
-        // if (!context.IdentityResources.Any())
-        // {
-        //     foreach (var resource in Config.IdentityResources)
-        //     {
-        //         context.IdentityResources.Add(resource.ToEntity());
-        //     }
-        //     context.SaveChanges();
-        // }
+        if (!context.IdentityResources.Any())
+        {
+            foreach (var resource in Config.IdentityResources)
+            {
+                context.IdentityResources.Add(resource.ToEntity());
+            }
+            context.SaveChanges();
+        }
 
-        // if (!context.ApiScopes.Any())
-        // {
-        //     foreach (var apiScope in Config.ApiScopes)
-        //     {
-        //         context.ApiScopes.Add(apiScope.ToEntity());
-        //     }
-        //     context.SaveChanges();
-        // }
+        if (!context.ApiScopes.Any())
+        {
+            foreach (var apiScope in Config.ApiScopes)
+            {
+                context.ApiScopes.Add(apiScope.ToEntity());
+            }
+            context.SaveChanges();
+        }
     }
 }

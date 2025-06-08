@@ -26,37 +26,37 @@ public static class Config
 
     public static IEnumerable<Client> Clients =>
         [
-            new Client
-            {
-                ClientId = "client",
+            //new Client
+            //{
+            //    ClientId = "client",
 
                 // no interactive user, use the clientid/secret for authentication
-                AllowedGrantTypes = GrantTypes.ClientCredentials,
+            //    AllowedGrantTypes = GrantTypes.ClientCredentials,
 
                 // secret for authentication
-                ClientSecrets =
-                {
-                    new Secret("secret".Sha256())
-                },
+            //    ClientSecrets =
+            //    {
+            //        new Secret("secret".Sha256())
+            //    },
 
                 // scopes that client has access to
-                AllowedScopes = { "api1" }
-            },
+            //    AllowedScopes = { "api1" }
+            //},
             // interactive ASP.NET Core Web App
             new Client
             {
                 ClientId = "web",
                 ClientSecrets = { new Secret("secret".Sha256()) },
-
+                RequireClientSecret = false,
                 AllowedGrantTypes = GrantTypes.Code,
                 
                 // where to redirect to after login
-                RedirectUris = { "https://localhost:5002/signin-oidc" },
+                RedirectUris = { "https://localhost:8000/signin-oidc" },
 
                 // where to redirect to after logout
-                PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
+                PostLogoutRedirectUris = { "https://localhost:8000/signout-callback-oidc" },
 
-                AllowOfflineAccess = true,
+                AllowOfflineAccess = false,
 
                 AllowedScopes =
                 {
