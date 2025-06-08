@@ -11,11 +11,11 @@ public static class Config
             new IdentityResource()
             {
                 Name = "verification",
-                UserClaims = new List<string>
-                {
+                UserClaims =
+                [
                     JwtClaimTypes.Email,
                     JwtClaimTypes.EmailVerified
-                }
+                ]
             }
         ];
 
@@ -24,6 +24,15 @@ public static class Config
             new ApiScope(name: "api1", displayName: "My API")
         ];
 
+    public static List<ApiResource> ApiResources =>
+            new List<ApiResource>
+            {
+                new ApiResource("webdir", "WebDirListing", [JwtClaimTypes.Email, JwtClaimTypes.Name])
+                {
+                    Scopes = { "api1" }
+                }
+
+            };
     public static IEnumerable<Client> Clients =>
         [
             //new Client

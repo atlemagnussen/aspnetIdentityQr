@@ -21,7 +21,7 @@ public static class IdentityServerSetup
         var idsvrBuilder = builder.Services.AddIdentityServer(idopts =>
         {
             idopts.KeyManagement.Enabled = false;
-
+            idopts.EmitStaticAudienceClaim = true;
             idopts.UserInteraction.LoginUrl = "/Identity/Account/Login";
             idopts.UserInteraction.ErrorUrl = "/Error";
         })
@@ -79,7 +79,7 @@ public static class IdentityServerSetup
 
         serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
 
-        
+
 
         var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
         // context.Database.Migrate();
@@ -106,6 +106,15 @@ public static class IdentityServerSetup
             foreach (var apiScope in Config.ApiScopes)
             {
                 context.ApiScopes.Add(apiScope.ToEntity());
+            }
+            context.SaveChanges();
+        }
+
+        if (!context.ApiResources.Any())
+        {
+            foreach (var res in Config.ApiResources)
+            {
+                context.ApiResources.Add(res.ToEntity());
             }
             context.SaveChanges();
         }
