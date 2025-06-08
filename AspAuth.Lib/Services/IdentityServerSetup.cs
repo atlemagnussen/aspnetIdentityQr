@@ -21,6 +21,9 @@ public static class IdentityServerSetup
         var idsvrBuilder = builder.Services.AddIdentityServer(idopts =>
         {
             idopts.KeyManagement.Enabled = false;
+
+            idopts.UserInteraction.LoginUrl = "/Identity/Account/Login";
+            idopts.UserInteraction.ErrorUrl = "/Error";
         })
             .AddConfigurationStore(options =>
             {
