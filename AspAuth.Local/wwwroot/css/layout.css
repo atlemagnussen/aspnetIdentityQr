@@ -2,12 +2,6 @@ html {
   font-size: 14px;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
 body {
   background-color: var(--md-sys-color-surface);
   color: var(--md-sys-color-on-surface);
@@ -51,15 +45,17 @@ main section.slot {
 }
 footer {
   grid-area: footer;
+  padding: 0.5rem 1rem;
 }
 
 @media only screen and (max-width: 640px) {
   main nav {
       display: none;
   }
-  main router-slot {
+  main section.slot {
       flex: 0 1 100%;
       max-width: 100%;
+      padding: 1rem;
   }
 }
 
