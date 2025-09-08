@@ -41,24 +41,6 @@ public static class IdentityServerSetup
         //builder.Services.AddKeysFromDb(idsvrBuilder);
 
         var authenticationBuilder = builder.Services.AddAuthentication();
-
-        // authenticationBuilder.AddOpenIdConnect("oidc", "Sign-in with oidc", options =>
-        // {
-        //     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-        //     options.SignOutScheme = IdentityServerConstants.SignoutScheme;
-        //     options.SaveTokens = true;
-        
-        //     options.Authority = "https://demo.duendesoftware.com";
-        //     options.ClientId = "interactive.confidential";
-        //     options.ClientSecret = "secret";
-        //     options.ResponseType = "code";
-        
-        //     options.TokenValidationParameters = new TokenValidationParameters
-        //     {
-        //         NameClaimType = "name",
-        //         RoleClaimType = "role"
-        //     };
-        // });
     }
 
     private static void AddKeysFromDb(this IServiceCollection services, IIdentityServerBuilder builder)
