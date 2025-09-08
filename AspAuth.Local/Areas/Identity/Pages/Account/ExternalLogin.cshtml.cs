@@ -129,6 +129,8 @@ namespace AspAuth.Local.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                    // var lo = await _userManager.GetLoginsAsync(user);
+                    // lo.Any(l => l.LoginProvider == info.LoginProvider)
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
