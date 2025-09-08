@@ -58,6 +58,7 @@ public static class AspNetIdentitySetup
             .AddMicrosoftAccount(ms =>
             {
                 ms.ClientId = entraSettings.ClientId ?? throw new ApplicationException("missing Entra ClientId");
+                ms.ClientSecret = entraSettings.ClientSecret ?? throw new ApplicationException("missing Entra Secret");
                 ms.CallbackPath = entraSettings.CallbackPath ?? "/signin-oidc";
             });
             // .AddOpenIdConnect("EntraId", "EntraId", options => {
