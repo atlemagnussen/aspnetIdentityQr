@@ -49,27 +49,33 @@ public static class AspNetIdentitySetup
         //var authBuilder = services.AddAuthentication();
         //services.AddAuthorization(options =>
         services.AddAuthentication()
-            .AddGoogle(google => {
-                google.ClientId = googleSettings.ClientId ?? throw new ApplicationException("missing google ClientId");
+            .AddGoogle(google =>
+            {
+                google.ClientId = googleSettings.ClientId ?? throw new ApplicationException("missing Google ClientId");
                 google.ClientSecret = googleSettings.ClientSecret ?? throw new ApplicationException("missing google ClientSecret");
                 google.CallbackPath = "/signin-google";
             })
-            .AddOpenIdConnect("EntraId", "EntraId", options => {
-                options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                options.SignOutScheme = IdentityServerConstants.SignoutScheme;
-                options.Authority = "https://login.microsoftonline.com/common";
-                options.ClientId = entraSettings.ClientId;
-                options.ResponseType = "id_token";
-                options.CallbackPath = entraSettings.CallbackPath ?? "/signin-oidc";
-                options.SignedOutCallbackPath = entraSettings.SignedOutCallbackPath ?? "/signout-callback-oidc";
-                options.RemoteAuthenticationTimeout = TimeSpan.FromHours(1);
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    NameClaimType = "name",
-                    RoleClaimType = "role",
-                    ValidateIssuer = false
-                };
+            .AddMicrosoftAccount(ms =>
+            {
+                ms.ClientId = entraSettings.ClientId ?? throw new ApplicationException("missing Entra ClientId");
+                ms.CallbackPath = entraSettings.CallbackPath ?? "/signin-oidc";
             });
+            // .AddOpenIdConnect("EntraId", "EntraId", options => {
+            //     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+            //     options.SignOutScheme = IdentityServerConstants.SignoutScheme;
+            //     options.Authority = "https://login.microsoftonline.com/common";
+            //     options.ClientId = entraSettings.ClientId;
+            //     options.ResponseType = "id_token";
+            //     options.CallbackPath = entraSettings.CallbackPath ?? "/signin-oidc";
+            //     options.SignedOutCallbackPath = entraSettings.SignedOutCallbackPath ?? "/signout-callback-oidc";
+            //     options.RemoteAuthenticationTimeout = TimeSpan.FromHours(1);
+            //     options.TokenValidationParameters = new TokenValidationParameters
+            //     {
+            //         NameClaimType = "name",
+            //         RoleClaimType = "role",
+            //         ValidateIssuer = false
+            //     };
+            // });
 
         services.AddDefaultIdentity<IdentityUser>(options =>
         {
