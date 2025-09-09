@@ -4,6 +4,9 @@ With QR code enabled and removed all default jquery and bootstrap
 
 Also examples of usage of logging in with Microsoft and Google
 
+Then also added Duende Identity Server on top to provide OAUTH2 and OIDC capabilities
+
+Just intended as an example
 
 And build/run examples with podman as container
 
