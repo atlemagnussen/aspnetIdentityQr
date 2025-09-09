@@ -139,7 +139,12 @@ namespace AspAuth.Local.Areas.Identity.Pages.Account
             var allClaims = auth.Principal.Claims.ToList();
             foreach (var claim in allClaims)
             {
-                _logger.LogInformation($"Claim Type={claim.Type} = {claim.ToJson()} ");
+                _logger.LogInformation($"Claim Type={claim.Type} = Value = {claim.Value}, ValueType = {claim.ValueType}, Issuer = {claim.Issuer}, OriginalIssuer = {claim.OriginalIssuer}, Subject = {claim.Subject}");
+                if (claim.Properties is not null)
+                {
+                    foreach (var prop in claim.Properties)
+                        _logger.LogInformation($"Prop {prop.Key} = {prop.Value}");
+                }
             }
 
             var nameIdentifiser = allClaims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
