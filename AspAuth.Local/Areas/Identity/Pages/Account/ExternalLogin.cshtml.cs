@@ -4,12 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using NuGet.Protocol;
 
 namespace AspAuth.Local.Areas.Identity.Pages.Account
 {
@@ -22,13 +24,15 @@ namespace AspAuth.Local.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
+        private readonly IAuthenticationSchemeProvider _schemes;
 
         public ExternalLoginModel(
             SignInManager<IdentityUser> signInManager,
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             ILogger<ExternalLoginModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IAuthenticationSchemeProvider schemes)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -36,6 +40,7 @@ namespace AspAuth.Local.Areas.Identity.Pages.Account
             _emailStore = GetEmailStore();
             _logger = logger;
             _emailSender = emailSender;
+            _schemes = schemes;
         }
 
         /// </summary>
@@ -74,6 +79,9 @@ namespace AspAuth.Local.Areas.Identity.Pages.Account
                 ErrorMessage = $"Error from external provider: {remoteError}";
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
+
+
+
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
@@ -108,17 +116,72 @@ namespace AspAuth.Local.Areas.Identity.Pages.Account
             }
         }
 
+        private const string LoginProviderKey = "LoginProvider";
+        private async Task<ExternalLoginInfo?> GetExternalLoginInfoAsync()
+        {
+            var auth = await HttpContext.AuthenticateAsync(IdentityConstants.ExternalScheme);
+            var items = auth?.Properties?.Items;
+            if (auth?.Principal == null || items == null || !items.TryGetValue(LoginProviderKey, out var provider))
+            {
+                return null;
+            }
+
+            // if (expectedXsrf != null)
+            // {
+            //     if (!items.TryGetValue(XsrfKey, out var userId) ||
+            //         userId != expectedXsrf)
+            //     {
+            //         return null;
+            //     }
+            // }
+
+            var allClaims = auth.Principal.Claims.ToList();
+            foreach (var claim in allClaims)
+            {
+                _logger.LogInformation($"Claim Type={claim.Type} = {claim.ToJson()} ");
+            }
+
+            var nameIdentifiser = allClaims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (nameIdentifiser is not null)
+                _logger.LogInformation($"{ClaimTypes.NameIdentifier} found");
+            
+            var sub = allClaims.FirstOrDefault(c => c.Type == "sub");
+            if (sub is not null)
+                _logger.LogInformation("sub found");
+
+            var providerKey = auth.Principal.FindFirstValue(ClaimTypes.NameIdentifier) ?? auth.Principal.FindFirstValue("sub");
+            if (providerKey == null || provider == null)
+            {
+                return null;
+            }
+
+            var providerDisplayName = (await GetExternalAuthenticationSchemesAsync()).FirstOrDefault(p => p.Name == provider)?.DisplayName ?? provider;
+            
+            return new ExternalLoginInfo(auth.Principal, provider, providerKey, providerDisplayName)
+            {
+                AuthenticationTokens = auth.Properties?.GetTokens(),
+                AuthenticationProperties = auth.Properties
+            };
+        }
+
+        private async Task<IEnumerable<AuthenticationScheme>> GetExternalAuthenticationSchemesAsync()
+        {
+            var schemes = await _schemes.GetAllSchemesAsync();
+            return schemes.Where(s => !string.IsNullOrEmpty(s.DisplayName));
+        }
         public async Task<IActionResult> OnPostConfirmationAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             // Get the information about the user from the external login provider
-            var info = await _signInManager.GetExternalLoginInfoAsync();
+            //var info = await _signInManager.GetExternalLoginInfoAsync();
+            var info = await GetExternalLoginInfoAsync();
             if (info == null)
             {
                 ErrorMessage = "Error loading external login information during confirmation.";
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
 
+            
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
