@@ -82,7 +82,8 @@ namespace AspAuth.Local.Areas.Identity.Pages.Account
 
 
 
-            var info = await _signInManager.GetExternalLoginInfoAsync();
+            //var info = await _signInManager.GetExternalLoginInfoAsync();
+            var info = await GetExternalLoginInfoAsync();
             if (info == null)
             {
                 ErrorMessage = "Error loading external login information.";
