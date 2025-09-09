@@ -1,4 +1,13 @@
-# auth local
+# asp.net core Identity
+
+With QR code enabled and removed all default jquery and bootstrap
+
+Also examples of usage of logging in with Microsoft and Google
+
+
+And build/run examples with podman as container
+
+## Just some EF commands
 
 dotnet tool install --global dotnet-ef
 or
