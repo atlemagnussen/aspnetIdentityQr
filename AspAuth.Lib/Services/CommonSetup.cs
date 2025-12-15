@@ -20,5 +20,7 @@ public static class CommonSetup
 
         services.AddScoped<ISigningCredentialStore, LocalSigningCredentialStore>();
         services.AddScoped<IValidationKeysStore, LocalValidationKeysStore>();
+
+        services.AddScoped<WebAuthnService>();
     }
 }

@@ -1,13 +1,11 @@
 using AspAuth.Lib.Data;
 using AspAuth.Lib.Models;
-using Duende.IdentityServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 
 namespace AspAuth.Lib.Services;
 
@@ -105,8 +103,10 @@ public static class AspNetIdentitySetup
     {
         builder.Services.Configure<IdentityPasskeyOptions>(options =>
         {
-            options.ServerDomain = "contoso.com";
+            options.ServerDomain = "logout.work";
             options.AuthenticatorTimeout = TimeSpan.FromMinutes(3);
+            options.UserVerificationRequirement = "required";
+            options.ResidentKeyRequirement = "preferred";
             options.ChallengeSize = 64;
 
             options.VerifyAttestationStatement = async (context) =>
