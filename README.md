@@ -1,5 +1,7 @@
 # asp.net core Identity
 
+https://learn.microsoft.com/en-us/aspnet/core/security/authentication/passkeys/
+
 With QR code enabled and removed all default jquery and bootstrap
 
 Also examples of usage of logging in with Microsoft and Google

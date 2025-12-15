@@ -100,4 +100,28 @@ public static class AspNetIdentitySetup
             .PersistKeysToDbContext<DataProtectionContext>()
             .SetApplicationName("aspauth");
     }
+
+    public static void AddWebAuthn(this WebApplicationBuilder builder)
+    {
+        builder.Services.Configure<IdentityPasskeyOptions>(options =>
+        {
+            options.ServerDomain = "contoso.com";
+            options.AuthenticatorTimeout = TimeSpan.FromMinutes(3);
+            options.ChallengeSize = 64;
+
+            options.VerifyAttestationStatement = async (context) =>
+            {
+                // Custom attestation validation logic
+                // Return 'true' if the attestation is valid
+                // Return 'false' if the attestation is invalid
+                return true;
+            };
+
+            // The default origin validation allows requests from subdomains and disallows cross-origin iframes.
+            // options.ValidateOrigin = async (context) =>
+            // {
+            //     return true;
+            // };
+        });
+    }
 }
