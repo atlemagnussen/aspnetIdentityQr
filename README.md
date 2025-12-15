@@ -1,6 +1,15 @@
 # asp.net core Identity
 
+## Passkeys
+
 https://learn.microsoft.com/en-us/aspnet/core/security/authentication/passkeys/
+
+update the Identity configuration to use schema version 3, which includes passkey support:
+```cs
+options.Stores.SchemaVersion = IdentitySchemaVersions.Version3;
+```
+
+## QR code 2Fa
 
 With QR code enabled and removed all default jquery and bootstrap
 

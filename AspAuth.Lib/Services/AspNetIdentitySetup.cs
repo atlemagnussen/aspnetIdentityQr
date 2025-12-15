@@ -80,6 +80,7 @@ public static class AspNetIdentitySetup
         {
             options.SignIn.RequireConfirmedAccount = false;
             options.Password.RequireNonAlphanumeric = false;
+            options.Stores.SchemaVersion = IdentitySchemaVersions.Version3;
         })
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
