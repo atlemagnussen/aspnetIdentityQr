@@ -23,9 +23,9 @@ const urlPasskeyRequestOptions = "api/Account/PasskeyRequestOptions"
  * @returns 
  */
 export async function passkeyCreateOptions(signal) {
-  const optionsString = await http.post(urlPasskeyCreationOptions, signal)
-  console.log("Create optionsResponse", optionsString)
-  const optionsJson = typeof optionsJson === "string" ? JSON.parse(optionsString) : optionsString
+  const optionsResponse = await http.post(urlPasskeyCreationOptions, signal)
+  console.log("Create optionsResponse", optionsResponse)
+  const optionsJson = typeof optionsResponse === "string" ? JSON.parse(optionsResponse) : optionsResponse
   const options = PublicKeyCredential.parseCreationOptionsFromJSON(optionsJson)
   const createdCred = await navigator.credentials.create({ publicKey: options, signal })
   return createdCred
