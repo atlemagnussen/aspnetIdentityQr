@@ -1,7 +1,7 @@
 const html = String.raw
 const css = String.raw
 
-import { browserSupportsPasskeys, createCredential } from "./passkeyService.js"
+import { browserSupportsPasskeys, passkeyCreateOptions, createPasskey } from "./passkeyService.js"
 
 class PasskeySubmit extends HTMLElement {
   btnCreate = null
@@ -48,9 +48,10 @@ class PasskeySubmit extends HTMLElement {
     const signal = this.abortController.signal
 
     try {
-      const credential = await createCredential(signal)
-      const credentialJson = JSON.stringify(credential)
+      const credential = await passkeyCreateOptions(signal)
       console.log("credentialJson", credentialJson)
+      createPasskey(signal, credential)
+      console.log("created")
     } catch (error) {
       if (error.name === "AbortError") {
         // The user explicitly canceled the operation - return without error.

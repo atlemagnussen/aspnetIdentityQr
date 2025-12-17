@@ -12,21 +12,27 @@ export const browserSupportsPasskeys =
 const http = new HttpService()
 
 const urlPasskeyCreationOptions = "api/Account/PasskeyCreationOptions"
+const urlPasskeyCreate = "api/Account/PasskeyCreate"
 const urlPasskeyRequestOptions = "api/Account/PasskeyRequestOptions"
 
 
 /**
- * Create new
+ * get Credentioals before create new
  * 
  * @param {AbortSignal | null} signal 
  * @returns 
  */
-export async function createCredential(signal) {
+export async function passkeyCreateOptions(signal) {
   const optionsJson = await http.post(urlPasskeyCreationOptions, signal)
   console.log("Create optionsResponse", optionsJson)
   const options = PublicKeyCredential.parseCreationOptionsFromJSON(optionsJson)
   const createdCred = await navigator.credentials.create({ publicKey: options, signal })
-  return createCredential
+  return createdCred
+}
+
+export function createPasskey(signal, credentialJson) {
+  const credentialsString = JSON.stringify(credentialJson)
+  return http.post(urlPasskeyCreate, signal, credentialsString)
 }
 
 
