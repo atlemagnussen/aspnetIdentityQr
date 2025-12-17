@@ -59,7 +59,7 @@ UserManager<IdentityUser> userManager,
 
         var user = await _userManager.FindByNameAsync(userName) ?? throw new ApplicationException("Can't find user");
 
-        var optionsJson = await signInManager.MakePasskeyRequestOptionsAsync(user);
+        var optionsJson = await _signInManager.MakePasskeyRequestOptionsAsync(user);
         return optionsJson;
     }
 }

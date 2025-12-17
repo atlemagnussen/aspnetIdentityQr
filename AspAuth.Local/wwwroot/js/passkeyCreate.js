@@ -50,7 +50,7 @@ class PasskeySubmit extends HTMLElement {
     try {
       const credential = await passkeyCreateOptions(signal)
       console.log("credentialJson", credentialJson)
-      createPasskey(signal, credential)
+      await createPasskey(signal, credential)
       console.log("created")
     } catch (error) {
       if (error.name === "AbortError") {
