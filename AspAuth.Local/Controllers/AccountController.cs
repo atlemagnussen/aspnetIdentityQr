@@ -39,4 +39,10 @@ public class AccountController : ControllerBase
         }
         return Ok();
     }
+
+    [HttpPost]
+    public async Task AddPasskey(string credentialJson)
+    {
+        
+    }
 }

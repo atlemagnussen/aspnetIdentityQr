@@ -5,10 +5,21 @@
     ViewData["ActivePage"] = ManageNavPages.Passkeys;
 }
 
-<h3>@ViewData["Title"]</h3>
+<h1>@ViewData["Title"]</h3>
 
 <h2>Existing keys</h2>
 @foreach(var key in Model.Keys) {
     <p>@key</p>
 }
 
+<div>
+    <h2>Add new passkey</h2>
+    <br>
+    <button id="btnAddPasskey">Add passkey</button>
+</div>
+<div>
+    <passkey-submit></passkey-submit>
+</div>
+@section Scripts {
+    <script type="module" src="~/js/webauthn.js"></script>
+}
