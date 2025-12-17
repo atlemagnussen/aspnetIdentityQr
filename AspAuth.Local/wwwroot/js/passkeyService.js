@@ -1,7 +1,7 @@
-import HttpService from "./httpService"
+import HttpService from "./httpService.js"
 
 
-const browserSupportsPasskeys =
+export const browserSupportsPasskeys =
   typeof navigator.credentials !== "undefined" &&
   typeof window.PublicKeyCredential !== "undefined" &&
   typeof window.PublicKeyCredential.parseCreationOptionsFromJSON === "function" &&
@@ -11,22 +11,33 @@ const browserSupportsPasskeys =
 
 const http = new HttpService()
 
-const urlPasskeyCreationOptions = "/api/Account/PasskeyCreationOptions"
-const urlPasskeyRequestOptions = "/api/Account/PasskeyRequestOptions"
+const urlPasskeyCreationOptions = "api/Account/PasskeyCreationOptions"
+const urlPasskeyRequestOptions = "api/Account/PasskeyRequestOptions"
 
 
 /**
+ * Create new
+ * 
  * @param {AbortSignal | null} signal 
  * @returns 
  */
-async function createCredential(signal) {
-  const optionsResponse = await http.post(urlPasskeyCreationOptions, signal)
-  console.log("Create optionsResponse", optionsResponse)
-  const optionsJson = await optionsResponse.json()
+export async function createCredential(signal) {
+  const optionsJson = await http.post(urlPasskeyCreationOptions, signal)
+  console.log("Create optionsResponse", optionsJson)
   const options = PublicKeyCredential.parseCreationOptionsFromJSON(optionsJson)
-  return await navigator.credentials.create({ publicKey: options, signal })
+  const createdCred = await navigator.credentials.create({ publicKey: options, signal })
+  return createCredential
 }
 
+
+/**
+ * Get existing
+ * 
+ * @param {string} email 
+ * @param {string} mediation 
+ * @param {AbortSignal | null} signal 
+ * @returns 
+ */
 async function requestCredential(email, mediation, signal) {
   const optionsResponse = await http.post(`${urlPasskeyRequestOptions}?username=${email}`, signal)
   const optionsJson = await optionsResponse.json()
