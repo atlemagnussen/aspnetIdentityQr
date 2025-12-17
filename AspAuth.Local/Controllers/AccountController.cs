@@ -48,8 +48,18 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost]
-    public async Task PasskeyRequestOptions(string credentialJson)
+    [AllowAnonymous]
+    public async Task<ActionResult<string>> PasskeyRequestOptions(string userName)
     {
-        
+        try
+        {
+            var requestOptions = await _webAuthnService.GetPasskeyRequestOptions(userName);
+            return Ok(requestOptions);
+        }
+        catch(ApplicationException ae)
+        {
+            ModelState.AddModelError("invalid", ae.Message);
+            return BadRequest(ModelState);
+        }
     }
 }

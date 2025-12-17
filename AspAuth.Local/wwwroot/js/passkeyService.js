@@ -17,7 +17,7 @@ const urlPasskeyRequestOptions = "api/Account/PasskeyRequestOptions"
 
 
 /**
- * get Credentioals before create new
+ * get createOptions before create
  * 
  * @param {AbortSignal | null} signal 
  * @returns 
@@ -30,6 +30,12 @@ export async function passkeyCreateOptions(signal) {
   return createdCred
 }
 
+/**
+ * create passkey
+ * @param {AbortSignal | null} signal 
+ * @param {*} credentialJson 
+ * @returns 
+ */
 export function createPasskey(signal, credentialJson) {
   const credentialsString = JSON.stringify(credentialJson)
   return http.post(urlPasskeyCreate, signal, credentialsString)
@@ -37,16 +43,16 @@ export function createPasskey(signal, credentialJson) {
 
 
 /**
- * Get existing
+ * Get existing options
  * 
- * @param {string} email 
+ * @param {string} userName 
  * @param {string} mediation 
  * @param {AbortSignal | null} signal 
  * @returns 
  */
-async function requestCredential(email, mediation, signal) {
-  const optionsResponse = await http.post(`${urlPasskeyRequestOptions}?username=${email}`, signal)
-  const optionsJson = await optionsResponse.json()
+async function requestCredential(userName, mediation, signal) {
+  const optionsJson = await http.post(`${urlPasskeyRequestOptions}?userName=${email}`, signal)
+  console.log("optionsJson", optionsJson)
   const options = PublicKeyCredential.parseRequestOptionsFromJSON(optionsJson)
   return await navigator.credentials.get({ publicKey: options, mediation, signal })
 }
