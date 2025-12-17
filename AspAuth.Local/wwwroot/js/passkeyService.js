@@ -51,9 +51,10 @@ export function createPasskey(signal, credentialJson) {
  * @param {AbortSignal | null} signal 
  * @returns 
  */
-async function requestCredential(userName, mediation, signal) {
-  const optionsJson = await http.post(`${urlPasskeyRequestOptions}?userName=${email}`, signal)
-  console.log("optionsJson", optionsJson)
+export async function requestPasskeyOptions(userName, mediation, signal) {
+  const optionsResponse = await http.post(`${urlPasskeyRequestOptions}?userName=${userName}`, signal)
+  console.log("optionsResponse", optionsResponse)
+  const optionsJson = typeof optionsResponse === "string" ? JSON.parse(optionsResponse) : optionsResponse
   const options = PublicKeyCredential.parseRequestOptionsFromJSON(optionsJson)
   return await navigator.credentials.get({ publicKey: options, mediation, signal })
 }

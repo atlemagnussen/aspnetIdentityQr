@@ -1,10 +1,10 @@
 const html = String.raw
 const css = String.raw
 
-import { browserSupportsPasskeys, passkeyCreateOptions, createPasskey } from "./passkeyService.js"
+import { browserSupportsPasskeys, requestPasskeyOptions } from "./passkeyService.js"
 
-class PasskeyCreate extends HTMLElement {
-  btnCreate = null
+class PasskeyLogin extends HTMLElement {
+  loginBtn = null
   abortController = null
 
   static styles = css`
@@ -17,7 +17,7 @@ class PasskeyCreate extends HTMLElement {
   constructor() {
     super()
     const sharedStyles = new CSSStyleSheet()
-    sharedStyles.replaceSync(PasskeyCreate.styles)
+    sharedStyles.replaceSync(PasskeyLogin.styles)
     const shadow = this.attachShadow({ mode: "open" })
     shadow.adoptedStyleSheets = [sharedStyles]
   }
@@ -27,8 +27,8 @@ class PasskeyCreate extends HTMLElement {
 
   disconnectedCallback() {
     this.abortController?.abort()
-    if (this.createBtn)
-      this.createBtn.removeEventListener("click", this.obtainAndSubmitNewKey)
+    if (this.loginBtn)
+      this.loginBtn.removeEventListener("click", this.obtainKeyOptions)
   }
 
   render() {
@@ -37,21 +37,20 @@ class PasskeyCreate extends HTMLElement {
         <p>Passkey not supported</p>
       `
     }
-    this.createBtn = document.createElement("button")
-    this.createBtn.innerText = "Create new passkey"
-    this.createBtn.addEventListener("click", this.obtainAndSubmitNewKey)
-    this.shadowRoot.appendChild(this.createBtn)
+    this.loginBtn = document.createElement("button")
+    this.loginBtn.innerText = "Login with passkey"
+    this.loginBtn.addEventListener("click", this.obtainKeyOptions)
+    this.shadowRoot.appendChild(this.loginBtn)
   }
-  obtainAndSubmitNewKey = async () => {
+  obtainKeyOptions = async () => {
     this.abortController?.abort()
     this.abortController = new AbortController()
     const signal = this.abortController.signal
 
     try {
-      const credential = await passkeyCreateOptions(signal)
+      const credential = await requestPasskeyOptions("atlemagnussen@gmail.com", "conditional", signal)
       console.log("credential", credential)
-      await createPasskey(signal, credential)
-      console.log("created")
+      
     } catch (error) {
       if (error.name === "AbortError") {
         // The user explicitly canceled the operation - return without error.
@@ -72,4 +71,4 @@ class PasskeyCreate extends HTMLElement {
     }
   }
 }
-customElements.define("passkey-create", PasskeyCreate)
+customElements.define("passkey-login", PasskeyLogin)
