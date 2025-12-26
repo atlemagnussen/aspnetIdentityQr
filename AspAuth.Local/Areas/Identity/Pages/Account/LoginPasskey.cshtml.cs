@@ -46,7 +46,7 @@ namespace AspAuth.Local.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             
-            var result = await _signInManager.PerformPasskeyAttestationAsync(credentialJson);
+            var result = await _signInManager.PerformPasskeyAssertionAsync(credentialJson);
             if (!result.Succeeded)
             {
                 ErrorMessage = result.Failure.Message;
