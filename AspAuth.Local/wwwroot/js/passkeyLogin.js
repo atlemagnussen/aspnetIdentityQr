@@ -10,6 +10,11 @@ class PasskeyLogin extends HTMLElement {
   abortController = null
   errorMsg = ""
 
+  attrs = {
+    userName: "Input.Email",
+    password: "Input.Password"
+  }
+
   static styles = css`
     :host {
       display: block;
@@ -80,12 +85,16 @@ class PasskeyLogin extends HTMLElement {
     const formData = new FormData()
     this.setError("")
     try {
-      const email = new FormData(this.internals.form).get("Input.Email") // by name
+      const email = new FormData(this.internals.form).get(this.attrs.userName) // by name
       if (!email)
         throw new Error("missing username")
       const credential = await requestPasskeyOptions(email, undefined, signal)
       const credentialJson = JSON.stringify(credential)
       formData.append("credentialJson", credentialJson)
+
+      this.internals.form.delete(this.attrs.userName)
+      this.internals.form.delete(this.attrs.password)
+
       this.internals.setFormValue(formData)
       this.internals.form.action = "/Identity/Account/LoginPasskey" // special form instead of complicating Login form even more
       this.internals.form.submit()
@@ -105,7 +114,7 @@ class PasskeyLogin extends HTMLElement {
   }
 
   async tryAutofillPasskey() {
-    if (browserSupportsPasskeys && this.attrs.operation === "Request" && await PublicKeyCredential.isConditionalMediationAvailable?.()) {
+    if (browserSupportsPasskeys && await PublicKeyCredential.isConditionalMediationAvailable?.()) {
       await this.obtainAndSubmitCredential(/* useConditionalMediation */ true)
     }
   }
