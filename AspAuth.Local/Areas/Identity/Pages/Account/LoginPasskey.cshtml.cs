@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using AspAuth.Lib.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -33,12 +34,6 @@ namespace AspAuth.Local.Areas.Identity.Pages.Account
         [TempData]
         public string? ErrorMessage { get; set; }
 
-        public class InputModel
-        {
-            [Required]
-            [EmailAddress]
-            public string? Email { get; set; }
-        }
         
         public IActionResult OnGet() => RedirectToPage("./Login");
 
@@ -61,7 +56,7 @@ namespace AspAuth.Local.Areas.Identity.Pages.Account
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
 
-            await _signInManager.SignInAsync(user, isPersistent: true);
+            await _signInManager.SignInAsync(user, isPersistent: Input.RememberMe, "hwk");
 
             // await _signInManager.PasskeySignInAsync(credentialJson)
             // if (result.IsNotAllowed)

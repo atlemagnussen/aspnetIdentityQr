@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-
 namespace AspAuth.Lib.Models;
 
 public class PasskeyUser
