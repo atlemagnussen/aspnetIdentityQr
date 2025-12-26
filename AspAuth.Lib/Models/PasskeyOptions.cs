@@ -11,5 +11,9 @@ public class PasskeyUser
 
 public class PassKeyViewModel
 {
+    /// <summary>
+    /// Base64 key
+    /// </summary>
+    public required string CredentialId {get;set;}
     public required string Name {get;set;}
 }

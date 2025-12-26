@@ -1,4 +1,5 @@
 
+using System.Buffers.Text;
 using AspAuth.Lib.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,7 @@ public class PasskeysModel(UserManager<IdentityUser> userManager) : PageModel
             {
                 Keys.Add(new PassKeyViewModel
                 {
+                    CredentialId = Base64Url.EncodeToString(key.CredentialId),
                     Name = key.Name ?? "unnamed"
                 });
             }

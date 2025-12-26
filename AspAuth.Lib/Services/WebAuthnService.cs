@@ -52,6 +52,12 @@ UserManager<IdentityUser> userManager,
         }
     }
 
+    /// <summary>
+    /// Pre login with no authenticated user
+    /// </summary>
+    /// <param name="userName">userName that wants to authenticate with passkey</param>
+    /// <returns></returns>
+    /// <exception cref="ApplicationException"></exception>
     public async Task<string> GetPasskeyRequestOptions(string userName)
     {
         if (string.IsNullOrWhiteSpace(userName))
@@ -71,13 +77,50 @@ UserManager<IdentityUser> userManager,
     /// <returns></returns>
     public async Task PasskeyRename(ClaimsPrincipal claimsUser, string credentialId, string name)
     {
+        var user = await _userManager.GetUserAsync(claimsUser) ?? throw new ApplicationException("no user");
+
+        byte[] credIdBytes;
         try
         {
-            var credIdBytes = Base64Url.DecodeFromChars(credentialId);    
+            credIdBytes = Base64Url.DecodeFromChars(credentialId);    
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Error parsing key");
             throw new ApplicationException("Error parsing keyId");
+        }
+
+        var passkey = await _userManager.GetPasskeyAsync(user, credIdBytes) ?? throw new ApplicationException("Could not find key");
+        passkey.Name = name;
+
+        var result = await _userManager.AddOrUpdatePasskeyAsync(user, passkey);
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(',', result.Errors);
+            throw new ApplicationException($"Could not update passkey: {errors}");
+        }
+    }
+
+    public async Task PasskeyDelete(ClaimsPrincipal claimsUser, string credentialId)
+    {
+        var user = await _userManager.GetUserAsync(claimsUser) ?? throw new ApplicationException("no user");
+
+        byte[] credIdBytes;
+        try
+        {
+            credIdBytes = Base64Url.DecodeFromChars(credentialId);    
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error parsing key");
+            throw new ApplicationException("Error parsing keyId");
+        }
+
+        var result = await _userManager.RemovePasskeyAsync(user, credIdBytes);
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(',', result.Errors);
+            throw new ApplicationException($"Could not remove passkey: {errors}");
         }
     }
 }

@@ -1,3 +1,4 @@
+using AspAuth.Lib.Models;
 using AspAuth.Lib.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,27 @@ public class AccountController : ControllerBase
     }
 
     /// <summary>
+    /// Request options before login
+    /// </summary>
+    /// <param name="userName"></param>
+    /// <returns></returns>
+    [HttpPost("PasskeyRequestOptions")]
+    [AllowAnonymous]
+    public async Task<ActionResult<string>> PasskeyRequestOptions([FromQuery]string userName)
+    {
+        try
+        {
+            var requestOptions = await _webAuthnService.GetPasskeyRequestOptions(userName);
+            return Ok(requestOptions);
+        }
+        catch(ApplicationException ae)
+        {
+            ModelState.AddModelError("invalid", ae.Message);
+            return BadRequest(ModelState);
+        }
+    }
+
+    /// <summary>
     /// Actually create
     /// </summary>
     /// <param name="credentialJson">from navigator.credentials.create</param>
@@ -47,19 +69,41 @@ public class AccountController : ControllerBase
         return Ok();
     }
 
-    [HttpPost("PasskeyRequestOptions")]
-    [AllowAnonymous]
-    public async Task<ActionResult<string>> PasskeyRequestOptions([FromQuery]string userName)
+    /// <summary>
+    /// Update name
+    /// </summary>
+    /// <param name="credentialJson">from navigator.credentials.create</param>
+    [HttpPost("PasskeyUpdate")]
+    public async Task<ActionResult> PasskeyUpdate([FromBody] PassKeyViewModel passkey)
     {
         try
         {
-            var requestOptions = await _webAuthnService.GetPasskeyRequestOptions(userName);
-            return Ok(requestOptions);
+            await _webAuthnService.PasskeyRename(User, passkey.CredentialId, passkey.Name);
         }
         catch(ApplicationException ae)
         {
             ModelState.AddModelError("invalid", ae.Message);
             return BadRequest(ModelState);
         }
+        return Ok();
+    }
+
+    /// <summary>
+    /// Update name
+    /// </summary>
+    /// <param name="credentialJson">from navigator.credentials.create</param>
+    [HttpPost("PasskeyDelete")]
+    public async Task<ActionResult> PasskeyDelete([FromBody] PassKeyViewModel passkey)
+    {
+        try
+        {
+            await _webAuthnService.PasskeyDelete(User, passkey.CredentialId);
+        }
+        catch(ApplicationException ae)
+        {
+            ModelState.AddModelError("invalid", ae.Message);
+            return BadRequest(ModelState);
+        }
+        return Ok();
     }
 }
