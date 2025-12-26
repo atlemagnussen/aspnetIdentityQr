@@ -13,7 +13,8 @@ const modulesToLoad = [
     "/components/radio-group/radio-group.js",
     "/components/radio/radio.js",
     "/components/textarea/textarea.js",
-    "/components/dialog/dialog.js"
+    "/components/dialog/dialog.js",
+    "/components/callout/callout.js"
 ]
 
 const baseUrl = "https://static.logout.work/webawesome/3.1.0/dist"
