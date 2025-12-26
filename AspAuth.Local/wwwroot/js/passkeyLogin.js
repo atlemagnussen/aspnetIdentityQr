@@ -86,6 +86,9 @@ class PasskeyLogin extends HTMLElement {
       const credential = await requestPasskeyOptions(email, undefined, signal)
       const credentialJson = JSON.stringify(credential)
       formData.append("credentialJson", credentialJson)
+      this.internals.setFormValue(formData)
+      this.internals.form.action = "https://id.logout.work/Identity/Account/LoginPasskey" // special form instead of complicating Login form even more
+      this.internals.form.submit()
       
     } catch (error) {
       if (error.name === "AbortError") {
@@ -99,9 +102,6 @@ class PasskeyLogin extends HTMLElement {
       console.error(errorMessage)
       this.setError(errorMessage)
     }
-    this.internals.setFormValue(formData)
-    this.internals.form.action = "https://id.logout.work/Identity/Account/LoginPasskey"
-    this.internals.form.submit()
   }
 
   async tryAutofillPasskey() {
