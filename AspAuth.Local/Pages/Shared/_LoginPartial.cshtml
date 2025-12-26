@@ -9,12 +9,16 @@
 {
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-            @User.Identity?.Name!
+            <wa-avatar initials="AM" label="@User.Identity?.Name!"></wa-avatar>
         </a>
     </li>
     <li class="nav-item">
-        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
-            <button type="submit" class="secondary">Logout</button>
+        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" 
+            asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+            <wa-button type="submit" appearance="outlined" variant="warning">
+                <wa-icon slot="start" name="right-from-bracket"></wa-icon>
+                Log out
+            </wa-button>
         </form>
     </li>
 }
@@ -27,7 +31,12 @@ else
         </li>
     }
     <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">
+            <wa-button type="submit" appearance="outlined" variant="warning">
+                <wa-icon name="arrow-right-to-bracket"></wa-icon>
+                Log in
+            </wa-button>
+        </a>
     </li>
 }
 

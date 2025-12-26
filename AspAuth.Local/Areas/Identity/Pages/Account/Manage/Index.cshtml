@@ -12,15 +12,23 @@
         <form id="profile-form" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="input-group">
-                <label asp-for="Username" class="form-label"></label>
-                <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
+                
+                <wa-input asp-for="Username" class="form-control" 
+                    label="Username" disabled value="@Model.Username">
+                </wa-input>
+                
             </div>
             <div class="input-group">
-                <label asp-for="Input.PhoneNumber" class="form-label"></label>
-                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number."/>
+
+                <wa-input asp-for="Phonenumber" class="form-control" 
+                    label="Phone number" disabled value="@Model.Input.PhoneNumber">
+                </wa-input>
+                
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+            <wa-button id="update-profile-button" type="submit" disabled>
+                Save
+            </wa-button>
         </form>
     </div>
 </div>

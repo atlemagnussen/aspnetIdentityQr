@@ -30,7 +30,7 @@
                     </label>
                 </div>
                 <div>
-                    <button id="login-submit" type="submit" class="primary">Log in</button>
+                    <wa-button id="login-submit" type="submit" class="primary">Log in</wa-button>
                 </div>
                 <div>
                     <p>
@@ -65,7 +65,10 @@
                             <p>
                                 @foreach (var provider in Model.ExternalLogins!)
                                 {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    <wa-button type="submit" class="btn btn-primary" name="provider" 
+                                        value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                        @provider.DisplayName
+                                    </wa-button>
                                 }
                             </p>
                         </div>
