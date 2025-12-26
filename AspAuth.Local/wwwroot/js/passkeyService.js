@@ -1,19 +1,18 @@
 import HttpService from "./httpService.js"
 
-
 export const browserSupportsPasskeys =
   typeof navigator.credentials !== "undefined" &&
   typeof window.PublicKeyCredential !== "undefined" &&
   typeof window.PublicKeyCredential.parseCreationOptionsFromJSON === "function" &&
   typeof window.PublicKeyCredential.parseRequestOptionsFromJSON === "function"
 
+const http = new HttpService("/api/Account")
 
-
-const http = new HttpService()
-
-const urlPasskeyCreationOptions = "api/Account/PasskeyCreationOptions"
-const urlPasskeyCreate = "api/Account/PasskeyCreate"
-const urlPasskeyRequestOptions = "api/Account/PasskeyRequestOptions"
+const urlPasskeyCreationOptions = "PasskeyCreationOptions"
+const urlPasskeyRequestOptions = "PasskeyRequestOptions"
+const urlPasskeyCreate = "PasskeyCreate"
+const urlPasskeyUpdate = "PasskeyUpdate"
+const urlPasskeyDelete = "PasskeyDelete"
 
 
 /**
@@ -30,21 +29,8 @@ export async function passkeyCreateOptions(signal) {
   const createdCred = await navigator.credentials.create({ publicKey: options, signal })
   return createdCred
 }
-
 /**
- * create passkey
- * @param {AbortSignal | null} signal 
- * @param {*} credentialJson 
- * @returns 
- */
-export function createPasskey(signal, credentialJson) {
-  const credentialsString = JSON.stringify(credentialJson)
-  return http.post(urlPasskeyCreate, signal, credentialsString)
-}
-
-
-/**
- * Get existing options
+ * Get existing options for authenticatio 
  * 
  * @param {string} userName 
  * @param {string} mediation 
@@ -57,6 +43,38 @@ export async function requestPasskeyOptions(userName, mediation, signal) {
   const optionsJson = typeof optionsResponse === "string" ? JSON.parse(optionsResponse) : optionsResponse
   const options = PublicKeyCredential.parseRequestOptionsFromJSON(optionsJson)
   return await navigator.credentials.get({ publicKey: options, mediation, signal })
+}
+
+/**
+ * create passkey
+ * @param {AbortSignal | null} signal 
+ * @param {object} credentialJson 
+ * @returns 
+ */
+export function createPasskey(signal, credentialJson) {
+  const credentialsString = JSON.stringify(credentialJson)
+  return http.post(urlPasskeyCreate, signal, credentialsString)
+}
+
+/**
+ * update name of passkey
+ * @param {AbortSignal | null} signal 
+ * @param {string} credentialId 
+ * @param {string} name 
+ */
+export function renamePasskey(signal, credentialId, name) {
+  var model = { credentialId, name }
+  return http.post(urlPasskeyUpdate, signal, model)
+}
+/**
+ * Delete passkey
+ * @param {AbortSignal | null} signal 
+ * @param {string} credentialId 
+ * @returns 
+ */
+export function deletePasskey(signal, credentialId) {
+  var model = { credentialId, name: "" }
+  return http.post(urlPasskeyDelete, signal, model)
 }
 
 class PasskeySubmit extends HTMLElement {

@@ -1,24 +1,37 @@
 @page
 @model PasskeysModel
 @{
-    ViewData["Title"] = "Passkeys";
-    ViewData["ActivePage"] = ManageNavPages.Passkeys;
+  ViewData["Title"] = "Passkeys";
+  ViewData["ActivePage"] = ManageNavPages.Passkeys;
 }
 
 <h1>@ViewData["Title"]</h3>
 
 <h2>Existing keys</h2>
 @foreach(var key in Model.Keys) {
-    <p>@key.Name (@key.CredentialId)</p>
+  <p>
+    @key.Name
+    <wa-button variant="neutral" appearance="outlined" size="small"
+        data-credential-id="@key.CredentialId">
+      <wa-icon name="pen-to-square"></wa-icon>
+    </wa-button>
+  </p>
 }
 
 <div>
-    <h2>Add new passkey</h2>
-    <passkey-create></passkey-create>
+  <h2>Add new passkey</h2>
+  <passkey-create></passkey-create>
 </div>
 <div>
-    
+
+<wa-dialog label="Edit key name" class="dialog-focus" id="passkeyEditDialog">
+  <wa-input autofocus placeholder="Type new key name"></wa-input>
+  <wa-button slot="footer" variant="brand" id="btnSave">Save</wa-button>
+  <wa-button slot="footer" variant="neutral" data-dialog="close">Cancel</wa-button>
+</wa-dialog>
+
 </div>
 @section Scripts {
     <script type="module" src="~/js/passkeyCreate.js"></script>
+    <script type="module" src="~/js/passkeyEdit.js"></script>
 }

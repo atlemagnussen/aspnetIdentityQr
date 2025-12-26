@@ -37,8 +37,10 @@ class PasskeyCreate extends HTMLElement {
         <p>Passkey not supported</p>
       `
     }
-    this.createBtn = document.createElement("button")
+    // <wa-button slot="footer" variant="brand" id="btnSave">Save</wa-button>
+    this.createBtn = document.createElement("wa-button")
     this.createBtn.innerText = "Create new passkey"
+    this.createBtn.variant = "brand"
     this.createBtn.addEventListener("click", this.obtainAndSubmitNewKey)
     this.shadowRoot.appendChild(this.createBtn)
   }

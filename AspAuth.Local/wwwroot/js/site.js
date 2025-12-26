@@ -1,11 +1,15 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
-
+﻿import { doImportWa } from "./waLoader.js"
 const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-if (systemDark)
+if (systemDark) {
     document.body.classList.add("dark")
-else
+    document.body.classList.add("wa-dark")
+}
+else {
     document.body.classList.add("light")
+    document.body.classList.add("wa-light")
+}
+
+doImportWa().then((success) => {
+    console.log("imported wa", success)
+})
