@@ -83,7 +83,7 @@ class PasskeyLogin extends HTMLElement {
       const email = new FormData(this.internals.form).get("Input.Email") // by name
       if (!email)
         throw new Error("missing username")
-      const credential = await requestPasskeyOptions(email, "conditional", signal)
+      const credential = await requestPasskeyOptions(email, undefined, signal)
       const credentialJson = JSON.stringify(credential)
       formData.append(`${this.attrs.name}.CredentialJson`, credentialJson)
       
