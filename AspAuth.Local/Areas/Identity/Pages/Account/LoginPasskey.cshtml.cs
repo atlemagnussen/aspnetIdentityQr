@@ -1,0 +1,70 @@
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace AspAuth.Local.Areas.Identity.Pages.Account
+{
+    [AllowAnonymous]
+    public class LoginPasskeyModel : PageModel
+    {
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly ILogger<ExternalLoginModel> _logger;
+
+        public LoginPasskeyModel(
+            SignInManager<IdentityUser> signInManager,
+            ILogger<ExternalLoginModel> logger)
+        {
+            _signInManager = signInManager;
+            _logger = logger;
+        }
+
+        /// </summary>
+        [BindProperty]
+        public InputModel Input { get; set; } = new InputModel();
+
+
+        public string? ReturnUrl { get; set; }
+
+        [TempData]
+        public string? ErrorMessage { get; set; }
+
+        public class InputModel
+        {
+            [Required]
+            [EmailAddress]
+            public string? Email { get; set; }
+        }
+        
+        public IActionResult OnGet() => RedirectToPage("./Login");
+
+        public async Task<IActionResult> OnPostAsync(string credentialJson, string? returnUrl = null)
+        {
+            returnUrl ??= Url.Content("~/");
+            
+            var result = await _signInManager.PasskeySignInAsync(credentialJson);
+            if (result.IsNotAllowed)
+            {
+                ErrorMessage = $"Not allowed";
+                _logger.LogInformation(ErrorMessage);
+                return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+            }
+            if (result.IsLockedOut)
+            {
+                ErrorMessage = $"Locked out";
+                _logger.LogInformation(ErrorMessage);
+                return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+            }
+            if (!result.Succeeded)
+            {
+                ErrorMessage = "Unsuccessful";
+                _logger.LogInformation(ErrorMessage);
+                return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+            }
+
+            _logger.LogInformation("Authentication passkey OK");
+            return LocalRedirect(returnUrl);
+        }
+    }
+}

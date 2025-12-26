@@ -37,8 +37,9 @@ class PasskeyLogin extends HTMLElement {
         <p>Passkey not supported</p>
       `
     }
-    this.loginBtn = document.createElement("button")
+    this.loginBtn = document.createElement("wa-button")
     this.loginBtn.innerText = "Login with passkey"
+    this.loginBtn.variant = "brand"
     this.loginBtn.addEventListener("click", this.obtainKeyOptions)
     this.shadowRoot.appendChild(this.loginBtn)
   }

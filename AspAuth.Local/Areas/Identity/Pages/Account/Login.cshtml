@@ -10,17 +10,20 @@
     <div class="col-md-4">
         <section>
             <form id="account" method="post">
-                <h2>Use a local account to log in.</h2>
+                <h2>Local account</h2>
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <div>
-                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                    <label asp-for="Input.Email" class="form-label">Email</label>
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    <wa-input label="Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" type="email" 
+                        data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." 
+                        id="Input_Email" name="Input.Email"
+                    </wa-input>
                 </div>
                 <div>
-                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
-                    <label asp-for="Input.Password" class="form-label">Password</label>
+                    <wa-input label="Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" type="password" 
+                        data-val="true" data-val-required="The Password field is required." 
+                        id="Input_Password" name="Input.Password">
+                    </wa-input>
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
                 <div>
@@ -30,7 +33,7 @@
                     </label>
                 </div>
                 <div>
-                    <wa-button id="login-submit" type="submit" class="primary">Log in</wa-button>
+                    <wa-button id="login-submit" type="submit" variant="brand">Log in</wa-button>
                 </div>
                 <div>
                     <p>
@@ -66,6 +69,7 @@
                                 @foreach (var provider in Model.ExternalLogins!)
                                 {
                                     <wa-button type="submit" class="btn btn-primary" name="provider" 
+                                        appearance="outlined" variant="brand"
                                         value="@provider.Name" title="Log in using your @provider.DisplayName account">
                                         @provider.DisplayName
                                     </wa-button>
@@ -77,7 +81,9 @@
             }
         </section>
         <section>
-            <passkey-login></passkey-login>
+            <form id="passkey-login" asp-page="./LoginPasskey" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                <passkey-login></passkey-login>
+            </form>
         </section>
     </div>
 </div>

@@ -1,0 +1,17 @@
+@page
+@model LoginPasskeyModel
+@{
+    ViewData["Title"] = "Login Passkey";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<p id="external-login-description" class="text-info">
+    You've successfully authenticated with <strong>Passkey</strong>.
+    But you dont have access here
+</p>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
