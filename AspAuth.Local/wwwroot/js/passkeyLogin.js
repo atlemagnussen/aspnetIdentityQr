@@ -85,7 +85,7 @@ class PasskeyLogin extends HTMLElement {
         throw new Error("missing username")
       const credential = await requestPasskeyOptions(email, undefined, signal)
       const credentialJson = JSON.stringify(credential)
-      formData.append(`${this.attrs.name}.CredentialJson`, credentialJson)
+      formData.append("credentialJson", credentialJson)
       
     } catch (error) {
       if (error.name === "AbortError") {
@@ -99,7 +99,9 @@ class PasskeyLogin extends HTMLElement {
       console.error(errorMessage)
       this.setError(errorMessage)
     }
-
+    this.internals.setFormValue(formData)
+    this.internals.form.action = "https://id.logout.work/Identity/Account/LoginPasskey"
+    this.internals.form.submit()
   }
 
   async tryAutofillPasskey() {
