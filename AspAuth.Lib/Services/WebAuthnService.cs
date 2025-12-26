@@ -1,3 +1,4 @@
+using System.Buffers.Text;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 
@@ -41,5 +42,23 @@ public class WebAuthnService(UserManager<IdentityUser> userManager,
 
         if (!addResult.Succeeded)
             throw new ApplicationException("Failed to store passkey");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="claimsUser">logged in user</param>
+    /// <param name="credentialId">base64 of byte[] credentialId</param>
+    /// <returns></returns>
+    public async Task PasskeyRename(ClaimsPrincipal claimsUser, string credentialId, string name)
+    {
+        try
+        {
+            var credIdBytes = Base64Url.DecodeFromChars(credentialId);    
+        }
+        catch (Exception e)
+        {
+            throw new ApplicationException("Error parsing keyId");
+        }
     }
 }
