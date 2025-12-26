@@ -9,17 +9,16 @@
 
 <h2>Existing keys</h2>
 @foreach(var key in Model.Keys) {
-    <p>@key</p>
+    <p>@key.Name</p>
 }
 
 <div>
     <h2>Add new passkey</h2>
-    <br>
-    <button id="btnAddPasskey">Add passkey</button>
+    <passkey-create></passkey-create>
 </div>
 <div>
-    <passkey-submit></passkey-submit>
+    
 </div>
 @section Scripts {
-    <script type="module" src="~/js/webauthn.js"></script>
+    <script type="module" src="~/js/passkeyCreate.js"></script>
 }

@@ -1,0 +1,59 @@
+{
+    "rp": {
+        "name": "logout.work",
+        "id": "logout.work"
+    },
+    "user": {
+        "id": "YjkyNjdhNTYtNTFhMC00MzRmLWEzNzEtNmE3MWQwN2ZmMTVi",
+        "name": "atlemagnussen@gmail.com",
+        "displayName": "atlemagnussen@gmail.com"
+    },
+    "challenge": "gzLClXsAia5_E7ewqLOAcu7QfIjdq_jnbHSicfF3N3B3MgUlGpjfsGw7X8tDqvudoiBz_9UVibQZitHDBpWoDA",
+    "pubKeyCredParams": [
+        {
+            "type": "public-key",
+            "alg": -7
+        },
+        {
+            "type": "public-key",
+            "alg": -37
+        },
+        {
+            "type": "public-key",
+            "alg": -35
+        },
+        {
+            "type": "public-key",
+            "alg": -38
+        },
+        {
+            "type": "public-key",
+            "alg": -39
+        },
+        {
+            "type": "public-key",
+            "alg": -257
+        },
+        {
+            "type": "public-key",
+            "alg": -36
+        },
+        {
+            "type": "public-key",
+            "alg": -258
+        },
+        {
+            "type": "public-key",
+            "alg": -259
+        }
+    ],
+    "timeout": 180000,
+    "excludeCredentials": [],
+    "authenticatorSelection": {
+        "residentKey": "preferred",
+        "requireResidentKey": false,
+        "userVerification": "required"
+    },
+    "hints": [],
+    "attestationFormats": []
+}

@@ -1,12 +1,15 @@
 using System.Buffers.Text;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace AspAuth.Lib.Services;
 
-public class WebAuthnService(UserManager<IdentityUser> userManager,
+public class WebAuthnService(ILogger<WebAuthnService> logger,
+UserManager<IdentityUser> userManager,
     SignInManager<IdentityUser> signInManager)
 {
+    private readonly ILogger _logger = logger;
     private readonly UserManager<IdentityUser> _userManager = userManager;
     private readonly SignInManager<IdentityUser> _signInManager = signInManager;
 
@@ -29,19 +32,35 @@ public class WebAuthnService(UserManager<IdentityUser> userManager,
 
     public async Task PasskeyCreate(ClaimsPrincipal claimsUser, string credentialJson)
     {
-        var user = await _userManager.GetUserAsync(claimsUser);
-        if (user is null)
-            throw new ApplicationException("no user");
+        var user = await _userManager.GetUserAsync(claimsUser) ?? throw new ApplicationException("no user");
 
         var attestationResult = await _signInManager.PerformPasskeyAttestationAsync(credentialJson);
 
         if (!attestationResult.Succeeded)
-            throw new ApplicationException(attestationResult.Failure.Message);
+        {
+            _logger.LogError(attestationResult.Failure.Message);
+            throw new ApplicationException(attestationResult.Failure.Message);   
+        }
         
         var addResult = await _userManager.AddOrUpdatePasskeyAsync(user, attestationResult.Passkey);
 
         if (!addResult.Succeeded)
-            throw new ApplicationException("Failed to store passkey");
+        {
+            foreach(var error in addResult.Errors)
+                _logger.LogError($"{error.Code} - {error.Description}");
+            throw new ApplicationException("Failed to store passkey");   
+        }
+    }
+
+    public async Task<string> GetPasskeyRequestOptions(string userName)
+    {
+        if (string.IsNullOrWhiteSpace(userName))
+            throw new ApplicationException("missing username");
+
+        var user = await _userManager.FindByNameAsync(userName) ?? throw new ApplicationException("Can't find user");
+
+        var optionsJson = await _signInManager.MakePasskeyRequestOptionsAsync(user);
+        return optionsJson;
     }
 
     /// <summary>

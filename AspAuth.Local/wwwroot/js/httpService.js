@@ -9,7 +9,7 @@ export default class HttpService {
      */
     get(urlPath) {
         const req = this.createRequest(urlPath, "get", jsonContentType)
-        return this.http<T>(req)
+        return this.http(req)
     }
     /**
      * @param {string} urlPath - only path and not baseurl/host
@@ -19,7 +19,7 @@ export default class HttpService {
      */
     post(urlPath, signal, data) {
         const req = this.createRequest(urlPath, "post", signal, jsonContentType, data)
-        return this.http<T>(req)
+        return this.http(req)
     }
     /**
      * @param {string} urlPath - only path and not baseurl/host
@@ -27,14 +27,14 @@ export default class HttpService {
      */
     put(urlPath, data) {
         const req = this.createRequest(urlPath, "put", jsonContentType, data)
-        return this.http<T>(req)
+        return this.http(req)
     } 
     /**
      * @param {string} urlPath - only path and not baseurl/host
      */
     delete(urlPath) {
     const req = this.createRequest(urlPath, "delete")
-        return this.http<T>(req)
+        return this.http(req)
     }
     
     /**
@@ -106,26 +106,12 @@ async function resHandler (res) {
         let errorFetchMsg = "Server returned error"
 
         if (res.status == 401) {
-            console.error("Status 401, token might be expired")
-            return
-        }
-        if (res.status >= 400 && res.status < 500) {
-            try {
-                const pd = await res.json()
-                console.log(pd)
-                const errors = handleErrorsAspNet(pd)
-                if (errors && errors.length > 0)
-                    errorFetchMsg = errors.join(",")
-            }
-            catch (ex) {
-                console.debug(ex);
-            }
-
+            errorFetchMsg = "Status 401, token might be expired"
+            
         } else {
-            const message = await res.text()
-            console.log(message)
+            errorFetchMsg = await res.text()
         }
-
+        console.log(errorFetchMsg)
         throw new HttpServiceError(errorFetchMsg, res.status)
     }
 }
@@ -149,7 +135,7 @@ function getHeaders(contentType) {
 export class HttpServiceError extends Error {
     status = 0
 
-    constructor(message: string, status: number) {
+    constructor(message, status) {
         super(message)
         this.status = status
     }

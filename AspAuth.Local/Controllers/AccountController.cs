@@ -15,6 +15,9 @@ public class AccountController : ControllerBase
         _webAuthnService = webAuthnService;
     }
 
+    /// <summary>
+    /// Create options before create
+    /// </summary>
     [HttpPost("PasskeyCreationOptions")]
     public async Task<ActionResult<string>> PasskeyCreationOptions()
     {
@@ -25,12 +28,16 @@ public class AccountController : ControllerBase
         return Ok(options);
     }
 
+    /// <summary>
+    /// Actually create
+    /// </summary>
+    /// <param name="credentialJson">from navigator.credentials.create</param>
     [HttpPost("PasskeyCreate")]
-    public async Task<ActionResult> PasskeyCreate([FromBody] string options)
+    public async Task<ActionResult> PasskeyCreate([FromBody] string credentialJson)
     {
         try
         {
-            await _webAuthnService.PasskeyCreate(User, options);
+            await _webAuthnService.PasskeyCreate(User, credentialJson);
         }
         catch(ApplicationException ae)
         {
@@ -40,9 +47,19 @@ public class AccountController : ControllerBase
         return Ok();
     }
 
-    [HttpPost]
-    public async Task AddPasskey(string credentialJson)
+    [HttpPost("PasskeyRequestOptions")]
+    [AllowAnonymous]
+    public async Task<ActionResult<string>> PasskeyRequestOptions([FromQuery]string userName)
     {
-        
+        try
+        {
+            var requestOptions = await _webAuthnService.GetPasskeyRequestOptions(userName);
+            return Ok(requestOptions);
+        }
+        catch(ApplicationException ae)
+        {
+            ModelState.AddModelError("invalid", ae.Message);
+            return BadRequest(ModelState);
+        }
     }
 }

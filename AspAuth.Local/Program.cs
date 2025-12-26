@@ -16,6 +16,7 @@ builder.ConfigureIdentityServer();
 
 builder.Services.LoadServices();
 
+builder.Services.AddControllers();
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
@@ -44,6 +45,7 @@ app.UseIdentityServer();
 
 app.UseAuthorization();
 
+app.MapControllers();
 app.MapRazorPages();
 
 app.Run();
