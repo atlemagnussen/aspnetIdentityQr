@@ -92,8 +92,8 @@ class PasskeyLogin extends HTMLElement {
       const credentialJson = JSON.stringify(credential)
       formData.append("credentialJson", credentialJson)
 
-      this.internals.form.delete(this.attrs.userName)
-      this.internals.form.delete(this.attrs.password)
+      const passwordEl = this.internals.form.querySelector("#InputPassword")
+      passwordEl.value = ""
 
       this.internals.setFormValue(formData)
       this.internals.form.action = "/Identity/Account/LoginPasskey" // special form instead of complicating Login form even more
