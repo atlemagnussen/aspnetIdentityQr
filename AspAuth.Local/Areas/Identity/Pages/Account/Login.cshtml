@@ -45,7 +45,7 @@
           </p>
         </div>
         <div>
-          <passkey-login id="__passkeySubmit"></passkey-login>
+          <passkey-login id="__passkeySubmit" return-url="@Model.ReturnUrl"></passkey-login>
         </div>
       </form>
     </section>
@@ -83,12 +83,6 @@
           </form>
         }
       }
-    </section>
-    <section>
-      <form id="passkey-login" asp-page="./LoginPasskey" asp-route-returnUrl="@Model.ReturnUrl" method="post"
-        class="form-horizontal">
-
-      </form>
     </section>
   </div>
 </div>

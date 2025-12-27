@@ -62,7 +62,7 @@ class PasskeyLogin extends HTMLElement {
 
     this.errorMsgCallout = document.createElement("wa-callout")
     this.errorMsgCallout.variant = "warning"
-    // <wa-icon name="triangle-exclamation"></wa-icon>
+    
     const errorIcon = document.createElement("wa-icon")
     errorIcon.slot = "icon"
     errorIcon.name = "triangle-exclamation"
@@ -83,6 +83,8 @@ class PasskeyLogin extends HTMLElement {
     this.abortController = new AbortController()
     const signal = this.abortController.signal
     const formData = new FormData()
+    const returnUrl = this.getAttribute("return-url")
+    this.loginBtn.setAttribute("loading", "")
     this.setError("")
     try {
       const email = new FormData(this.internals.form).get(this.attrs.userName) // by name
@@ -96,7 +98,8 @@ class PasskeyLogin extends HTMLElement {
       passwordEl.value = ""
 
       this.internals.setFormValue(formData)
-      this.internals.form.action = "/Identity/Account/LoginPasskey" // special form instead of complicating Login form even more
+
+      this.internals.form.action = `/Identity/Account/LoginPasskey?returnUrl=${returnUrl}` // special form instead of complicating Login form even more
       this.internals.form.submit()
       
     } catch (error) {
@@ -111,11 +114,8 @@ class PasskeyLogin extends HTMLElement {
       console.error(errorMessage)
       this.setError(errorMessage)
     }
-  }
-
-  async tryAutofillPasskey() {
-    if (browserSupportsPasskeys && await PublicKeyCredential.isConditionalMediationAvailable?.()) {
-      await this.obtainAndSubmitCredential(/* useConditionalMediation */ true)
+    finally {
+      this.loginBtn.removeAttribute("loading")
     }
   }
 }
