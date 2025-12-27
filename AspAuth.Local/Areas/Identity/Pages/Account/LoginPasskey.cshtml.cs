@@ -28,12 +28,10 @@ namespace AspAuth.Local.Areas.Identity.Pages.Account
         [BindProperty]
         public InputModel Input { get; set; } = new InputModel();
 
-
         public string? ReturnUrl { get; set; }
 
         [TempData]
         public string? ErrorMessage { get; set; }
-
         
         public IActionResult OnGet() => RedirectToPage("./Login");
 
