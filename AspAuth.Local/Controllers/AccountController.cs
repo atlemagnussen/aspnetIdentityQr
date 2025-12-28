@@ -36,7 +36,7 @@ public class AccountController : ControllerBase
     /// <returns></returns>
     [HttpPost("PasskeyRequestOptions")]
     [AllowAnonymous]
-    public async Task<ActionResult<string>> PasskeyRequestOptions([FromQuery]string userName)
+    public async Task<ActionResult<string>> PasskeyRequestOptions([FromQuery]string? userName)
     {
         try
         {

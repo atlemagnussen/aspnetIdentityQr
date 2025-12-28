@@ -55,15 +55,14 @@ UserManager<IdentityUser> userManager,
     /// <summary>
     /// Pre login with no authenticated user
     /// </summary>
-    /// <param name="userName">userName that wants to authenticate with passkey</param>
+    /// <param name="userName">userName that wants to authenticate with passkey or blank for conditional mediation</param>
     /// <returns></returns>
     /// <exception cref="ApplicationException"></exception>
-    public async Task<string> GetPasskeyRequestOptions(string userName)
+    public async Task<string> GetPasskeyRequestOptions(string? userName)
     {
-        if (string.IsNullOrWhiteSpace(userName))
-            throw new ApplicationException("missing username");
-
-        var user = await _userManager.FindByNameAsync(userName) ?? throw new ApplicationException("Can't find user");
+        IdentityUser? user = null;
+        if (userName is not null)
+            user = await _userManager.FindByNameAsync(userName);
 
         var optionsJson = await _signInManager.MakePasskeyRequestOptionsAsync(user);
         return optionsJson;

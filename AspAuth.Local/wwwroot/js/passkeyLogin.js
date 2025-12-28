@@ -26,8 +26,6 @@ class PasskeyLogin extends HTMLElement {
     }
   `
 
-  conditionalMediation = isConditionalMediationAvailable()
-
   constructor() {
     super()
     const sharedStyles = new CSSStyleSheet()
@@ -54,6 +52,13 @@ class PasskeyLogin extends HTMLElement {
       if (this.userName)
         this.obtainKeyOptions()
     })
+
+    // try autofill if allowed
+    if (isConditionalMediationAvailable()) {
+      this.obtainKeyOptions(true).then(() => {
+        this.submitForm(true)
+      })
+    }
   }
 
   disconnectedCallback() {
@@ -96,7 +101,7 @@ class PasskeyLogin extends HTMLElement {
     this.errorMsg.innerText = errorMsg
     this.errorMsgCallout.style.display = errorMsg ? "block" : "none"
   }
-  obtainKeyOptions = async () => {
+  obtainKeyOptions = async (conditionalMediation = false) => {
     this.abortController?.abort()
     this.abortController = new AbortController()
     const signal = this.abortController.signal
@@ -105,7 +110,7 @@ class PasskeyLogin extends HTMLElement {
     this.setError("")
     try {
       //const email = new FormData(this.internals.form).get(this.attrs.userName) // by name
-      if (!this.userName)
+      if (!this.userName && !conditionalMediation)
         throw new Error("missing username")
       this.options = await requestPasskeyOptions(this.userName, signal)
       if (this.options.allowCredentials && this.options.allowCredentials.length > 0) {
@@ -121,7 +126,7 @@ class PasskeyLogin extends HTMLElement {
     }
   }
 
-  submitForm = async () => {
+  submitForm = async (conditionalMediation = false) => {
     const formData = new FormData()
     const returnUrl = this.getAttribute("return-url")
 
@@ -132,7 +137,11 @@ class PasskeyLogin extends HTMLElement {
     const signal = this.abortController.signal
     this.loginBtn.setAttribute("loading", "")
     try {
-      const credential = await navigator.credentials.get({ publicKey: this.options, mediation: undefined, signal })
+      const credential = await navigator.credentials.get({ 
+        publicKey: this.options,
+        mediation: conditionalMediation ? "conditional" : undefined,
+        signal
+      })
       const credentialJson = JSON.stringify(credential)
       formData.append("credentialJson", credentialJson)
 
