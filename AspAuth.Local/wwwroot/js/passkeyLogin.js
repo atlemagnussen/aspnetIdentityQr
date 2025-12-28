@@ -76,6 +76,7 @@ class PasskeyLogin extends HTMLElement {
     this.loginBtn = document.createElement("wa-button")
     this.loginBtn.style.display = "none"
     this.loginBtn.variant = "success"
+    this.loginBtn.type = "submit"
     const btnIcon = document.createElement("wa-icon")
     btnIcon.slot = "start"
     btnIcon.name = "key"
