@@ -49,7 +49,7 @@ export async function passkeyCreateOptions(signal) {
  * @param {AbortSignal | null} signal 
  * @returns 
  */
-export async function requestPasskeyOptions(userName, signal) {
+export async function requestPasskeyOptions(userName = "", signal) {
   const optionsResponse = await http.post(`${urlPasskeyRequestOptions}?userName=${userName}`, signal)
   console.log("optionsResponse", optionsResponse)
   const optionsJson = typeof optionsResponse === "string" ? JSON.parse(optionsResponse) : optionsResponse

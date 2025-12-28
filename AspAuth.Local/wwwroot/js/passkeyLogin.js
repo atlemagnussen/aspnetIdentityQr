@@ -41,14 +41,14 @@ class PasskeyLogin extends HTMLElement {
     this.internals.form.addEventListener("submit", (event) => {
       if (event.submitter?.name === "__passkeySubmit") {
         event.preventDefault()
-        //this.obtainAndSubmitCredential()
+        this.submitForm()
       }
     })
 
     const userNameEl = this.internals.form.querySelector("#InputEmail")
-    this.userName = userNameEl.value
+    this.userName = userNameEl.value ?? ""
     userNameEl.addEventListener("change", (e) => {
-      this.userName = userNameEl.value
+      this.userName = userNameEl.value ?? ""
       if (this.userName)
         this.obtainKeyOptions()
     })
@@ -63,8 +63,8 @@ class PasskeyLogin extends HTMLElement {
 
   disconnectedCallback() {
     this.abortController?.abort()
-    if (this.loginBtn)
-      this.loginBtn.removeEventListener("click", this.submitForm)
+    // if (this.loginBtn)
+    //   this.loginBtn.removeEventListener("click", this.submitForm)
   }
 
   render() {
@@ -81,7 +81,7 @@ class PasskeyLogin extends HTMLElement {
     btnIcon.name = "key"
     this.loginBtn.appendChild(btnIcon)
     this.loginBtn.appendChild(document.createTextNode("Login with passkey"))
-    this.loginBtn.addEventListener("click", this.submitForm)
+    // this.loginBtn.addEventListener("click", this.submitForm)
     this.shadowRoot.appendChild(this.loginBtn)
 
     this.errorMsgCallout = document.createElement("wa-callout")
@@ -113,7 +113,7 @@ class PasskeyLogin extends HTMLElement {
       if (!this.userName && !conditionalMediation)
         throw new Error("missing username")
       this.options = await requestPasskeyOptions(this.userName, signal)
-      if (this.options.allowCredentials && this.options.allowCredentials.length > 0) {
+      if (this.options.allowCredentials && (this.options.allowCredentials.length > 0 || conditionalMediation)) {
         this.loginBtn.style.display = "block"
       } else {
         this.loginBtn.style.display = "none"
