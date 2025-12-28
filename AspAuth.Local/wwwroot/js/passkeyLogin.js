@@ -1,7 +1,7 @@
 const html = String.raw
 const css = String.raw
 
-import { browserSupportsPasskeys, requestPasskeyOptions } from "./passkeyService.js"
+import { browserSupportsPasskeys, requestPasskeyOptions, isConditionalMediationAvailable } from "./passkeyService.js"
 
 class PasskeyLogin extends HTMLElement {
   static formAssociated = true
@@ -9,6 +9,10 @@ class PasskeyLogin extends HTMLElement {
   loginBtn = null
   abortController = null
   errorMsg = ""
+
+  userName = ""
+  /** @type {PublicKeyCredentialRequestOptions | null} */
+  options = null
 
   attrs = {
     userName: "Input.Email",
@@ -21,6 +25,8 @@ class PasskeyLogin extends HTMLElement {
       min-height: 30px;
     }
   `
+
+  conditionalMediation = isConditionalMediationAvailable()
 
   constructor() {
     super()
@@ -37,15 +43,23 @@ class PasskeyLogin extends HTMLElement {
     this.internals.form.addEventListener("submit", (event) => {
       if (event.submitter?.name === "__passkeySubmit") {
         event.preventDefault()
-        this.obtainAndSubmitCredential()
+        //this.obtainAndSubmitCredential()
       }
+    })
+
+    const userNameEl = this.internals.form.querySelector("#InputEmail")
+    this.userName = userNameEl.value
+    userNameEl.addEventListener("change", (e) => {
+      this.userName = userNameEl.value
+      if (this.userName)
+        this.obtainKeyOptions()
     })
   }
 
   disconnectedCallback() {
     this.abortController?.abort()
     if (this.loginBtn)
-      this.loginBtn.removeEventListener("click", this.obtainKeyOptions)
+      this.loginBtn.removeEventListener("click", this.submitForm)
   }
 
   render() {
@@ -55,9 +69,10 @@ class PasskeyLogin extends HTMLElement {
       `
     }
     this.loginBtn = document.createElement("wa-button")
+    this.loginBtn.style.display = "none"
     this.loginBtn.innerText = "Login with passkey"
     this.loginBtn.variant = "brand"
-    this.loginBtn.addEventListener("click", this.obtainKeyOptions)
+    this.loginBtn.addEventListener("click", this.submitForm)
     this.shadowRoot.appendChild(this.loginBtn)
 
     this.errorMsgCallout = document.createElement("wa-callout")
@@ -82,26 +97,46 @@ class PasskeyLogin extends HTMLElement {
     this.abortController?.abort()
     this.abortController = new AbortController()
     const signal = this.abortController.signal
-    const formData = new FormData()
-    const returnUrl = this.getAttribute("return-url")
+    
     this.loginBtn.setAttribute("loading", "")
     this.setError("")
     try {
-      const email = new FormData(this.internals.form).get(this.attrs.userName) // by name
-      if (!email)
+      //const email = new FormData(this.internals.form).get(this.attrs.userName) // by name
+      if (!this.userName)
         throw new Error("missing username")
-      const credential = await requestPasskeyOptions(email, undefined, signal)
+      this.options = await requestPasskeyOptions(this.userName, signal)
+      if (this.options.allowCredentials && this.options.allowCredentials.length > 0) {
+        this.loginBtn.style.display = "block"
+      } else {
+        this.loginBtn.style.display = "none"
+      }
+    } catch (error) {
+      this.loginBtn.style.display = "none"
+    }
+    finally {
+      this.loginBtn.removeAttribute("loading")
+    }
+  }
+
+  submitForm = async () => {
+    const formData = new FormData()
+    const returnUrl = this.getAttribute("return-url")
+
+    if (!this.options) {
+      this.setError("no options")
+      return
+    }
+    const signal = this.abortController.signal
+    this.loginBtn.setAttribute("loading", "")
+    try {
+      const credential = await navigator.credentials.get({ publicKey: this.options, mediation: undefined, signal })
       const credentialJson = JSON.stringify(credential)
       formData.append("credentialJson", credentialJson)
-
-      const passwordEl = this.internals.form.querySelector("#InputPassword")
-      passwordEl.value = ""
 
       this.internals.setFormValue(formData)
 
       this.internals.form.action = `/Identity/Account/LoginPasskey?returnUrl=${returnUrl}` // special form instead of complicating Login form even more
       this.internals.form.submit()
-      
     } catch (error) {
       if (error.name === "AbortError") {
         // The user explicitly canceled the operation - return without error.

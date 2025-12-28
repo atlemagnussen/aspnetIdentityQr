@@ -6,6 +6,18 @@ export const browserSupportsPasskeys =
   typeof window.PublicKeyCredential.parseCreationOptionsFromJSON === "function" &&
   typeof window.PublicKeyCredential.parseRequestOptionsFromJSON === "function"
 
+
+export function isConditionalMediationAvailable() {
+  if (
+    typeof PublicKeyCredential.isConditionalMediationAvailable === "function" &&
+    PublicKeyCredential.isConditionalMediationAvailable()
+  ) {
+    console.log("Conditional Mediation is available");
+    return true;
+  }
+  console.log("Conditional Mediation is not available");
+  return false;
+}
 const http = new HttpService("/api/Account")
 
 const urlPasskeyCreationOptions = "PasskeyCreationOptions"
@@ -37,12 +49,12 @@ export async function passkeyCreateOptions(signal) {
  * @param {AbortSignal | null} signal 
  * @returns 
  */
-export async function requestPasskeyOptions(userName, mediation, signal) {
+export async function requestPasskeyOptions(userName, signal) {
   const optionsResponse = await http.post(`${urlPasskeyRequestOptions}?userName=${userName}`, signal)
   console.log("optionsResponse", optionsResponse)
   const optionsJson = typeof optionsResponse === "string" ? JSON.parse(optionsResponse) : optionsResponse
   const options = PublicKeyCredential.parseRequestOptionsFromJSON(optionsJson)
-  return await navigator.credentials.get({ publicKey: options, mediation, signal })
+  return options
 }
 
 /**

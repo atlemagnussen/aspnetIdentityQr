@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace AspAuth.Lib.Services;
 
@@ -102,9 +103,11 @@ public static class AspNetIdentitySetup
 
     public static void AddWebAuthn(this WebApplicationBuilder builder)
     {
+        var isDev = builder.Environment.IsDevelopment();
+
         builder.Services.Configure<IdentityPasskeyOptions>(options =>
         {
-            options.ServerDomain = "logout.work";
+            options.ServerDomain = isDev ? null : "logout.work";
             options.AuthenticatorTimeout = TimeSpan.FromMinutes(3);
             options.UserVerificationRequirement = "required";
             options.ResidentKeyRequirement = "preferred";
