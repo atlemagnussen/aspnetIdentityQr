@@ -70,8 +70,12 @@ class PasskeyLogin extends HTMLElement {
     }
     this.loginBtn = document.createElement("wa-button")
     this.loginBtn.style.display = "none"
-    this.loginBtn.innerText = "Login with passkey"
-    this.loginBtn.variant = "brand"
+    this.loginBtn.variant = "success"
+    const btnIcon = document.createElement("wa-icon")
+    btnIcon.slot = "start"
+    btnIcon.name = "key"
+    this.loginBtn.appendChild(btnIcon)
+    this.loginBtn.appendChild(document.createTextNode("Login with passkey"))
     this.loginBtn.addEventListener("click", this.submitForm)
     this.shadowRoot.appendChild(this.loginBtn)
 
@@ -81,7 +85,6 @@ class PasskeyLogin extends HTMLElement {
     const errorIcon = document.createElement("wa-icon")
     errorIcon.slot = "icon"
     errorIcon.name = "triangle-exclamation"
-    errorIcon.variant = "regular"
     this.errorMsgCallout.appendChild(errorIcon)
     this.errorMsg = document.createElement("strong")
     this.errorMsgCallout.appendChild(this.errorMsg)
