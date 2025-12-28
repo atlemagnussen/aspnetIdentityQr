@@ -8,15 +8,8 @@ export const browserSupportsPasskeys =
 
 
 export function isConditionalMediationAvailable() {
-  if (
-    typeof PublicKeyCredential.isConditionalMediationAvailable === "function" &&
+  return typeof PublicKeyCredential.isConditionalMediationAvailable === "function" &&
     PublicKeyCredential.isConditionalMediationAvailable()
-  ) {
-    console.log("Conditional Mediation is available");
-    return true;
-  }
-  console.log("Conditional Mediation is not available");
-  return false;
 }
 const http = new HttpService("/api/Account")
 

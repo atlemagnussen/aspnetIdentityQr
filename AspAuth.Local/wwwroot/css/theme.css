@@ -53,3 +53,6 @@ form {
         flex: 0 1 50%;
     }
 }
+wa-popover::part(body) {
+    padding: var(--wa-space-s)
+}

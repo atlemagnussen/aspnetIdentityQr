@@ -53,20 +53,32 @@ class PasskeyLogin extends HTMLElement {
         this.obtainKeyOptions()
     })
 
-    // try autofill if allowed
-    if (isConditionalMediationAvailable()) {
-      this.obtainKeyOptions(true).then(() => {
-        this.submitForm(true)
-      })
-    }
+    this.tryAutofillAvailable()
   }
 
   disconnectedCallback() {
     this.abortController?.abort()
-    // if (this.loginBtn)
-    //   this.loginBtn.removeEventListener("click", this.submitForm)
+    if (this.loginBtn)
+      this.loginBtn.removeEventListener("click", submitFormFromBtn)
   }
 
+  submitFormFromBtn = () => {
+    this.submitForm()
+  }
+  async tryAutofillAvailable() {
+    const isAvailable = await isConditionalMediationAvailable()
+    if (!isAvailable)
+      return
+    
+    await this.obtainKeyOptions(true)
+    if (this.options && this.options.userVerification === "required") {
+      // show wa-popover
+      const popover = this.internals.form.querySelector("wa-popover")
+      if (popover)
+        popover.open = "true"
+    }
+    this.submitForm(true)  
+  }
   render() {
     if (!browserSupportsPasskeys) {
       this.shadowRoot.innerHTML = html`
@@ -82,7 +94,7 @@ class PasskeyLogin extends HTMLElement {
     btnIcon.name = "key"
     this.loginBtn.appendChild(btnIcon)
     this.loginBtn.appendChild(document.createTextNode("Login with passkey"))
-    // this.loginBtn.addEventListener("click", this.submitForm)
+    this.loginBtn.addEventListener("click", this.submitFormFromBtn)
     this.shadowRoot.appendChild(this.loginBtn)
 
     this.errorMsgCallout = document.createElement("wa-callout")

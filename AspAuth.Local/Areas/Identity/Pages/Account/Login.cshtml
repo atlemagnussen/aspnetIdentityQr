@@ -10,18 +10,23 @@
   <div>
     <section>
       <form id="account" method="post">
-        <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
         <div>
           <wa-input label="Email" class="form-control" autocomplete="username webauthn" aria-required="true"
             placeholder="name@example.com" type="email" data-val="true"
             data-val-email="The Email field is not a valid e-mail address."
-            data-val-required="The Email field is required." id="InputEmail" name="Input.Email" </wa-input>
+            data-val-required="The Email field is required." id="InputEmail" name="Input.Email">
+            <wa-icon name="at" slot="start"></wa-icon>
+          </wa-input>
+          <wa-popover for="InputEmail" placement="top" distance="0">
+            <small>Passkey autofill available</small>
+          </wa-popover>
         </div>
         <div>
           <wa-input label="Password" class="form-control" autocomplete="current-password" aria-required="true"
             placeholder="password" type="password" data-val="true" data-val-required="The Password field is required."
             id="InputPassword" name="Input.Password">
+            <wa-icon name="key" slot="start"></wa-icon>
           </wa-input>
           <span asp-validation-for="Input.Password" class="text-danger"></span>
         </div>
