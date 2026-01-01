@@ -77,7 +77,7 @@ namespace AspAuth.Local.Areas.Identity.Pages.Account
             // }
 
             _logger.LogInformation("Authentication passkey OK");
-            return LocalRedirect(returnUrl);
+            return Redirect(returnUrl);
         }
     }
 }

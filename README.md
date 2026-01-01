@@ -61,3 +61,6 @@ drop table public."AspNetUserTokens"
 drop table public."AspNetUserLogins"
 drop table public."AspNetRoles"
 drop table public."AspNetUsers"
+
+
+https://id.logout.work/Identity/Account/LoginPasskey?returnUrl=/connect/authorize/callback?request_uri=urn%3Aietf%3Aparams%3Aoauth%3Arequest_uri%3AF68E2BD22151CA0E0C4531F89306C16B6BF76ECCA5748AB2597B8BA1CB289249&client_id=web
