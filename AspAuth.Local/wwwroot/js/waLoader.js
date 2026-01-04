@@ -1,20 +1,13 @@
 const modulesToLoad = [
-    "/components/button/button.js",
-    "/components/icon/icon.js",
-    "/components/tooltip/tooltip.js",
-    "/components/switch/switch.js",
-    "/components/popover/popover.js",
-    "/components/avatar/avatar.js",
-    "/components/dropdown/dropdown.js",
-    "/components/details/details.js",
-    "/components/input/input.js",
-    "/components/select/select.js",
-    "/components/option/option.js",
-    "/components/radio-group/radio-group.js",
-    "/components/radio/radio.js",
-    "/components/textarea/textarea.js",
-    "/components/dialog/dialog.js",
-    "/components/callout/callout.js"
+    "/components/button/button.js",      // wa-button
+    "/components/icon/icon.js",          // wa-icon
+    "/components/tooltip/tooltip.js",    // wa-tooltip
+    "/components/checkbox/checkbox.js",   // wa-checkbox
+    "/components/popover/popover.js",    // wa-popover
+    "/components/avatar/avatar.js",      // wa-avatar
+    "/components/input/input.js",        // wa-input
+    "/components/dialog/dialog.js",      // wa-dialog 
+    "/components/callout/callout.js"     // wa-callout
 ]
 
 const baseUrl = "https://static.logout.work/webawesome/3.1.0/dist"

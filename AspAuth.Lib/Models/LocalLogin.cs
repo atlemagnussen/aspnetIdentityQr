@@ -1,5 +1,6 @@
 #nullable disable
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace AspAuth.Lib.Models;
 
@@ -14,5 +15,6 @@ public class InputModel
     public string Password { get; set; }
 
     [Display(Name = "Remember me?")]
+
     public bool RememberMe { get; set; }
 }

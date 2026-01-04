@@ -32,7 +32,7 @@
         </div>
         <div class="login-helper">
           <label asp-for="Input.RememberMe" class="form-label">
-            <input class="form-check-input" asp-for="Input.RememberMe" />
+            <wa-checkbox asp-for="Input.RememberMe"</wa-checkbox>
             @Html.DisplayNameFor(m => m.Input.RememberMe)
           </label>
           <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
@@ -42,6 +42,7 @@
           <passkey-login id="__passkeySubmit" return-url="@Model.ReturnUrl"></passkey-login>
         </div>
       </form>
+      <partial name="_ValidationSummary" />
     </section>
   </div>
   <div>
