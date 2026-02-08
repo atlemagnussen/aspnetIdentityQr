@@ -1,3 +1,4 @@
+using Npgsql;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -9,26 +10,34 @@ public static class OpenTelemetryStartup
 {
     public static IHostApplicationBuilder ConfigureOtel(this IHostApplicationBuilder builder)
     {
-        builder.Logging.AddOpenTelemetry(x => {
-            x.IncludeScopes = true;
-            x.IncludeFormattedMessage = true;
+        builder.Logging.AddOpenTelemetry(logging => {
+            logging.IncludeScopes = true;
+            logging.IncludeFormattedMessage = true;
         });
 
         builder.Services.AddOpenTelemetry()
             .ConfigureResource(resource => resource
                 .AddService(serviceName: builder.Environment.ApplicationName))
-            .WithMetrics(x =>
+            .WithMetrics(metrics =>
             {
-                x.AddRuntimeInstrumentation()
-                    .AddMeter("Microsoft.AspNet.Hosting",
-                        "Microsoft.AspNet.Server.Kestrel",
-                        "System.Net.Http"
-                    );
+                metrics
+                  .AddAspNetCoreInstrumentation()
+                  .AddHttpClientInstrumentation();
+
+                // metrics.AddRuntimeInstrumentation()
+                //     .AddMeter("Microsoft.AspNet.Hosting",
+                //         "Microsoft.AspNet.Server.Kestrel",
+                //         "System.Net.Http"
+                //     );
             })
-            .WithTracing(x => 
-               x.AddAspNetCoreInstrumentation()
+            .WithTracing(tracing => 
+               tracing
+                .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
-                .AddConsoleExporter());
+                .AddEntityFrameworkCoreInstrumentation()
+                .AddNpgsql());
+
+                // .AddConsoleExporter()
 
         return builder;
     }
@@ -36,8 +45,7 @@ public static class OpenTelemetryStartup
     public static IHostApplicationBuilder AddOtelExporters(this IHostApplicationBuilder builder)
     {
         var otelEndpoint = builder.Configuration.GetValue<string>("OTEL_EXPORTER_OTLP_ENDPOINT");
-        var otelProtocol = builder.Configuration.GetValue<string>("OTEL_EXPORTER_OTLP_TRACES_PROTOCOL");
-
+        //var otelProtocol = builder.Configuration.GetValue<string>("OTEL_EXPORTER_OTLP_TRACES_PROTOCOL");
         var hasExporter = !string.IsNullOrWhiteSpace(otelEndpoint);
 
         if (hasExporter)

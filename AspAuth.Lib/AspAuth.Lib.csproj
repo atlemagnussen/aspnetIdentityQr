@@ -30,5 +30,7 @@
     <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="7.4.3" />
     <PackageReference Include="Duende.IdentityServer.EntityFramework" Version="7.4.3" />
     <PackageReference Include="MailKit" Version="4.14.1" />
+    <PackageReference Include="Npgsql.OpenTelemetry" Version="10.0.1" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.15.0-beta.1" />
   </ItemGroup>
 </Project>
