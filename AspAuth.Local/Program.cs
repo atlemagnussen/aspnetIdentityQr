@@ -1,5 +1,5 @@
-using AspAuth.Lib.Models;
 using AspAuth.Lib.Services;
+using AspAuth.Local.Observe;
 using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +10,9 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     options.KnownIPNetworks.Clear();
     options.KnownProxies.Clear();
 });
+
+builder.ConfigureOtel()
+    .AddOtelExporters();
 
 builder.ConfigureAspNetIdentity();
 builder.AddWebAuthn();
