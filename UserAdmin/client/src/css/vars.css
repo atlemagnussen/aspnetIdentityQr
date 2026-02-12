@@ -1,0 +1,34 @@
+:root {
+    --digilean-blue-sky: #76c3ed;
+    --digilean-blue-moon: #9dc4e7;
+    --digilean-blue-sky-light: #acd3ef;
+    --digilean-blue-sky-lighter: #d1e9f8;
+    --digilean-blue: #1c93d3;
+    --digilean-blue-alt: #2095d5;
+    --digilean-blue-light: #58b2e3;
+    --digilean-blue-sharp: #0099de;
+    --digilean-blue-raw: #0077B5;
+    --digilean-blue-diamond: #008cc9;
+
+    --digilean-grey: #676a6c;
+    --digilean-grey-dark: #2f4050;
+    --digilean-white: #fff;
+    --digilean-grey-white: #fafafa;
+    --digilean-grey-light: #d2d2d2;
+    --digilean-grey-lighter: #d4d4d4;
+    --default-grey: #F0F0F0;
+    /* --digilean-logo-error-color: rgb(124, 26, 26); */
+    --digilean-logo-error-color: #721c24;
+    --digilean-logo-error-color-light: #f8d7da;
+
+    --digilean-orange: #F89406;
+    --digilean-red: #BD362F;
+    --digilean-yellow: #fff3cd;
+    --digilean-brown: #856404;
+
+    --primary-background: var(--digilean-grey-dark);
+    --primary-text: var(--digilean-white);
+
+    --logo-top-left-color: var(--digilean-blue-light);
+    --logo-rest-color: var(--digilean-blue-raw);
+}

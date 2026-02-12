@@ -1,0 +1,7 @@
+<div id="login-partial">
+@if(User.Identity is not null && User.Identity.IsAuthenticated) {
+    <a href="/UserInfo">
+        <span>@User.Identity.Name</span>
+    </a>
+}
+</div>

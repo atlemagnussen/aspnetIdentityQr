@@ -14,6 +14,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 builder.ConfigureOtel()
     .AddOtelExporters();
 
+builder.ConfigureCookies();
 builder.ConfigureAspNetIdentity();
 builder.AddWebAuthn();
 builder.ConfigureIdentityServer();

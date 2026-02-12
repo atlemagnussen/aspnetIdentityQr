@@ -1,0 +1,21 @@
+dialog {
+    border-radius: var(--wa-border-radius-m);
+    box-shadow: 0.5rem 0.5rem 0.5rem var(--wa-color-overlay-modal);
+}
+
+dialog#migrate {
+    width: 60vw;
+    padding: 0.1rem 0.5rem 0.5rem 0.5rem;
+    header {
+        display: flex;
+        justify-content: space-between;
+        cursor: move;
+    }
+    &.is-dragging {
+        box-shadow: 0.5rem 0.5rem 0.5rem var(--wa-color-focus);
+        border: var(--wa-border-width-m) var(--wa-border-style) var(--wa-color-focus);
+    }
+    article {
+        overflow-y: show;
+    }
+}

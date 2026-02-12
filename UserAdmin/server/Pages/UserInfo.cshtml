@@ -1,0 +1,30 @@
+@page
+@using UserAdmin.Pages;
+@model UserInfoModel
+@{
+    ViewData["Title"] = "UserInfo";
+}
+
+<section id="home-page">
+    <div>
+
+        @if (Model.View.IsLoggedIn)
+        {
+            <h2>Is Logged In:</h2>
+            <p>@Model.View.UserName</p>
+            <ul>
+            @foreach (var claim in Model.View.Claims) {
+                <li>@claim</li>
+            }
+            </ul>
+            <div class="login-link">
+                <a asp-page="/Logout/Index">Log out</a>
+            </div>
+        } else {
+            <div class="login-link">
+                <a asp-page="/Login/Index" asp-route-returnurl="/">Log in</a>
+            </div>
+
+        }
+    </div>
+</section>

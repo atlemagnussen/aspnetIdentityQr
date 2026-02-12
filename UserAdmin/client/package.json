@@ -1,0 +1,28 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "description": "client for dbupdater",
+  "keywords": [
+    "web"
+  ],
+  "license": "ISC",
+  "author": "atlemagnussen",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "vite build",
+    "watch": "tsc && vite build --watch",
+    "ts": "tsc --build"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.10",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
+  },
+  "dependencies": {
+    "@awesome.me/webawesome": "^3.1.0",
+    "@microsoft/signalr": "^10.0.0",
+    "lit": "^3.3.2",
+    "syntax-highlight-element": "^1.2.0"
+  }
+}

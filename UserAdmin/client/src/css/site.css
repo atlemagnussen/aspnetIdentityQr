@@ -1,0 +1,149 @@
+﻿
+svg.svg-defs {
+    display: none;
+}
+
+/* Logo common */
+figure.digilean-logo, #digilean-logo-success {
+    --logo-top-left-color: var(--digilean-blue-sky-light);
+    --logo-top-right-color: var(--digilean-blue);
+    --logo-bottom-left-color: var(--digilean-blue);
+    --logo-bottom-right-color: var(--digilean-blue);
+}
+figure.digilean-logo {
+    display: inline-block;
+}
+figure.digilean-logo figcaption {
+    text-align: center;
+}
+h1.logo-name {
+    font-size: 3rem;
+    letter-spacing: -2px;
+    font-weight: 800;
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+/* Error and validation common between Login and Login/Error */
+div.validation-messages {
+    background-color: var(--digilean-logo-error-color-light);
+    border-radius: 0.25rem;
+    color: var(--digilean-logo-error-color);
+    margin-top: 2rem;
+    padding: 0.3rem;
+}
+.validation-summary-errors>ul {
+    margin-bottom: 0;
+    margin-block-start: 0.2rem;
+    padding-inline-start: 0.2rem;;
+    list-style: none;
+}
+
+.login-link a, .login-link a:hover {
+    color: white;
+    text-decoration: underline;
+}
+.contact-link a, .contact-link a:hover {
+    color: white;
+    text-decoration: underline;
+}
+.login-link a:hover, .contact-link a:hover {
+    cursor: pointer;
+}
+
+#passwordless-form, #passwordless-form input {
+    width: 400px;
+}
+#passwordless-result {
+    max-width: 80vw;
+    word-break: break-all;
+}
+.login.btn a {
+    color: white;
+}
+
+.info-text {
+    color: var(--digilean-white);
+}
+.important-text {
+    text-decoration: underline;
+}
+
+/* bootstrap classes*/ 
+.form-group {
+    margin-bottom: 1rem;
+}
+.form-control {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.alert-warning {
+    background: var(--digilean-yellow);
+    color: var(--digilean-brown);
+}
+.alert-danger {
+    background: var(--digilean-logo-error-color-light);
+    color: var(--digilean-red);
+}
+
+/* default button */
+button {
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: .375rem .75rem;
+    text-align: center;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+
+    background: var(--digilean-grey-lighter);
+    border: 1px solid var(--digilean-grey-light);
+    color: var(--digilean-grey-dark);
+}
+button:hover {
+    background: var(--digilean-grey-white);
+}
+
+/* primary button */
+button.digilean-primary-button {
+    background: var(--digilean-blue-sharp);
+    border: 1px solid var(--digilean-blue-raw);
+    color: var(--digilean-white);   
+}
+
+button.digilean-primary-button:hover {
+    background: var(--digilean-blue-diamond);
+}
+
+button.digilean-primary-button:disabled,
+button[disabled] {
+    cursor: wait;
+    border: 1px solid var(--digilean-grey-light);
+    background-color: var(--digilean-grey-light);
+    color: var(--digilean-grey);
+}
+
+a {
+    color: white;
+    text-decoration: underline;
+}
+
+div.row {
+    margin-top: 2rem;
+    display: flex;
+    div.grow {
+        flex: auto 1 1;
+    }
+}

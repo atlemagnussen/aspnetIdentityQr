@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Admin</title>
+    <link rel="stylesheet" href="~/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a class="navbar-brand" asp-area="" asp-page="/Index">
+                <span>Home</span>
+            </a>
+            <h2>
+                @ViewData["Title"]
+            </h2>
+            <ul class="navbar-nav">
+                <partial name="_LoginPartial" />
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="centered-content">
+            @RenderBody()
+        </section>
+    </main>
+    <script src="~/main.js" asp-append-version="true" type="module"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

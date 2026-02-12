@@ -1,0 +1,21 @@
+@page
+@using UserAdmin.Pages;
+@model ManagerModel
+@{
+    ViewData["Title"] = "Db Update Manager";
+}
+
+<section id="home-page">
+    <div class="row">
+        <div>
+            <permissions-element></permissions-element>
+            <a href="/permissions">See all permissions</a>
+        </div>
+        <div class="grow">
+            <db-console></db-console>
+        </div>
+    </div>
+    <div class="row">
+        <db-overview></db-overview>
+    </div>
+</section>
