@@ -11,7 +11,8 @@
         @if (Model.View.IsLoggedIn)
         {
             <h2>Is Logged In:</h2>
-            <p>@Model.View.UserName</p>
+            <p>UserName: @Model.View.UserName</p>
+            <p>FullName: @Model.View.Fullname</p>
             <ul>
             @foreach (var claim in Model.View.Claims) {
                 <li>@claim</li>

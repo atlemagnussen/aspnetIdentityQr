@@ -5,8 +5,8 @@ namespace UserAdmin.Persistence.Database;
 
 public static class DatabaseStartup
 {
-    public static void AddDatabase(this WebApplicationBuilder builder)
+    public static void AddDatabase(this WebApplicationBuilder builder, string connectionString)
     {
-        builder.Services.AddDbContext<ApplicationDbContext>();
+        builder.AddApplicationDatabaseContext(connectionString);
     }
 }

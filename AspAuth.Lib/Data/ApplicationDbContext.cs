@@ -15,7 +15,7 @@ namespace AspAuth.Lib.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<UserProfile>().HasKey(wc => wc.AspNetUserId);
+            builder.Entity<UserProfile>().HasKey(wc => wc.UserId);
             base.OnModelCreating(builder);
         }
     }

@@ -76,9 +76,6 @@ namespace AspAuth.Lib.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<string>("UserProfileAspNetUserId")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -87,8 +84,6 @@ namespace AspAuth.Lib.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
-
-                    b.HasIndex("UserProfileAspNetUserId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -118,13 +113,13 @@ namespace AspAuth.Lib.Migrations
 
             modelBuilder.Entity("AspAuth.Lib.Models.UserProfile", b =>
                 {
-                    b.Property<string>("AspNetUserId")
+                    b.Property<string>("UserId")
                         .HasColumnType("text");
 
                     b.Property<string>("FullName")
                         .HasColumnType("text");
 
-                    b.HasKey("AspNetUserId");
+                    b.HasKey("UserId");
 
                     b.ToTable("UserProfile");
                 });
@@ -282,13 +277,15 @@ namespace AspAuth.Lib.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("AspAuth.Lib.Models.ApplicationUser", b =>
+            modelBuilder.Entity("AspAuth.Lib.Models.UserProfile", b =>
                 {
-                    b.HasOne("AspAuth.Lib.Models.UserProfile", "UserProfile")
-                        .WithMany()
-                        .HasForeignKey("UserProfileAspNetUserId");
+                    b.HasOne("AspAuth.Lib.Models.ApplicationUser", "User")
+                        .WithOne("UserProfile")
+                        .HasForeignKey("AspAuth.Lib.Models.UserProfile", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("UserProfile");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -389,6 +386,11 @@ namespace AspAuth.Lib.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AspAuth.Lib.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("UserProfile");
                 });
 #pragma warning restore 612, 618
         }

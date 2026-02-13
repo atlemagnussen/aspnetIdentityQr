@@ -33,13 +33,7 @@ public static class AspNetIdentitySetup
         // var connectionString = $"Data Source={DbPath}";
         var connectionString = configuration.GetAuthConnectionString();
 
-        services.AddDbContext<ApplicationDbContext>(opt =>
-        {
-            opt.UseNpgsql(connectionString, o =>
-            {
-                o.ConfigureDataSource(ds => ds.EnableDynamicJson());
-            });
-        });
+        builder.AddApplicationDatabaseContext(connectionString);
 
         services.AddDataProtectionAuth(connectionString);
 
