@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using UserAdmin.Api.Users;
 
 namespace UserAdmin.Api;
 
@@ -15,5 +16,7 @@ public static class ApiStartup
             
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(allowIntegerValues: false));
         });
+
+        builder.AddUsers();
     }
 }
