@@ -1,3 +1,4 @@
+using AspAuth.Lib.Data;
 using Duende.IdentityServer.EntityFramework.DbContexts;
 using Duende.IdentityServer.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Builder;
@@ -54,6 +55,11 @@ public static class IdentityServerSetup
         keyService.CreateAndSaveNewKey();
     }
 
+    public static void MigrateDb(this IApplicationBuilder app)
+    {
+        using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>()!.CreateScope();
+        serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
+    }
     public static void InitializeDatabase(this IApplicationBuilder app)
     {
         using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>()!.CreateScope();

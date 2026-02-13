@@ -33,6 +33,8 @@ dotnet ef migrations add AddCryptoSigningKeys --project ../AspAuth.Lib -c Applic
 
 dotnet ef migrations add Addpasskeys --project ../AspAuth.Lib -c ApplicationDbContext
 
+dotnet ef migrations add AddUserProfile --project ../AspAuth.Lib -c ApplicationDbContext
+
 dotnet ef database update -c ApplicationDbContext
 
 
@@ -52,6 +54,16 @@ dotnet ef migrations add InitialIdentityServerOperational --project ../AspAuth.L
 
 dotnet ef database update -c ConfigurationDbContext
 dotnet ef database update -c PersistedGrantDbContext
+
+# remove 
+
+dotnet ef migrations list -c ApplicationDbContext
+
+dotnet ef database update 20251215224051_Addpasskeys -c ApplicationDbContext
+
+dotnet ef migrations remove --project ../AspAuth.Lib -c ApplicationDbContext
+
+
 ## clear
 
 drop table public."AspNetRoleClaims"

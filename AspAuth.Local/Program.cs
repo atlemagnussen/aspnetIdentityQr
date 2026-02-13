@@ -26,7 +26,7 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-//app.InitializeDatabase();
+//app.MigrateDb();
 
 // app.SetPublicUrl(builder.Configuration);
 

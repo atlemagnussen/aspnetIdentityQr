@@ -12,5 +12,11 @@ namespace AspAuth.Lib.Data
         }
         
         public DbSet<CryptoSigningKey> SigningKeys { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<UserProfile>().HasKey(wc => wc.AspNetUserId);
+            base.OnModelCreating(builder);
+        }
     }
 }
