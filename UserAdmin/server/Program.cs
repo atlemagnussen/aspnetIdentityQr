@@ -1,9 +1,17 @@
 using AspAuth.Lib.Services;
+using Microsoft.AspNetCore.HttpOverrides;
 using UserAdmin.Api;
 using UserAdmin.Auth;
 using UserAdmin.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
 builder.Services.AddProblemDetails(configure =>
 {
@@ -36,7 +44,10 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
+else
+{
+    app.UseForwardedHeaders();
+}
 app.UseExceptionHandler();
 
 app.MapControllers();
