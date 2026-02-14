@@ -8,6 +8,7 @@ public static class Config
         [
             new IdentityResources.OpenId(),
             new IdentityResources.Profile(),
+            new IdentityResource("roles", "User roles", ["role"]), // Map 'role' claim to 'roles' scope
             new IdentityResource()
             {
                 Name = "verification",
@@ -72,7 +73,7 @@ public static class Config
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
                     "verification",
-                    "api1"
+                    "roles"
                 }
             }
         ];

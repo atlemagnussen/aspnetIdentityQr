@@ -1,5 +1,6 @@
 using AspAuth.Lib.Models;
 using Duende.IdentityModel;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 
 namespace UserAdmin.Auth;
@@ -32,15 +33,24 @@ public static class AuthenticationStartup
 
             options.Scope.Add("openid");
             options.Scope.Add("profile");
+            options.Scope.Add("roles");
 
-            options.CallbackPath = "/signin-oidc";
             options.MapInboundClaims = false;
+
+            options.ClaimActions.Clear();
+            options.ClaimActions.DeleteClaim("nonce");
+            options.ClaimActions.DeleteClaim("at_hash");
+
+            options.ClaimActions.MapJsonKey("role", "role", "role"); 
+            options.ClaimActions.MapUniqueJsonKey("name", "name", "name");
 
             options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
             {
                 NameClaimType = "name",
                 RoleClaimType = "role"
             };
+
+            options.CallbackPath = "/signin-oidc";
 
             options.Events.OnRemoteFailure = context =>
             {
