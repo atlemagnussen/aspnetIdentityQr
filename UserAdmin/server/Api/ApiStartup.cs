@@ -18,5 +18,9 @@ public static class ApiStartup
         });
 
         builder.AddUsers();
+
+        builder.Services.AddOpenApi(options =>
+            options.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi3_1
+        );
     }
 }

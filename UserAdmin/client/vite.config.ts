@@ -3,7 +3,7 @@ import { defineConfig } from "vite"
 
 const thisFolder = path.resolve(__dirname)
 const srcFolder = path.join(thisFolder, "src")
-//const publicFolder = path.join(thisFolder, "public")
+const apiFolder = path.join(srcFolder, "api")
 
 export default defineConfig({
   build: {
@@ -20,7 +20,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@db/client": srcFolder
+      "@db/client": srcFolder,
+      "@db/api": apiFolder
     }
   },
 })

@@ -5,14 +5,19 @@ namespace UserAdmin.Api.Users.Translators;
 
 public class ApplicationUserToUserDTO
 {
-    public UserDTO Translate(ApplicationUser applicationUser)
+    public static UserDTO Translate(ApplicationUser user)
     {
         return new UserDTO
         {
-            Id = applicationUser.Id,
-            UserName = applicationUser.UserName!,
-            Email = applicationUser.Email!,
-            FullName = applicationUser.UserProfile?.FullName
+            Id = user.Id,
+            UserName = user.UserName!,
+            Email = user.Email!,
+            FullName = user.UserProfile?.FullName
         };
+    }
+
+    public static List<UserDTO> Translate(List<ApplicationUser> users)
+    {
+        return [.. users.Select(u => Translate(u))];
     }
 }
