@@ -71,17 +71,17 @@ public static class AspNetIdentitySetup
             //     };
             // });
 
-        services.AddDefaultIdentity<IdentityUser>(options =>
+        services.AddDefaultIdentity<ApplicationUser>(options =>
         {
             options.SignIn.RequireConfirmedAccount = false;
             options.Password.RequireNonAlphanumeric = false;
             options.Stores.SchemaVersion = IdentitySchemaVersions.Version3;
         })
+            .AddRoles<IdentityRole>()
+            .AddRoleManager<RoleManager<IdentityRole>>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
-        services.AddTransient<IEmailSender<IdentityUser>, AuthEmailSender>();
-
+        services.AddTransient<IEmailSender<ApplicationUser>, AuthEmailSender>();
         services.Configure<AuthenticationSettings>(builder.Configuration.GetSection("Authentication"));
     }
 

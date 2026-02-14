@@ -1,4 +1,5 @@
 using AspAuth.Lib.Data;
+using AspAuth.Lib.Models;
 using Duende.IdentityServer.EntityFramework.DbContexts;
 using Duende.IdentityServer.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Builder;
@@ -35,7 +36,7 @@ public static class IdentityServerSetup
                 options.ConfigureDbContext = b => b.UseNpgsql(connectionString,
                     sql => sql.MigrationsAssembly(migrationsAssembly));
             })
-            .AddAspNetIdentity<IdentityUser>();
+            .AddAspNetIdentity<ApplicationUser>();
 
 
         //builder.Services.AddKeysFromDb(idsvrBuilder);

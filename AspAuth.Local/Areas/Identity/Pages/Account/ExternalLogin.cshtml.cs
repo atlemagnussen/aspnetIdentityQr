@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using AspAuth.Lib.Models;
 using AspAuth.Lib.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -12,12 +13,12 @@ namespace AspAuth.Local.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class ExternalLoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<ExternalLoginModel> _logger;
         private readonly IAuthenticationSchemeProvider _schemes;
 
         public ExternalLoginModel(
-            SignInManager<IdentityUser> signInManager,
+            SignInManager<ApplicationUser> signInManager,
             ILogger<ExternalLoginModel> logger,
             IAuthenticationSchemeProvider schemes)
         {

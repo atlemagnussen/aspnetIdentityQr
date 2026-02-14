@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AspAuth.Local.Areas.Identity.Pages.Account.Manage;
-public class PasskeysModel(UserManager<IdentityUser> userManager) : PageModel
+public class PasskeysModel(UserManager<ApplicationUser> userManager) : PageModel
 {
-    private readonly UserManager<IdentityUser> _userManager = userManager;
+    private readonly UserManager<ApplicationUser> _userManager = userManager;
 
     public List<PassKeyViewModel> Keys = [];
 

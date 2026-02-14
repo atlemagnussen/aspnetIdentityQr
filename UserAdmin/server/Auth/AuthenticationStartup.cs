@@ -1,3 +1,5 @@
+using AspAuth.Lib.Models;
+using Duende.IdentityModel;
 using Microsoft.AspNetCore.Identity;
 
 namespace UserAdmin.Auth;
@@ -48,6 +50,14 @@ public static class AuthenticationStartup
             };
         });
 
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy(Policies.RequiresAdmin, policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                policy.RequireClaim(JwtClaimTypes.Role, UserRoles.Admin.ToString());
+            });
+        });
         //builder.Services.AddHttpContextAccessor();
     }
 }

@@ -6,7 +6,7 @@ using UserAdmin.Api.Users.Models;
 
 namespace UserAdmin.Api.Users;
 
-[Authorize]
+[Authorize(Policies.RequiresAdmin)]
 [ApiController]
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
@@ -17,6 +17,7 @@ public class UsersController : ControllerBase
     {
         _service = service;
     }
+
     [HttpGet]
     public async Task<List<UserDTO>> List()
     {

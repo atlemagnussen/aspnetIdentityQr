@@ -1,4 +1,5 @@
 using AspAuth.Lib.Data;
+using AspAuth.Lib.Models;
 using Duende.IdentityServer.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ public class UserInfoModel : PageModel
         {
             View.IsLoggedIn = true;
             View.UserName = User.Identity.Name;
-            View.Claims = new List<string>();
+            View.Claims = [];
 
             var claims = User.Claims.ToList();
 
@@ -61,11 +62,4 @@ public class UserInfoModel : PageModel
 
         return Page();
     }
-}
-public class AccountViewModel
-{
-    public bool IsLoggedIn { get; set; }
-    public string? UserName { get; set; }
-    public string? Fullname { get; set; }
-    public List<string> Claims { get; set; } = [];
 }

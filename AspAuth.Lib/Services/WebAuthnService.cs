@@ -1,17 +1,18 @@
 using System.Buffers.Text;
 using System.Security.Claims;
+using AspAuth.Lib.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
 namespace AspAuth.Lib.Services;
 
 public class WebAuthnService(ILogger<WebAuthnService> logger,
-UserManager<IdentityUser> userManager,
-    SignInManager<IdentityUser> signInManager)
+UserManager<ApplicationUser> userManager,
+    SignInManager<ApplicationUser> signInManager)
 {
     private readonly ILogger _logger = logger;
-    private readonly UserManager<IdentityUser> _userManager = userManager;
-    private readonly SignInManager<IdentityUser> _signInManager = signInManager;
+    private readonly UserManager<ApplicationUser> _userManager = userManager;
+    private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
 
     public async Task<string?> PasskeyCreationOptions(ClaimsPrincipal claimsUser)
     {
@@ -60,7 +61,7 @@ UserManager<IdentityUser> userManager,
     /// <exception cref="ApplicationException"></exception>
     public async Task<string> GetPasskeyRequestOptions(string? userName)
     {
-        IdentityUser? user = null;
+        ApplicationUser? user = null;
         if (userName is not null)
             user = await _userManager.FindByNameAsync(userName);
 
