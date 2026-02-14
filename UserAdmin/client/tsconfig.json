@@ -1,5 +1,5 @@
 {
-    "exclude": ["vite.config.ts"],
+    "exclude": ["vite.config.ts", "generation/*"],
     "compilerOptions": {
         "target": "esnext",
         "module": "NodeNext",

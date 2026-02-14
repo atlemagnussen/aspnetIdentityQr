@@ -7,7 +7,7 @@ const apiFolder = path.join(srcFolder, "api")
 
 export default defineConfig({
   build: {
-    outDir: "../src/wwwroot",
+    outDir: "../server/wwwroot",
     emptyOutDir: true,
     sourcemap: true,
     lib: {

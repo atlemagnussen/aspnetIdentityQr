@@ -12,7 +12,7 @@ const modulesToLoad = [
     "/components/select/select.js",      // wa-select
 ]
 
-const baseUrlWa = "https://static.internal.digilean.no/webawesome/3.1.0"
+const baseUrlWa = "https://static.logout.work/webawesome/3.1.0/dist"
 const mainCssWa = "/styles/themes/default.css"
 
 const syntaxHighlighterJs = "https://cdn.jsdelivr.net/npm/syntax-highlight-element@1/+esm"

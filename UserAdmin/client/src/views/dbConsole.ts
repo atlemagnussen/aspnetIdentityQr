@@ -1,6 +1,5 @@
 import {LitElement, css, html} from "lit"
 import {customElement, query, state} from "lit/decorators.js"
-import * as signalR from "@microsoft/signalr"
 import { DivMovable } from "@db/client/components/divMovable.js"
 
 type consoleType = "info" | "error"
@@ -41,29 +40,6 @@ export class DbConsole extends LitElement {
         }
     `
 
-    connection?: signalR.HubConnection
-    connectedCallback(): void {
-        super.connectedCallback()        
-        this.connectSignalR()
-    }
-    async connectSignalR() {
-        this.connection = new signalR.HubConnectionBuilder().withUrl("/hub").build()
-
-        this.connection.onclose(async error => {
-            console.error(error?.message)
-            this.errorToTerminal(error)
-        }) 
-            
-        await this.connection.start().catch(err => this.errorToTerminal(err))
-
-        this.connection?.send("echo", "Console initialized") 
-
-        this.connection.on("consoleMessage", (message: string) => {
-            this.appendToTerminal(message)
-        })
-
-        const mover = new DivMovable(this, this.header)
-    }
     @query("#terminal")
     terminal?: HTMLDivElement
 
