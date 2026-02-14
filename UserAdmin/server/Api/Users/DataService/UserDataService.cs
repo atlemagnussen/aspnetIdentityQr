@@ -29,13 +29,26 @@ public class UserDataService
         var usersDto = ApplicationUserToUserDTO.Translate(users);
         return usersDto;
     }
-
-    public async Task AddRole(UserRoleDTO userRole)
+    public async Task<UserDTO> Get(string userId)
     {
-        var user = await _manager.FindByIdAsync(userRole.UserId) ?? throw new ApplicationException($"User {userRole.UserId} not found");
-        await EnsureRoleExist(userRole.Role);
+        var user = await _context.Users.Include(u => u.UserProfile).FirstOrDefaultAsync(u => u.Id == userId)
+            ?? throw new ApplicationException("User does not exist");
+        return ApplicationUserToUserDTO.Translate(user);
+    }
 
-        await _manager.AddToRoleAsync(user, userRole.Role.ToString());
+    public async Task<IList<string>?> GetRoles(string userId)
+    {
+        var user = await _manager.FindByIdAsync(userId) ?? throw new ApplicationException("User does not exist");
+        var roles = await _manager.GetRolesAsync(user);
+        return roles;
+    }
+
+    public async Task AddRole(string userId, UserRoles role)
+    {
+        var user = await _manager.FindByIdAsync(userId) ?? throw new ApplicationException($"User {userId} not found");
+        await EnsureRoleExist(role);
+
+        await _manager.AddToRoleAsync(user, role.ToString());
     }
 
     private async Task<IdentityRole> EnsureRoleExist(UserRoles role)

@@ -3,7 +3,7 @@ dialog {
     box-shadow: 0.5rem 0.5rem 0.5rem var(--wa-color-overlay-modal);
 }
 
-dialog#migrate {
+dialog#details {
     width: 60vw;
     padding: 0.1rem 0.5rem 0.5rem 0.5rem;
     header {

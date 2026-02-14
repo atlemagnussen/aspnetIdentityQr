@@ -1,3 +1,4 @@
+using AspAuth.Lib.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserAdmin.Api.Users.DataService;
@@ -21,5 +22,25 @@ public class UsersController : ControllerBase
     {
         var users = await _service.List();
         return users;
+    }
+
+    [HttpGet("{id}")]
+    public Task<UserDTO> Get(string id)
+    {
+        return _service.Get(id);
+    }
+
+    [HttpGet("{id}/roles")]
+    public async Task<IList<string>> GetUserRoles(string id)
+    {
+        var roles = await _service.GetRoles(id);
+        return roles ?? [];
+    }
+
+    [HttpPut("{id}/roles")]
+    public async Task<IActionResult> AddUserRoles(string id, UserRoles role)
+    {
+        await _service.AddRole(id, role);
+        return Ok();
     }
 }

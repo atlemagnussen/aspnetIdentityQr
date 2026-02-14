@@ -1,7 +1,7 @@
 import { UserDto } from "@db/api"
 import {LitElement, css, html} from "lit"
 import {customElement, state} from "lit/decorators.js"
-
+import { openUserDialog } from "./userDetails.js"
 import * as userService from "@db/client/views/users/userService.js"
 
 //import { openMigrationDialog } from "./migration/dialogOpener.js"
@@ -65,7 +65,7 @@ export class UsersList extends LitElement {
 				<table>
 					<thead>
 						<tr>
-							<th>Id</th>
+							<th></th>
 							<th>UserName</th>
 							<th>Name</th>
 							<th>Email</th>
@@ -73,16 +73,16 @@ export class UsersList extends LitElement {
 						</tr>
 					</thead>
 					<tbody>
-						${this.result.map(r => {
+						${this.result.map(u => {
 							return html`
 								<tr>
-									<td>${r.id}</td>
-									<td>${r.userName}</td>
-									<td>${r.fullName}</td>
-									<td>${r.email}</td>
+									<td></td>
+									<td>${u.userName}</td>
+									<td>${u.fullName}</td>
+									<td>${u.email}</td>
 									<td>
-										<wa-button variant="neutral" appearance="filled">
-											<wa-icon name="house" label="Home"></wa-icon>
+										<wa-button variant="neutral" appearance="filled" @click=${() => openUserDialog(u)}>
+											<wa-icon name="pen-to-square" variant="regular"></wa-icon>
 										</wa-button>
 									</td>
 								</tr>
