@@ -11,6 +11,10 @@ export type UserDto = {
     fullName?: null | string;
 };
 
+export enum UserRoles {
+    ADMIN = 'Admin'
+}
+
 export type GetApiUsersData = {
     body?: never;
     path?: never;
@@ -26,3 +30,57 @@ export type GetApiUsersResponses = {
 };
 
 export type GetApiUsersResponse = GetApiUsersResponses[keyof GetApiUsersResponses];
+
+export type GetApiUsersByIdData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/Users/{id}';
+};
+
+export type GetApiUsersByIdResponses = {
+    /**
+     * OK
+     */
+    200: UserDto;
+};
+
+export type GetApiUsersByIdResponse = GetApiUsersByIdResponses[keyof GetApiUsersByIdResponses];
+
+export type GetApiUsersByIdRolesData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/Users/{id}/roles';
+};
+
+export type GetApiUsersByIdRolesResponses = {
+    /**
+     * OK
+     */
+    200: Array<string>;
+};
+
+export type GetApiUsersByIdRolesResponse = GetApiUsersByIdRolesResponses[keyof GetApiUsersByIdRolesResponses];
+
+export type PutApiUsersByIdRolesData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: {
+        role?: UserRoles;
+    };
+    url: '/api/Users/{id}/roles';
+};
+
+export type PutApiUsersByIdRolesResponses = {
+    /**
+     * OK
+     */
+    200: unknown;
+};
