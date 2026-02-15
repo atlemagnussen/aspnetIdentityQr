@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using UserAdmin.Api.Configuration;
 using UserAdmin.Api.Users;
 
 namespace UserAdmin.Api;
@@ -18,6 +19,7 @@ public static class ApiStartup
         });
 
         builder.AddUsers();
+        builder.AddConfiguration();
 
         builder.Services.AddOpenApi(options =>
             options.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi3_1
