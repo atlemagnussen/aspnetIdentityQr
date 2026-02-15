@@ -52,6 +52,7 @@ else
 {
     app.UseForwardedHeaders();
     app.UseHsts();
+    app.UseHttpsRedirection();
 }
 app.UseExceptionHandler();
 
