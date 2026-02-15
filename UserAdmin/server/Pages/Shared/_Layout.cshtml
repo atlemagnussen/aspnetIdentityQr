@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg" href="/icon.svg" sizes="32x32">
     <title>User Admin</title>
     <link rel="stylesheet" href="~/site.css" asp-append-version="true" />
 </head>
@@ -10,14 +11,21 @@
     <header>
         <nav class="navbar">
             <a class="navbar-brand" asp-area="" asp-page="/Index">
-                <span>Home</span>
+                <img class="logo" src="/icon.svg" alt="auth logo">
             </a>
             <h2>
                 @ViewData["Title"]
             </h2>
-            <ul class="navbar-nav">
+            <nav class="navbar-nav">
+                <a href="/Manager">
+                    <span>Manager</span>
+                </a>
+                <a href="/Permissions">
+                    <span>Permissions</span>
+                </a>
                 <partial name="_LoginPartial" />
-            </ul>
+
+            </nav>
         </nav>
     </header>
     <main>

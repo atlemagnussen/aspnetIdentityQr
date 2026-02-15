@@ -1,3 +1,4 @@
+using AspAuth.Lib.Observe;
 using AspAuth.Lib.Services;
 using Microsoft.AspNetCore.HttpOverrides;
 using UserAdmin.Api;
@@ -13,6 +14,9 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     options.KnownProxies.Clear();
 });
 
+builder.ConfigureOtel()
+    .AddOtelExporters();
+    
 builder.Services.AddProblemDetails(configure =>
 {
     configure.CustomizeProblemDetails = context =>

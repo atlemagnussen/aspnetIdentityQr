@@ -4,6 +4,129 @@ export type ClientOptions = {
     baseUrl: 'http://localhost:5057/' | (string & {});
 };
 
+export type AccessTokenType = number;
+
+export type ApiResource = {
+    requireResourceIndicator?: boolean;
+    apiSecrets?: Array<Secret>;
+    scopes?: Array<string>;
+    allowedAccessTokenSigningAlgorithms?: Array<string>;
+    enabled?: boolean;
+    name?: string;
+    displayName?: null | string;
+    description?: null | string;
+    showInDiscoveryDocument?: boolean;
+    userClaims?: Array<string>;
+    properties?: {
+        [key: string]: string;
+    };
+};
+
+export type Client = {
+    enabled?: boolean;
+    clientId?: string;
+    protocolType?: string;
+    clientSecrets?: Array<Secret>;
+    requireClientSecret?: boolean;
+    clientName?: null | string;
+    description?: null | string;
+    clientUri?: null | string;
+    logoUri?: null | string;
+    requireConsent?: boolean;
+    allowRememberConsent?: boolean;
+    allowedGrantTypes?: Array<string>;
+    requirePkce?: boolean;
+    allowPlainTextPkce?: boolean;
+    requireRequestObject?: boolean;
+    allowAccessTokensViaBrowser?: boolean;
+    requireDPoP?: boolean;
+    dPoPValidationMode?: DPoPTokenExpirationValidationMode;
+    dPoPClockSkew?: string;
+    redirectUris?: Array<string>;
+    postLogoutRedirectUris?: Array<string>;
+    frontChannelLogoutUri?: null | string;
+    frontChannelLogoutSessionRequired?: boolean;
+    backChannelLogoutUri?: null | string;
+    backChannelLogoutSessionRequired?: boolean;
+    allowOfflineAccess?: boolean;
+    allowedScopes?: Array<string>;
+    alwaysIncludeUserClaimsInIdToken?: boolean;
+    identityTokenLifetime?: number | string;
+    allowedIdentityTokenSigningAlgorithms?: Array<string>;
+    accessTokenLifetime?: number | string;
+    authorizationCodeLifetime?: number | string;
+    absoluteRefreshTokenLifetime?: number | string;
+    slidingRefreshTokenLifetime?: number | string;
+    consentLifetime?: null | number | string;
+    pushedAuthorizationLifetime?: null | number | string;
+    requirePushedAuthorization?: boolean;
+    refreshTokenUsage?: TokenUsage;
+    updateAccessTokenClaimsOnRefresh?: boolean;
+    refreshTokenExpiration?: TokenExpiration;
+    accessTokenType?: AccessTokenType;
+    enableLocalLogin?: boolean;
+    identityProviderRestrictions?: Array<string>;
+    includeJwtId?: boolean;
+    claims?: Array<ClientClaim>;
+    alwaysSendClientClaims?: boolean;
+    clientClaimsPrefix?: null | string;
+    pairWiseSubjectSalt?: null | string;
+    userSsoLifetime?: null | number | string;
+    userCodeType?: null | string;
+    deviceCodeLifetime?: number | string;
+    cibaLifetime?: null | number | string;
+    pollingInterval?: null | number | string;
+    coordinateLifetimeWithUserSession?: null | boolean;
+    allowedCorsOrigins?: Array<string>;
+    initiateLoginUri?: null | string;
+    properties?: {
+        [key: string]: string;
+    };
+};
+
+export type ClientClaim = {
+    type?: string;
+    value?: string;
+    valueType?: string;
+};
+
+export type DPoPTokenExpirationValidationMode = number;
+
+export type IdentityProvider = {
+    scheme?: string;
+    displayName?: null | string;
+    enabled?: boolean;
+    type?: string;
+    properties?: {
+        [key: string]: string;
+    };
+};
+
+export type IdentityResource = {
+    required?: boolean;
+    emphasize?: boolean;
+    enabled?: boolean;
+    name?: string;
+    displayName?: null | string;
+    description?: null | string;
+    showInDiscoveryDocument?: boolean;
+    userClaims?: Array<string>;
+    properties?: {
+        [key: string]: string;
+    };
+};
+
+export type Secret = {
+    description?: null | string;
+    value?: string;
+    expiration?: null | string;
+    type?: string;
+};
+
+export type TokenExpiration = number;
+
+export type TokenUsage = number;
+
 export type UserDto = {
     id: string;
     userName: string;
@@ -84,3 +207,121 @@ export type PutApiUsersByIdRolesResponses = {
      */
     200: unknown;
 };
+
+export type GetApiIdentityResourcesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/IdentityResources';
+};
+
+export type GetApiIdentityResourcesResponses = {
+    /**
+     * OK
+     */
+    200: Array<IdentityResource>;
+};
+
+export type GetApiIdentityResourcesResponse = GetApiIdentityResourcesResponses[keyof GetApiIdentityResourcesResponses];
+
+export type GetApiIdentityResourcesByIdData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/IdentityResources/{id}';
+};
+
+export type GetApiIdentityResourcesByIdResponses = {
+    /**
+     * OK
+     */
+    200: IdentityResource;
+};
+
+export type GetApiIdentityResourcesByIdResponse = GetApiIdentityResourcesByIdResponses[keyof GetApiIdentityResourcesByIdResponses];
+
+export type GetApiIdentityProvidersData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/IdentityProviders';
+};
+
+export type GetApiIdentityProvidersResponses = {
+    /**
+     * OK
+     */
+    200: Array<IdentityProvider>;
+};
+
+export type GetApiIdentityProvidersResponse = GetApiIdentityProvidersResponses[keyof GetApiIdentityProvidersResponses];
+
+export type GetApiClientsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/Clients';
+};
+
+export type GetApiClientsResponses = {
+    /**
+     * OK
+     */
+    200: Array<Client>;
+};
+
+export type GetApiClientsResponse = GetApiClientsResponses[keyof GetApiClientsResponses];
+
+export type GetApiClientsByIdData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/Clients/{id}';
+};
+
+export type GetApiClientsByIdResponses = {
+    /**
+     * OK
+     */
+    200: Client;
+};
+
+export type GetApiClientsByIdResponse = GetApiClientsByIdResponses[keyof GetApiClientsByIdResponses];
+
+export type GetApiApiResourcesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/ApiResources';
+};
+
+export type GetApiApiResourcesResponses = {
+    /**
+     * OK
+     */
+    200: Array<ApiResource>;
+};
+
+export type GetApiApiResourcesResponse = GetApiApiResourcesResponses[keyof GetApiApiResourcesResponses];
+
+export type GetApiApiResourcesByIdData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/ApiResources/{id}';
+};
+
+export type GetApiApiResourcesByIdResponses = {
+    /**
+     * OK
+     */
+    200: ApiResource;
+};
+
+export type GetApiApiResourcesByIdResponse = GetApiApiResourcesByIdResponses[keyof GetApiApiResourcesByIdResponses];

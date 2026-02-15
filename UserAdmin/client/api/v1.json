@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.1",
   "info": {
-    "title": "Admin | v1",
+    "title": "UserAdmin | v1",
     "version": "1.0.0"
   },
   "servers": [
@@ -161,10 +161,758 @@
           }
         }
       }
+    },
+    "/api/IdentityResources": {
+      "get": {
+        "tags": [
+          "IdentityResources"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IdentityResource"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IdentityResource"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IdentityResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/IdentityResources/{id}": {
+      "get": {
+        "tags": [
+          "IdentityResources"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdentityResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdentityResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdentityResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/IdentityProviders": {
+      "get": {
+        "tags": [
+          "IdentityProviders"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IdentityProvider"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IdentityProvider"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IdentityProvider"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Clients": {
+      "get": {
+        "tags": [
+          "Clients"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Client"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Client"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Client"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Clients/{id}": {
+      "get": {
+        "tags": [
+          "Clients"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Client"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Client"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Client"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ApiResources": {
+      "get": {
+        "tags": [
+          "ApiResources"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApiResource"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApiResource"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApiResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ApiResources/{id}": {
+      "get": {
+        "tags": [
+          "ApiResources"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResource"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "AccessTokenType": {
+        "type": "integer"
+      },
+      "ApiResource": {
+        "type": "object",
+        "properties": {
+          "requireResourceIndicator": {
+            "type": "boolean"
+          },
+          "apiSecrets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Secret"
+            }
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "allowedAccessTokenSigningAlgorithms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "description": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "showInDiscoveryDocument": {
+            "type": "boolean"
+          },
+          "userClaims": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Client": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "clientId": {
+            "type": "string"
+          },
+          "protocolType": {
+            "type": "string"
+          },
+          "clientSecrets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Secret"
+            }
+          },
+          "requireClientSecret": {
+            "type": "boolean"
+          },
+          "clientName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "description": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "clientUri": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "logoUri": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "requireConsent": {
+            "type": "boolean"
+          },
+          "allowRememberConsent": {
+            "type": "boolean"
+          },
+          "allowedGrantTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "requirePkce": {
+            "type": "boolean"
+          },
+          "allowPlainTextPkce": {
+            "type": "boolean"
+          },
+          "requireRequestObject": {
+            "type": "boolean"
+          },
+          "allowAccessTokensViaBrowser": {
+            "type": "boolean"
+          },
+          "requireDPoP": {
+            "type": "boolean"
+          },
+          "dPoPValidationMode": {
+            "$ref": "#/components/schemas/DPoPTokenExpirationValidationMode"
+          },
+          "dPoPClockSkew": {
+            "pattern": "^-?(\\d+\\.)?\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,7})?$",
+            "type": "string"
+          },
+          "redirectUris": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "postLogoutRedirectUris": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "frontChannelLogoutUri": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "frontChannelLogoutSessionRequired": {
+            "type": "boolean"
+          },
+          "backChannelLogoutUri": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "backChannelLogoutSessionRequired": {
+            "type": "boolean"
+          },
+          "allowOfflineAccess": {
+            "type": "boolean"
+          },
+          "allowedScopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "alwaysIncludeUserClaimsInIdToken": {
+            "type": "boolean"
+          },
+          "identityTokenLifetime": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "allowedIdentityTokenSigningAlgorithms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "accessTokenLifetime": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "authorizationCodeLifetime": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "absoluteRefreshTokenLifetime": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "slidingRefreshTokenLifetime": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "consentLifetime": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "pushedAuthorizationLifetime": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "requirePushedAuthorization": {
+            "type": "boolean"
+          },
+          "refreshTokenUsage": {
+            "$ref": "#/components/schemas/TokenUsage"
+          },
+          "updateAccessTokenClaimsOnRefresh": {
+            "type": "boolean"
+          },
+          "refreshTokenExpiration": {
+            "$ref": "#/components/schemas/TokenExpiration"
+          },
+          "accessTokenType": {
+            "$ref": "#/components/schemas/AccessTokenType"
+          },
+          "enableLocalLogin": {
+            "type": "boolean"
+          },
+          "identityProviderRestrictions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "includeJwtId": {
+            "type": "boolean"
+          },
+          "claims": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClientClaim"
+            }
+          },
+          "alwaysSendClientClaims": {
+            "type": "boolean"
+          },
+          "clientClaimsPrefix": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "pairWiseSubjectSalt": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "userSsoLifetime": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "userCodeType": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "deviceCodeLifetime": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "cibaLifetime": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "pollingInterval": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "coordinateLifetimeWithUserSession": {
+            "type": [
+              "null",
+              "boolean"
+            ]
+          },
+          "allowedCorsOrigins": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "initiateLoginUri": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ClientClaim": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "valueType": {
+            "type": "string"
+          }
+        }
+      },
+      "DPoPTokenExpirationValidationMode": {
+        "type": "integer"
+      },
+      "IdentityProvider": {
+        "type": "object",
+        "properties": {
+          "scheme": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "type": {
+            "type": "string"
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "IdentityResource": {
+        "type": "object",
+        "properties": {
+          "required": {
+            "type": "boolean"
+          },
+          "emphasize": {
+            "type": "boolean"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "description": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "showInDiscoveryDocument": {
+            "type": "boolean"
+          },
+          "userClaims": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Secret": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "value": {
+            "type": "string"
+          },
+          "expiration": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "TokenExpiration": {
+        "type": "integer"
+      },
+      "TokenUsage": {
+        "type": "integer"
+      },
       "UserDTO": {
         "required": [
           "id",
@@ -200,6 +948,18 @@
   "tags": [
     {
       "name": "Users"
+    },
+    {
+      "name": "IdentityResources"
+    },
+    {
+      "name": "IdentityProviders"
+    },
+    {
+      "name": "Clients"
+    },
+    {
+      "name": "ApiResources"
     }
   ]
 }

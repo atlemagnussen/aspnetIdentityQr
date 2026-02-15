@@ -1,5 +1,5 @@
+using AspAuth.Lib.Observe;
 using AspAuth.Lib.Services;
-using AspAuth.Local.Observe;
 using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);

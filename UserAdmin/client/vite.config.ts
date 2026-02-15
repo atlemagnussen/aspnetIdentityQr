@@ -3,13 +3,16 @@ import { defineConfig } from "vite"
 
 const thisFolder = path.resolve(__dirname)
 const srcFolder = path.join(thisFolder, "src")
+const publicFolder = path.join(thisFolder, "public")
 const apiFolder = path.join(srcFolder, "api")
 
 export default defineConfig({
+  publicDir: publicFolder,
   build: {
     outDir: "../server/wwwroot",
     emptyOutDir: true,
     sourcemap: true,
+    copyPublicDir: true,
     lib: {
       name: "mylib",
       formats: ["es"],
