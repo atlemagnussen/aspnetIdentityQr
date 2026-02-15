@@ -38,6 +38,9 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
+// must be first
+app.UseForwardedHeaders();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -50,9 +53,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseForwardedHeaders();
     app.UseHsts();
-    app.UseHttpsRedirection();
 }
 app.UseExceptionHandler();
 
