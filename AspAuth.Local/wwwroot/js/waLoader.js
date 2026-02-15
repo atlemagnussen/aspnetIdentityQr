@@ -10,7 +10,7 @@ const modulesToLoad = [
     "/components/callout/callout.js"     // wa-callout
 ]
 
-const baseUrl = "https://static.logout.work/webawesome/3.1.0/dist"
+const baseUrl = "https://static.logout.work/webawesome/3.2.1/dist"
 
 const mainCss = "/styles/themes/default.css"
 
