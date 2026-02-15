@@ -51,6 +51,7 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseForwardedHeaders();
+    app.UseHsts();
 }
 app.UseExceptionHandler();
 
