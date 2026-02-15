@@ -2,28 +2,28 @@ using Duende.IdentityServer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace UserAdmin.Api.Configuration.Clients;
+namespace UserAdmin.Api.Configuration.ApiResources;
 
 [Authorize(Policies.RequiresAdmin)]
 [ApiController]
 [Route("api/[controller]")]
-public class ClientsController : ControllerBase
+public class ApiResourcesController : ControllerBase
 {
-    private readonly ClientsService _service;
+    private readonly ApiResourcesService _service;
 
-    public ClientsController(ClientsService service)
+    public ApiResourcesController(ApiResourcesService service)
     {
         _service = service;
     }
 
     [HttpGet]
-    public Task<IEnumerable<Client>> List()
+    public Task<IEnumerable<ApiResource>> List()
     {
         return _service.List();
     }
 
     [HttpGet("{id}")]
-    public Task<Client> Get(string id)
+    public Task<ApiResource> Get(string id)
     {
         return _service.Get(id);
     }
