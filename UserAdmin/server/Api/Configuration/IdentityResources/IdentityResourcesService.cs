@@ -14,4 +14,14 @@ public class IdentityResourcesService(ConfigurationDbContext context)
         var resources = await Context.IdentityResources.ToArrayAsync();
         return resources.Select(p => p.ToModel());
     }
+
+    public async Task<IdentityResource> Get(string name)
+    {
+        var resource = await Context.IdentityResources
+            .Include(i => i.UserClaims)
+            .SingleOrDefaultAsync(i => i.Name == name)
+            ?? throw new ApplicationException("not found");
+        
+        return resource.ToModel();
+    }
 }

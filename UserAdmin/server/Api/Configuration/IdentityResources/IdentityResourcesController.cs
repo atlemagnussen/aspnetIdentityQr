@@ -21,4 +21,10 @@ public class IdentityResourcesController : ControllerBase
     {
         return _service.List();
     }
+
+    [HttpGet("{id}")]
+    public Task<IdentityResource> Get(string id)
+    {
+        return _service.Get(id);
+    }
 }
