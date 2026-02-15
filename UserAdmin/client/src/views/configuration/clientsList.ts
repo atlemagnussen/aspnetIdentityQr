@@ -67,6 +67,7 @@ export class ClientsList extends LitElement {
                             <th>Lifetime</th>
                             <th>Protocol</th>
                             <th>PKCE</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,6 +79,12 @@ export class ClientsList extends LitElement {
                                     <td>${c.accessTokenLifetime}</td>
                                     <td>${c.protocolType}</td>
                                     <td>${c.requirePkce}</td>
+                                    <td>
+                                        <wa-button variant="neutral" appearance="filled"
+                                            href="/api/clients/${c.clientId}">
+                                            <wa-icon name="pen-to-square" variant="regular"></wa-icon>
+                                        </wa-button>
+                                    </td>
                                 </tr>
                             `
                         })}
