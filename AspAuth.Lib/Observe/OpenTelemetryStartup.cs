@@ -38,8 +38,8 @@ public static class OpenTelemetryStartup
                tracing
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
-                .AddEntityFrameworkCoreInstrumentation()
-                .AddNpgsql());
+                .AddEntityFrameworkCoreInstrumentation());
+                //.AddNpgsql());
 
                 // .AddConsoleExporter()
 
