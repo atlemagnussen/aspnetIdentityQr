@@ -11,15 +11,15 @@ export class UsersList extends LitElement {
 
 	static styles = css`
 		tbody { 
-			color: black;
+			color: var(--wa-color-text-normal);
 			tr:nth-child(odd) {
-				background-color: var(--digilean-blue-sky-light);
+				background-color: var(--wa-color-surface-raised);
 			}
 			tr:nth-child(even) {
-				background-color: var(--digilean-blue-light);
+				background-color: var(--wa-color-surface-lowered);
 			}
 			tr td {
-				padding: 0.3rem;
+				padding: var(--wa-space-xs);
 			}
 		}
 		button {

@@ -9,8 +9,8 @@ html {
 }
 
 body {
-    background: var(--primary-background);
-    color: var(--primary-text);
+    background: var(--wa-color-surface-default);
+    color: var(--wa-color-text-normal);
     font-family: open sans, Helvetica Neue, Helvetica, Arial, sans-serif;
     font-size: 1rem;
     height: 100svh;

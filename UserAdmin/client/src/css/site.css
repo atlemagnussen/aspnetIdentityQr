@@ -1,29 +1,4 @@
 ﻿
-svg.svg-defs {
-    display: none;
-}
-
-/* Logo common */
-figure.digilean-logo, #digilean-logo-success {
-    --logo-top-left-color: var(--digilean-blue-sky-light);
-    --logo-top-right-color: var(--digilean-blue);
-    --logo-bottom-left-color: var(--digilean-blue);
-    --logo-bottom-right-color: var(--digilean-blue);
-}
-figure.digilean-logo {
-    display: inline-block;
-}
-figure.digilean-logo figcaption {
-    text-align: center;
-}
-h1.logo-name {
-    font-size: 3rem;
-    letter-spacing: -2px;
-    font-weight: 800;
-    margin-block-start: 0;
-    margin-block-end: 0;
-}
-
 /* Error and validation common between Login and Login/Error */
 div.validation-messages {
     background-color: var(--digilean-logo-error-color-light);
@@ -59,84 +34,27 @@ div.validation-messages {
     word-break: break-all;
 }
 .login.btn a {
-    color: white;
+    color: var(--wa-color-text-normal);
 }
 
 .info-text {
-    color: var(--digilean-white);
+    color: var(--wa-color-text-normal);
 }
 .important-text {
     text-decoration: underline;
 }
 
-/* bootstrap classes*/ 
-.form-group {
-    margin-bottom: 1rem;
-}
-.form-control {
-    display: block;
-    width: 100%;
-    height: calc(1.5em + .75rem + 2px);
-    padding: .375rem .75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #495057;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #ced4da;
-    border-radius: .25rem;
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-}
 .alert-warning {
-    background: var(--digilean-yellow);
-    color: var(--digilean-brown);
+    background: var(--wa-color-warning-fill-normal);
+    color: var(--wa-color-warning-on-normal);
 }
 .alert-danger {
-    background: var(--digilean-logo-error-color-light);
-    color: var(--digilean-red);
-}
-
-/* default button */
-button {
-    border-radius: 0.25rem;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    padding: .375rem .75rem;
-    text-align: center;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-
-    background: var(--digilean-grey-lighter);
-    border: 1px solid var(--digilean-grey-light);
-    color: var(--digilean-grey-dark);
-}
-button:hover {
-    background: var(--digilean-grey-white);
-}
-
-/* primary button */
-button.digilean-primary-button {
-    background: var(--digilean-blue-sharp);
-    border: 1px solid var(--digilean-blue-raw);
-    color: var(--digilean-white);   
-}
-
-button.digilean-primary-button:hover {
-    background: var(--digilean-blue-diamond);
-}
-
-button.digilean-primary-button:disabled,
-button[disabled] {
-    cursor: wait;
-    border: 1px solid var(--digilean-grey-light);
-    background-color: var(--digilean-grey-light);
-    color: var(--digilean-grey);
+    background: var(--wa-color-danger-fill-normal);
+    color: var(--wa-color-danger-on-normal);
 }
 
 a {
-    color: white;
+    color: var(--wa-color-text-normal);
     text-decoration: underline;
 }
 

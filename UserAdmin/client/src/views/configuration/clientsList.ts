@@ -8,16 +8,16 @@ export class ClientsList extends LitElement {
 
     static styles = css`
         tbody { 
-            color: black;
-            tr:nth-child(odd) {
-                background-color: var(--digilean-blue-sky-light);
-            }
-            tr:nth-child(even) {
-                background-color: var(--digilean-blue-light);
-            }
-            tr td {
-                padding: 0.3rem;
-            }
+            color: var(--wa-color-text-normal);
+			tr:nth-child(odd) {
+				background-color: var(--wa-color-surface-raised);
+			}
+			tr:nth-child(even) {
+				background-color: var(--wa-color-surface-lowered);
+			}
+			tr td {
+				padding: var(--wa-space-xs);
+			}
         }
         button {
             cursor: pointer;

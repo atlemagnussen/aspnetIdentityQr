@@ -1,4 +1,3 @@
-import "./css/vars.css"
 import "./css/layout.css"
 import "./css/site.css"
 import "./css/dialog.css"
