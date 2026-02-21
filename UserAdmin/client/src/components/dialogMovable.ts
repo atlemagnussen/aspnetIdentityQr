@@ -1,7 +1,6 @@
 export class DialogMovable {
-
     /**
-     * adds dragging to popover
+     * adds dragging to dialog (and maybe popover)
      */
     constructor(dialog: HTMLElement, header?: HTMLDivElement) {
         

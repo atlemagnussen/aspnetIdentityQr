@@ -3,7 +3,6 @@ import { getData, saveFile } from "./common.mjs"
 
 const openApiUrl = "http://localhost:5057/openapi/v1.json"
 
-// let swaggerUrl = "https://api-test-digilean.tools/swagger/v2/swagger.json"
 let localFolder = "api"
 let localFile = "v1.json"
 
