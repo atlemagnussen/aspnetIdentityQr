@@ -9,6 +9,7 @@ import { css, html, LitElement } from "lit"
 let dialogEl: HTMLDialogElement
 let dialogTitle: HTMLDivElement
 let dialogContent: HTMLDivElement
+let movableHandler: DialogMovable
 
 export function openUserDialog(user: UserDto) {
 
@@ -28,7 +29,7 @@ function getDialog() {
     if (!dialogEl) {
         dialogEl = document.createElement("dialog") as HTMLDialogElement
         dialogEl.id = "details"
-
+        dialogEl.setAttribute("closedby", "any")
         const dialogHeader = document.createElement("header") as HTMLDivElement
         dialogTitle = document.createElement("div")
         dialogTitle.innerHTML = "<h3>User details</h3>"
@@ -44,7 +45,7 @@ function getDialog() {
         dialogContent = document.createElement("article") as HTMLDivElement
         dialogEl.appendChild(dialogContent)
         
-        const handler = new DialogMovable(dialogEl)
+        movableHandler = new DialogMovable(dialogEl)
         document.body.appendChild(dialogEl)
     }
     return dialogEl
