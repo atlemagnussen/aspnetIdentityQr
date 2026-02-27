@@ -4,7 +4,7 @@ import { defineConfig } from "vite"
 const thisFolder = path.resolve(__dirname)
 const srcFolder = path.join(thisFolder, "src")
 const publicFolder = path.join(thisFolder, "public")
-const apiFolder = path.join(srcFolder, "api")
+const apiFolder = path.join(thisFolder, "api")
 
 export default defineConfig({
   publicDir: publicFolder,

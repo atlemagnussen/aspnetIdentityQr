@@ -13,7 +13,7 @@
     "build": "vite build",
     "watch": "tsc && vite build --watch",
     "ts": "tsc --build",
-    "import-open-api": "node --experimental-strip-types ./generation/openApiCodeGen.ts"
+    "open-api": "node --experimental-strip-types ./generation/openApi.ts"
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.92.4",
@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@awesome.me/webawesome": "^3.2.1",
-    "lit": "^3.3.2"
+    "lit": "^3.3.2",
+    "zod": "^4.3.6"
   }
 }
