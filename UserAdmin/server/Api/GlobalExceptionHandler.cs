@@ -1,7 +1,6 @@
 using System.Security;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.Identity.Web;
 
 namespace UserAdmin.Api;
@@ -15,7 +14,6 @@ internal sealed class GlobalExceptionHandler(IProblemDetailsService problemDetai
             ApplicationException => StatusCodes.Status400BadRequest,
             SecurityException => StatusCodes.Status403Forbidden,
             ArgumentException => StatusCodes.Status400BadRequest,
-            SqlException => StatusCodes.Status418ImATeapot,
             MicrosoftIdentityWebChallengeUserException => StatusCodes.Status403Forbidden,
             _ => StatusCodes.Status500InternalServerError
         };
