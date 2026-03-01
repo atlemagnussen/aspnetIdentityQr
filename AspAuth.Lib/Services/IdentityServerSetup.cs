@@ -36,7 +36,8 @@ public static class IdentityServerSetup
                 options.ConfigureDbContext = b => b.UseNpgsql(connectionString,
                     sql => sql.MigrationsAssembly(migrationsAssembly));
             })
-            .AddAspNetIdentity<ApplicationUser>();
+            .AddAspNetIdentity<ApplicationUser>()
+            .AddProfileService<CustomProfileService>();
 
 
         //builder.Services.AddKeysFromDb(idsvrBuilder);
