@@ -1,7 +1,6 @@
 using AspAuth.Lib.Data;
 using AspAuth.Lib.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UserAdmin.Api.Users.Models;
 using UserAdmin.Api.Users.Translators;
