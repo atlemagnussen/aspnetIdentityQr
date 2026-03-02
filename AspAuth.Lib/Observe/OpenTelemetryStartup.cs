@@ -39,9 +39,7 @@ public static class OpenTelemetryStartup
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
                 .AddEntityFrameworkCoreInstrumentation());
-                //.AddNpgsql());
 
-                // .AddConsoleExporter()
 
         return builder;
     }
