@@ -35,12 +35,18 @@ header {
     grid-area: header;
     display: flex;
     flex-direction: row;
+    padding: var(--wa-space-2xs);
     overflow: hidden;
     nav {
-        width: 90%;
+        background-color: var(--wa-color-surface-raised);
+        width: 100%;
         display: flex;
         justify-content: space-around;
         flex-direction: row;
+    }
+    img {
+        width: 3rem;
+        height: 3rem;
     }
     figure {
         width: 3rem;
