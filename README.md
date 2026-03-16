@@ -35,11 +35,6 @@ dotnet ef migrations add Addpasskeys --project ../AspAuth.Lib -c ApplicationDbCo
 
 dotnet ef migrations add AddUserProfile --project ../AspAuth.Lib -c ApplicationDbContext
 
-dotnet ef database update -c ApplicationDbContext
-
-
-
-
 package add Microsoft.Identity.Web
 dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL --version 8.0.11
 
@@ -52,9 +47,6 @@ dotnet ef database update --context DataProtectionContext
 dotnet ef migrations add InitialIdentityServerConfiguration --project ../AspAuth.Lib -c ConfigurationDbContext
 dotnet ef migrations add InitialIdentityServerOperational --project ../AspAuth.Lib -c PersistedGrantDbContext
 
-dotnet ef database update -c ConfigurationDbContext
-dotnet ef database update -c PersistedGrantDbContext
-
 # remove 
 
 dotnet ef migrations list -c ApplicationDbContext
@@ -63,6 +55,12 @@ dotnet ef database update 20251215224051_Addpasskeys -c ApplicationDbContext
 
 dotnet ef migrations remove --project ../AspAuth.Lib -c ApplicationDbContext
 
+## apply all
+
+dotnet ef database update -c ApplicationDbContext
+dotnet ef database update --context DataProtectionContext
+dotnet ef database update -c ConfigurationDbContext
+dotnet ef database update -c PersistedGrantDbContext
 
 ## clear
 
