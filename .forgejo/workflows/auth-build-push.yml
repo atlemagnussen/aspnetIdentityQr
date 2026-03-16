@@ -20,4 +20,6 @@ jobs:
       - name: Build
         run: docker build -f AspAuth.Local/Containerfile -t dev.logout.work/empire/aspauth:1.0.0 -t dev.logout.work/empire/aspauth:latest .
       - name: Push
-        run: docker push dev.logout.work/empire/aspauth:latest
+        run: |
+          docker push dev.logout.work/empire/aspauth:1.0.0
+          docker push dev.logout.work/empire/aspauth:latest
