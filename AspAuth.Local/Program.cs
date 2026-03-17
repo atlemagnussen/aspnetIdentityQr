@@ -21,6 +21,7 @@ builder.AddWebAuthn();
 builder.ConfigureIdentityServer();
 
 builder.Services.LoadServices();
+builder.Services.AddScoped<SeedIdentityServerSetup>();
 
 builder.Services.AddControllers();
 builder.Services.AddRazorPages();
