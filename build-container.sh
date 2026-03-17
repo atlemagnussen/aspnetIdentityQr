@@ -1,2 +1,2 @@
-podman build -f AspAuth.Local/Containerfile --tag atlmag/aspauth:latest .
-podman build -f UserAdmin/Containerfile --tag atlmag/useradmin:latest .
+podman build -f AspAuth.Local/Containerfile --tag dev.logout.work/empire/aspauth:latest .
+#podman build -f UserAdmin/Containerfile --tag dev.logout.work/empire/useradmin:latest .
