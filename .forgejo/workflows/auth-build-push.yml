@@ -15,14 +15,26 @@ jobs:
         with:
           fetch-depth: 0
       
-      - name: GitVersion
-        image: mcr.microsoft.com/dotnet/sdk:10.0
+      - name: Install .NET 10
+        # If the image doesn't have 10.0 yet, we install it manually
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Install GitVersion
         run: |
           dotnet tool install --global GitVersion.Tool
-          export PATH="$PATH:/root/.dotnet/tools"
-          dotnet-gitversion /output buildserver
+          # Force the path update for the current session
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Determine Version
+        id: gitversion
+        run: |
+          # Use the full path just to be safe
+          $HOME/.dotnet/tools/dotnet-gitversion /output buildserver
           
-          VERSION=$(dotnet-gitversion /showvariable FullSemVer)
+          VERSION=$($HOME/.dotnet/tools/dotnet-gitversion /showvariable FullSemVer)
+          echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_ENV
       
       - name: Log in to Registry
         run: |
