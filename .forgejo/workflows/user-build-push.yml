@@ -23,7 +23,7 @@ jobs:
             VERSION="dev-${GITHUB_SHA::7}"
           fi
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "Building with version: $VERSION
+          echo "Building with version: $VERSION"
       
       - name: Log in to Registry
         run: |
