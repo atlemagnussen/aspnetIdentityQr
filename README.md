@@ -75,3 +75,5 @@ drop table public."AspNetUsers"
 
 podman build -f AspAuth.Local/Containerfile --tag localhost/aspauth:latest .
 podman build -f UserAdmin/Containerfile --tag localhost/useradmin:latest .
+
+https://github.com/GitTools/actions/blob/main/docs/examples/github/gitversion/execute.md
