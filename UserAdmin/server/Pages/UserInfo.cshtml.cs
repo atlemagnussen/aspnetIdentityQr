@@ -36,8 +36,11 @@ public class UserInfoModel : PageModel
 
             if (claims.Count > 0)
             {
-                foreach (var claim in claims)
+                foreach (var claim in claims) {
+                    if (claim.Type == "role" && claim.Value.Equals(UserRoles.Admin.ToString()))
+                        View.IsAdmin = true;
                     View.Claims.Add($"{claim.Type} = {claim.Value}");
+                }
             }
 
             var userId = User.Identity.GetSubjectId();

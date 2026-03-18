@@ -6,4 +6,5 @@ public class AccountViewModel
     public string? UserName { get; set; }
     public string? Fullname { get; set; }
     public List<string> Claims { get; set; } = [];
+    public bool IsAdmin { get; set; }
 }
