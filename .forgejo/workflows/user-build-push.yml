@@ -12,14 +12,25 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Docker Version
-        run: docker version
+        with:
+          fetch-depth: 0
+      
+      - name: Set version
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            VERSION="${GITHUB_REF#refs/tags/}"
+          else
+            VERSION="dev-${GITHUB_SHA::7}"
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Building with version: $VERSION
+      
       - name: Log in to Registry
         run: |
           echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login dev.logout.work -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
       - name: Build
-        run: docker build -f UserAdmin/Containerfile  -t dev.logout.work/empire/useradmin:1.0.0 -t dev.logout.work/empire/useradmin:latest .
+        run: docker build -f UserAdmin/Containerfile  -t dev.logout.work/empire/useradmin:${{ env.VERSION }} -t dev.logout.work/empire/useradmin:latest .
       - name: Push
         run: |
-          docker push dev.logout.work/empire/useradmin:1.0.0
+          docker push dev.logout.work/empire/useradmin:${{ env.VERSION }}
           docker push dev.logout.work/empire/useradmin:latest
