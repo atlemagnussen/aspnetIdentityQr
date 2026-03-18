@@ -23,9 +23,7 @@ jobs:
       - name: Determine Version
         id: version_step # step id used as a reference for output values
         uses: gittools/actions/gitversion/execute@v4.4.2
-
-      - name: Show version
-        run: echo "Version: ${{ env.fullSemVer }}"
+      
       - name: Log in to Registry
         run: |
           echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login dev.logout.work -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
