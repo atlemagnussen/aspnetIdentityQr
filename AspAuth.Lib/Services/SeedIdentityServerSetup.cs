@@ -25,7 +25,10 @@ public class SeedIdentityServerSetup(ConfigurationDbContext context)
         if (!await _context.ApiScopes.AnyAsync())
         {
             foreach (var scope in ApiScopes.ToList())
-                await _context.ApiScopes.AddAsync(scope.ToEntity());
+            {
+                var ent = scope.ToEntity();
+                await _context.ApiScopes.AddAsync(ent);
+            }
             await _context.SaveChangesAsync();
         }
 
@@ -63,7 +66,7 @@ public class SeedIdentityServerSetup(ConfigurationDbContext context)
 
     public static IEnumerable<ApiScope> ApiScopes =>
     [
-        new ApiScope(name: "file", displayName: "Files"),
+        new ApiScope(name: "file", displayName: "Files", userClaims: ["role"]),
         new ApiScope(name: "doc", displayName: "Docs")
     ];
 
@@ -87,7 +90,8 @@ public class SeedIdentityServerSetup(ConfigurationDbContext context)
             RequireClientSecret = false,
             AllowedGrantTypes = GrantTypes.Code,
             
-            RedirectUris = { 
+            RedirectUris = {
+                "http://localhost:5057/signin-oidc", "https://localhost:7028/signin-oidc",
                 "https://localhost:8000/callback.html", "https://localhost:8000/popup.html", "https://localhost:8000/silentRenew.html",//localhost
                 "https://docs.logout.work/callback.html", "https://docs.logout.work/popup.html", "https://docs.logout.work/silentRenew.html", // docs
                 "https://med.logout.work/callback.html", "https://med.logout.work/popup.html", "https://med.logout.work/silentRenew.html", // media
@@ -105,7 +109,9 @@ public class SeedIdentityServerSetup(ConfigurationDbContext context)
             },
 
             AllowedCorsOrigins = {
-                "https://localhost:8000", 
+                "https://localhost:8000",
+                "http://localhost:5057",
+                "https://localhost:7028",
                 "https://docs.logout.work",
                 "https://med.logout.work",
                 "https://fil.logout.work",

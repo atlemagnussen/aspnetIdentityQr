@@ -19,7 +19,7 @@ public class CryptoKeyService
         var signingKey = new CryptoSigningKey
         {
             StartDate = DateTime.UtcNow,
-            ExpiryDate = DateTime.UtcNow.AddYears(2),
+            ExpiryDate = DateTime.UtcNow.AddYears(5),
             Key = key
         };
 

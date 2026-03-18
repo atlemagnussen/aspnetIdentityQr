@@ -49,13 +49,6 @@ public static class IdentityServerSetup
         //idsvrBuilder.AddSigningCredential(key, SecurityAlgorithms.RsaSha256);
     }
 
-    public static void CreateNewKey(this IApplicationBuilder app)
-    {
-        using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>()!.CreateScope();
-        var keyService = serviceScope.ServiceProvider.GetRequiredService<CryptoKeyService>();
-        keyService.CreateAndSaveNewKey();
-    }
-
     public static void MigrateDb(this IApplicationBuilder app)
     {
         using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>()!.CreateScope();

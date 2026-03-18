@@ -5,11 +5,10 @@ namespace AspAuth.Local.Pages
 {
     public class PrivacyModel : PageModel
     {
-        private readonly SeedIdentityServerSetup _seeder;
+        //private readonly CryptoKeyService _keyService;
 
-        public PrivacyModel(SeedIdentityServerSetup seeder)
+        public PrivacyModel()
         {
-            _seeder = seeder;
             Claims = [];
         }
 
@@ -21,8 +20,8 @@ namespace AspAuth.Local.Pages
             {
                 Claims.Add(claim.Type, claim.Value);
             }
-
-            await _seeder.SeedData();
+            //_keyService.CreateAndSaveNewKey();
+            //await _seeder.SeedData();
         }
     }
 
