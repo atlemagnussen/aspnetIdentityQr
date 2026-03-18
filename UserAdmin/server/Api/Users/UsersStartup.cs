@@ -6,6 +6,6 @@ public static class UsersStartup
 {
     public static void AddUsers(this WebApplicationBuilder builder)
     {
-        builder.Services.AddTransient<UserDataService>();
+        builder.Services.AddScoped<UserDataService>();
     }
 }
