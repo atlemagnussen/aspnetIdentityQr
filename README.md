@@ -73,4 +73,7 @@ drop table public."AspNetRoles"
 drop table public."AspNetUsers"
 
 
-https://id.logout.work/Identity/Account/LoginPasskey?returnUrl=/connect/authorize/callback?request_uri=urn%3Aietf%3Aparams%3Aoauth%3Arequest_uri%3AF68E2BD22151CA0E0C4531F89306C16B6BF76ECCA5748AB2597B8BA1CB289249&client_id=web
+podman build -f AspAuth.Local/Containerfile --tag localhost/aspauth:latest .
+podman build -f UserAdmin/Containerfile --tag localhost/useradmin:latest .
+
+https://github.com/GitTools/actions/blob/main/docs/examples/github/gitversion/execute.md

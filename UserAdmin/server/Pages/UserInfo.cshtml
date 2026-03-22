@@ -18,10 +18,20 @@
                 <li>@claim</li>
             }
             </ul>
+
+            @if(Model.View.UserName == "atlemagnussen@gmail.com" && !Model.View.IsAdmin)
+            {
+                <form method="post" asp-page-handler="MakeAdmin" class="login-link">
+                    <button type="submit">Make me admin</button>
+                </form>
+            }
+            
             <div class="login-link">
-                <a asp-page="/Logout/Index">Log out</a>
+                <a asp-page="/Logout">Log out</a>
             </div>
-        } else {
+        }
+        else
+        {
             <div class="login-link">
                 <a asp-page="/Login/Index" asp-route-returnurl="/">Log in</a>
             </div>

@@ -23,7 +23,7 @@ jobs:
             VERSION="dev-${GITHUB_SHA::7}"
           fi
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-          IMAGE_NAME="dev.logout.work/empire/aspauth"
+          IMAGE_NAME="dev.logout.work/empire/useradmin"
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
           echo "Building $IMAGE_NAME : $VERSION"
       
@@ -31,8 +31,8 @@ jobs:
         run: |
           echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login dev.logout.work -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
       - name: Build
-        run: docker build -f AspAuth.Local/Containerfile -t ${{ env.IMAGE_NAME }}:${{ env.VERSION }} -t ${{ env.IMAGE_NAME }}:latest .
+        run: docker build -f UserAdmin/Containerfile  -t ${{ env.IMAGE_NAME }}:${{ env.VERSION }} -t ${{ env.IMAGE_NAME }}:latest .
       - name: Push
         run: |
-          docker push ${{ env.IMAGE_NAME }}:${{ env.VERSION }} 
+          docker push ${{ env.IMAGE_NAME }}:${{ env.VERSION }}
           docker push ${{ env.IMAGE_NAME }}:latest
