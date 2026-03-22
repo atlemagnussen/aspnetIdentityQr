@@ -92,7 +92,7 @@ public class SeedIdentityServerSetup(ConfigurationDbContext context)
             
             RedirectUris = {
                 "http://localhost:5057/signin-oidc", "https://localhost:7028/signin-oidc",
-                "https://localhost:8000/callback.html", "https://localhost:8000/popup.html", "https://localhost:8000/silentRenew.html",//localhost
+                "http://localhost:8000/callback.html", "http://localhost:8000/popup.html", "http://localhost:8000/silentRenew.html",//localhost
                 "https://docs.logout.work/callback.html", "https://docs.logout.work/popup.html", "https://docs.logout.work/silentRenew.html", // docs
                 "https://med.logout.work/callback.html", "https://med.logout.work/popup.html", "https://med.logout.work/silentRenew.html", // media
                 "https://fil.logout.work/signin-oidc", // files
@@ -109,7 +109,7 @@ public class SeedIdentityServerSetup(ConfigurationDbContext context)
             },
 
             AllowedCorsOrigins = {
-                "https://localhost:8000",
+                "http://localhost:8000",
                 "http://localhost:5057",
                 "https://localhost:7028",
                 "https://docs.logout.work",
@@ -132,7 +132,8 @@ public class SeedIdentityServerSetup(ConfigurationDbContext context)
                 IdentityServerConstants.StandardScopes.Profile,
                 "verification",
                 "roles",
-                "doc"
+                "doc",
+                "file"
             }
         }
     ];
