@@ -1,3 +1,5 @@
+*.lscache
+
 appsettings.Development.json
 
 tsconfig.tsbuildinfo
