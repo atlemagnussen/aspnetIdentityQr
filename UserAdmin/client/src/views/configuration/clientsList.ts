@@ -1,96 +1,100 @@
 import { Client } from "@db/api"
-import {LitElement, css, html} from "lit"
-import {customElement, state} from "lit/decorators.js"
+import { LitElement, css, html } from "lit"
+import { customElement, state } from "lit/decorators.js"
 import * as service from "@db/client/views/configuration/configurationService.js"
+import { openClientEditDialog } from "@db/client/views/configuration/clientEditDialog.js"
 
 @customElement("clients-list")
 export class ClientsList extends LitElement {
 
-    static styles = css`
-        tbody { 
-            color: var(--wa-color-text-normal);
-			tr:nth-child(odd) {
-				background-color: var(--wa-color-surface-raised);
-			}
-			tr:nth-child(even) {
-				background-color: var(--wa-color-surface-lowered);
-			}
-			tr td {
-				padding: var(--wa-space-xs);
-			}
-        }
-        button {
-            cursor: pointer;
-        }
-    `
-    connectedCallback(): void {
-        super.connectedCallback()
-        this.get()
+  static styles = css`
+    tbody { 
+      color: var(--wa-color-text-normal);
+      tr:nth-child(odd) {
+        background-color: var(--wa-color-surface-raised);
+      }
+      tr:nth-child(even) {
+        background-color: var(--wa-color-surface-lowered);
+      }
+      tr td {
+        padding: var(--wa-space-xs);
+      }
     }
-    @state()
-    clients?: Array<Client>
+    button {
+      cursor: pointer;
+    }
+  `
+  connectedCallback(): void {
+    super.connectedCallback()
+    this.get()
+  }
+  @state()
+  clients?: Array<Client>
 
-    @state()
-    showStorage = false
+  @state()
+  showStorage = false
 
-    toggleShowStorage() {
-        this.showStorage = !this.showStorage
+  toggleShowStorage() {
+    this.showStorage = !this.showStorage
+  }
+
+  error = ""
+  get = async () => {
+    try {
+      this.clients = await service.getClients()
+    } catch (err: any) {
+      this.error = err.message
+    }
+  }
+
+  render() {
+    if (!this.clients) {
+      return html`
+        <div>
+          <p>No result</p>
+          <button @click=${this.get}>Get Dbs</button>
+        </div>
+      `
     }
 
-    error = ""
-    get = async () => {
-        try {
-            this.clients = await service.getClients()
-        } catch (err: any) {
-            this.error = err.message
-        }
-    }
-
-    render() {
-        if (!this.clients) {
+    return html`
+      <section>
+      <h3>Clients</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Lifetime</th>
+            <th>Protocol</th>
+            <th>PKCE</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${this.clients.map(c => {
             return html`
-            <div>
-                <p>No result</p>
-                <button @click=${this.get}>Get Dbs</button>
-            </div>
+              <tr>
+                <td>${c.clientId}</td>
+                <td>${c.clientName}</td>
+                <td>${c.accessTokenLifetime}</td>
+                <td>${c.protocolType}</td>
+                <td>${c.requirePkce}</td>
+                <td>
+                  <wa-button variant="neutral" appearance="filled" @click=${() => openClientEditDialog(c, this.get)}>
+                    <wa-icon name="pen-to-square" variant="regular"></wa-icon>
+                  </wa-button>
+                  <wa-button variant="neutral" appearance="filled"
+                    href="/api/clients/${c.clientId}">
+                    <wa-icon name="home" variant="regular"></wa-icon>
+                  </wa-button>
+                </td>
+              </tr>
             `
-        }
-
-        return html`
-            <section>
-                <h3>Users</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Name</th>
-                            <th>Lifetime</th>
-                            <th>Protocol</th>
-                            <th>PKCE</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${this.clients.map(c => {
-                            return html`
-                                <tr>
-                                    <td>${c.clientId}</td>
-                                    <td>${c.clientName}</td>
-                                    <td>${c.accessTokenLifetime}</td>
-                                    <td>${c.protocolType}</td>
-                                    <td>${c.requirePkce}</td>
-                                    <td>
-                                        <wa-button variant="neutral" appearance="filled"
-                                            href="/api/clients/${c.clientId}">
-                                            <wa-icon name="pen-to-square" variant="regular"></wa-icon>
-                                        </wa-button>
-                                    </td>
-                                </tr>
-                            `
-                        })}
-                    </tbody>
-                </table>
-            </section>
-        `
-    }
+            })}
+        </tbody>
+      </table>
+    </section>
+    `
+  }
 }

@@ -14,6 +14,12 @@ export const zClientClaim = z.object({
 
 export type ClientClaimZodType = z.infer<typeof zClientClaim>;
 
+export const zClientUrlPatch = z.object({
+    url: z.string()
+});
+
+export type ClientUrlPatchZodType = z.infer<typeof zClientUrlPatch>;
+
 export const zDPoPTokenExpirationValidationMode = z.int();
 
 export type DPoPTokenExpirationValidationModeZodType = z.infer<typeof zDPoPTokenExpirationValidationMode>;
@@ -394,6 +400,23 @@ export type GetApiClientsByIdDataZodType = z.infer<typeof zGetApiClientsByIdData
 export const zGetApiClientsByIdResponse = zClient;
 
 export type GetApiClientsByIdResponseZodType = z.infer<typeof zGetApiClientsByIdResponse>;
+
+export const zPutApiClientsByIdRedirecturlsData = z.object({
+    body: zClientUrlPatch,
+    path: z.object({
+        id: z.string()
+    }),
+    query: z.optional(z.never())
+});
+
+export type PutApiClientsByIdRedirecturlsDataZodType = z.infer<typeof zPutApiClientsByIdRedirecturlsData>;
+
+/**
+ * OK
+ */
+export const zPutApiClientsByIdRedirecturlsResponse = zClient;
+
+export type PutApiClientsByIdRedirecturlsResponseZodType = z.infer<typeof zPutApiClientsByIdRedirecturlsResponse>;
 
 export const zGetApiApiResourcesData = z.object({
     body: z.optional(z.never()),

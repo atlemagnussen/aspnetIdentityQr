@@ -5,10 +5,16 @@ using Microsoft.Identity.Web;
 
 namespace UserAdmin.Api;
 
-internal sealed class GlobalExceptionHandler(IProblemDetailsService problemDetailsService) : IExceptionHandler
+internal sealed class GlobalExceptionHandler(IProblemDetailsService problemDetailsService, ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
+        logger.LogError(
+            exception,
+            "Unhandled exception for {Method} {Path}",
+            httpContext.Request.Method,
+            httpContext.Request.Path);
+
         httpContext.Response.StatusCode = exception switch
         {
             ApplicationException => StatusCodes.Status400BadRequest,

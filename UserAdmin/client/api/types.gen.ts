@@ -90,6 +90,10 @@ export type ClientClaim = {
     valueType?: string;
 };
 
+export type ClientUrlPatch = {
+    url: string;
+};
+
 export type DPoPTokenExpirationValidationMode = number;
 
 export type IdentityProvider = {
@@ -291,6 +295,24 @@ export type GetApiClientsByIdResponses = {
 };
 
 export type GetApiClientsByIdResponse = GetApiClientsByIdResponses[keyof GetApiClientsByIdResponses];
+
+export type PutApiClientsByIdRedirecturlsData = {
+    body: ClientUrlPatch;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/Clients/{id}/redirecturls';
+};
+
+export type PutApiClientsByIdRedirecturlsResponses = {
+    /**
+     * OK
+     */
+    200: Client;
+};
+
+export type PutApiClientsByIdRedirecturlsResponse = PutApiClientsByIdRedirecturlsResponses[keyof PutApiClientsByIdRedirecturlsResponses];
 
 export type GetApiApiResourcesData = {
     body?: never;

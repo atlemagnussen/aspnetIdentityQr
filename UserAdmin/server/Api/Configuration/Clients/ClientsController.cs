@@ -1,6 +1,7 @@
 using Duende.IdentityServer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UserAdmin.Api.Configuration.Clients.Model;
 
 namespace UserAdmin.Api.Configuration.Clients;
 
@@ -26,5 +27,12 @@ public class ClientsController : ControllerBase
     public Task<Client> Get(string id)
     {
         return _service.Get(id);
+    }
+
+    [HttpPut("{id}/redirecturls")]
+    public async Task<Client> AddRedirectUrl([FromRoute] string id, [FromBody] ClientUrlPatch patch)
+    {
+        var client = await _service.AddRedirectUri(id, patch.Url);
+        return client;   
     }
 }

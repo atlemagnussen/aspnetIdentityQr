@@ -354,6 +354,65 @@
         }
       }
     },
+    "/api/Clients/{id}/redirecturls": {
+      "put": {
+        "tags": [
+          "Clients"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientUrlPatch"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientUrlPatch"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientUrlPatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Client"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Client"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Client"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/ApiResources": {
       "get": {
         "tags": [
@@ -806,6 +865,17 @@
             "type": "string"
           },
           "valueType": {
+            "type": "string"
+          }
+        }
+      },
+      "ClientUrlPatch": {
+        "required": [
+          "url"
+        ],
+        "type": "object",
+        "properties": {
+          "url": {
             "type": "string"
           }
         }
