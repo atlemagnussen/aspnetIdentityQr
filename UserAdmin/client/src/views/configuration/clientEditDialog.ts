@@ -1,6 +1,6 @@
 import WaButton from "@awesome.me/webawesome/dist/components/button/button.js"
 import { Client } from "@db/api"
-import { addRedirectUrl } from "@db/client/views/configuration/configurationService.js"
+import { addCorsOrigin, addRedirectUrl } from "@db/client/views/configuration/configurationService.js"
 import { LitElement, css, html } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 
@@ -154,10 +154,13 @@ export class ClientEditDetails extends LitElement {
     onSaved?: () => void
 
     @state()
-    private selectedSection: "redirect" | "scopes" | "grants" = "redirect"
+    private selectedSection: "redirect" | "cors" | "scopes" | "grants" = "redirect"
 
     @state()
     private redirectUrl = ""
+
+    @state()
+    private corsOrigin = ""
 
     @state()
     private isSaving = false
@@ -212,6 +215,50 @@ export class ClientEditDetails extends LitElement {
         }
     }
 
+    private onInputCorsOrigin(e: Event) {
+        const input = e.target as HTMLInputElement
+        this.corsOrigin = input.value
+        this.error = ""
+        this.success = ""
+    }
+
+    private async saveCorsOrigin() {
+        const clientId = this.client?.clientId
+        const originInput = this.corsOrigin.trim()
+
+        if (!clientId) {
+            this.error = "Missing client id."
+            return
+        }
+
+        if (!originInput) {
+            this.error = "Please enter a CORS origin."
+            return
+        }
+
+        try {
+            new URL(originInput)
+        } catch {
+            this.error = "Please enter a valid absolute URL."
+            return
+        }
+
+        this.isSaving = true
+        this.error = ""
+        this.success = ""
+
+        try {
+            await addCorsOrigin(clientId, originInput)
+            this.corsOrigin = ""
+            this.success = "CORS origin saved."
+            this.onSaved?.()
+        } catch (err: any) {
+            this.error = err?.message ?? "Unable to save CORS origin."
+        } finally {
+            this.isSaving = false
+        }
+    }
+
     render() {
         return html`
             <section class="layout">
@@ -224,28 +271,56 @@ export class ClientEditDetails extends LitElement {
                     >
                         Redirect URLs
                     </wa-button>
+                    <wa-button
+                        variant=${this.selectedSection === "cors" ? "brand" : "neutral"}
+                        appearance="filled"
+                        @click=${() => (this.selectedSection = "cors")}
+                    >
+                        CORS origins
+                    </wa-button>
                     <wa-button variant="neutral" appearance="outlined" disabled>Scopes (soon)</wa-button>
                     <wa-button variant="neutral" appearance="outlined" disabled>Grant types (soon)</wa-button>
                 </nav>
 
                 <article class="editor">
-                    <h4>Redirect URLs</h4>
-                    <p class="help">
-                        Add one redirect URL for client <strong>${this.client?.clientId ?? ""}</strong>.
-                    </p>
+                    ${this.selectedSection === "redirect"
+                        ? html`
+                              <h4>Redirect URLs</h4>
+                              <p class="help">
+                                  Add one redirect URL for client <strong>${this.client?.clientId ?? ""}</strong>.
+                              </p>
 
-                    <wa-input
-                        label="Redirect URL"
-                        placeholder="https://example.com/signin-oidc"
-                        .value=${this.redirectUrl}
-                        @input=${this.onInputRedirectUrl}
-                    ></wa-input>
+                              <wa-input
+                                  label="Redirect URL"
+                                  placeholder="https://example.com/signin-oidc"
+                                  .value=${this.redirectUrl}
+                                  @input=${this.onInputRedirectUrl}
+                              ></wa-input>
+                          `
+                        : html`
+                              <h4>CORS origins</h4>
+                              <p class="help">
+                                  Add one CORS origin for client <strong>${this.client?.clientId ?? ""}</strong>.
+                              </p>
+
+                              <wa-input
+                                  label="CORS origin"
+                                  placeholder="https://app.example.com"
+                                  .value=${this.corsOrigin}
+                                  @input=${this.onInputCorsOrigin}
+                              ></wa-input>
+                          `}
 
                     ${this.error ? html`<p class="message error">${this.error}</p>` : null}
                     ${this.success ? html`<p class="message success">${this.success}</p>` : null}
 
                     <div class="actions">
-                        <wa-button variant="brand" appearance="filled" ?disabled=${this.isSaving} @click=${this.saveRedirectUrl}>
+                        <wa-button
+                            variant="brand"
+                            appearance="filled"
+                            ?disabled=${this.isSaving}
+                            @click=${this.selectedSection === "redirect" ? this.saveRedirectUrl : this.saveCorsOrigin}
+                        >
                             ${this.isSaving ? "Saving..." : "Save"}
                         </wa-button>
                     </div>

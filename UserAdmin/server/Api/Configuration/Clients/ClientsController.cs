@@ -35,4 +35,11 @@ public class ClientsController : ControllerBase
         var client = await _service.AddRedirectUri(id, patch.Url);
         return client;   
     }
+
+    [HttpPut("{id}/corsorigins")]
+    public async Task<Client> AddCorsOrigin([FromRoute] string id, [FromBody] ClientUrlPatch patch)
+    {
+        var client = await _service.AddCorsOrigin(id, patch.Url);
+        return client;   
+    }
 }

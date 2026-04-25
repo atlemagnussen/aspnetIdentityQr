@@ -66,6 +66,26 @@ public class ClientsService(ConfigurationDbContext context)
         return client.ToModel();
     }
 
+    public async Task<Client> AddCorsOrigin(string clientId, string url)
+    {
+        var client = await FullClient(clientId);
+        var normalizedOrigin = NormalizeCorsOrigin(url);
+
+        var alreadyExists = client.AllowedCorsOrigins.Any(o =>
+            string.Equals(NormalizeCorsOrigin(o.Origin), normalizedOrigin, StringComparison.OrdinalIgnoreCase));
+
+        if (alreadyExists)
+            return client.ToModel();
+
+        client.AllowedCorsOrigins.Add(new DuendeDb.ClientCorsOrigin {
+            ClientId = client.Id,
+            Origin = normalizedOrigin
+        });
+
+        await Context.SaveChangesAsync();
+        return client.ToModel();
+    }
+
     private static string NormalizeRedirectUri(string url)
     {
         var trimmed = url?.Trim();
@@ -75,5 +95,23 @@ public class ClientsService(ConfigurationDbContext context)
         }
 
         return uri.AbsoluteUri;
+    }
+
+    private static string NormalizeCorsOrigin(string url)
+    {
+        var trimmed = url?.Trim();
+        if (string.IsNullOrWhiteSpace(trimmed) || !Uri.TryCreate(trimmed, UriKind.Absolute, out var uri))
+        {
+            throw new ArgumentException("CORS origin must be a valid absolute URL.", nameof(url));
+        }
+
+        if (!string.Equals(uri.Scheme, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase)
+            && !string.Equals(uri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new ArgumentException("CORS origin must use http or https.", nameof(url));
+        }
+
+        // Persist only the origin portion: scheme + host + optional non-default port.
+        return uri.GetLeftPart(UriPartial.Authority);
     }
 }
