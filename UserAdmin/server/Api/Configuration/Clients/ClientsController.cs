@@ -36,6 +36,13 @@ public class ClientsController : ControllerBase
         return client;   
     }
 
+    [HttpPut("{id}/postlogoutredirecturls")]
+    public async Task<Client> AddPostLogoutRedirectUrl([FromRoute] string id, [FromBody] ClientUrlPatch patch)
+    {
+        var client = await _service.AddPostLogoutRedirectUri(id, patch.Url);
+        return client;
+    }
+
     [HttpPut("{id}/corsorigins")]
     public async Task<Client> AddCorsOrigin([FromRoute] string id, [FromBody] ClientUrlPatch patch)
     {

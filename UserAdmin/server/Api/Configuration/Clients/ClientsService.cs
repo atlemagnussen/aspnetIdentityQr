@@ -66,6 +66,27 @@ public class ClientsService(ConfigurationDbContext context)
         return client.ToModel();
     }
 
+    public async Task<Client> AddPostLogoutRedirectUri(string clientId, string url)
+    {
+        var client = await FullClient(clientId);
+        var normalizedUrl = NormalizeRedirectUri(url);
+
+        var alreadyExists = client.PostLogoutRedirectUris.Any(r =>
+            string.Equals(NormalizeRedirectUri(r.PostLogoutRedirectUri), normalizedUrl, StringComparison.OrdinalIgnoreCase));
+
+        if (alreadyExists)
+            return client.ToModel();
+
+        client.PostLogoutRedirectUris.Add(new DuendeDb.ClientPostLogoutRedirectUri
+        {
+            PostLogoutRedirectUri = normalizedUrl,
+            ClientId = client.Id
+        });
+
+        await Context.SaveChangesAsync();
+        return client.ToModel();
+    }
+
     public async Task<Client> AddCorsOrigin(string clientId, string url)
     {
         var client = await FullClient(clientId);

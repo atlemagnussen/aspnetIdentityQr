@@ -1,6 +1,6 @@
 import WaButton from "@awesome.me/webawesome/dist/components/button/button.js"
 import { Client } from "@db/api"
-import { addCorsOrigin, addRedirectUrl } from "@db/client/views/configuration/configurationService.js"
+import { addCorsOrigin, addPostLogoutRedirectUrl, addRedirectUrl } from "@db/client/views/configuration/configurationService.js"
 import { LitElement, css, html } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 
@@ -154,10 +154,13 @@ export class ClientEditDetails extends LitElement {
     onSaved?: () => void
 
     @state()
-    private selectedSection: "redirect" | "cors" | "scopes" | "grants" = "redirect"
+    private selectedSection: "redirect" | "postlogout" | "cors" | "scopes" | "grants" = "redirect"
 
     @state()
     private redirectUrl = ""
+
+    @state()
+    private postLogoutRedirectUrl = ""
 
     @state()
     private corsOrigin = ""
@@ -210,6 +213,50 @@ export class ClientEditDetails extends LitElement {
             this.onSaved?.()
         } catch (err: any) {
             this.error = err?.message ?? "Unable to save redirect URL."
+        } finally {
+            this.isSaving = false
+        }
+    }
+
+    private onInputPostLogoutRedirectUrl(e: Event) {
+        const input = e.target as HTMLInputElement
+        this.postLogoutRedirectUrl = input.value
+        this.error = ""
+        this.success = ""
+    }
+
+    private async savePostLogoutRedirectUrl() {
+        const clientId = this.client?.clientId
+        const url = this.postLogoutRedirectUrl.trim()
+
+        if (!clientId) {
+            this.error = "Missing client id."
+            return
+        }
+
+        if (!url) {
+            this.error = "Please enter a post logout redirect URL."
+            return
+        }
+
+        try {
+            new URL(url)
+        } catch {
+            this.error = "Please enter a valid absolute URL."
+            return
+        }
+
+        this.isSaving = true
+        this.error = ""
+        this.success = ""
+
+        try {
+            await addPostLogoutRedirectUrl(clientId, url)
+            this.postLogoutRedirectUrl = ""
+            this.success = "Post logout redirect URL saved."
+            this.onSaved?.()
+        } catch (err: any) {
+            this.error = err?.message ?? "Unable to save post logout redirect URL."
         } finally {
             this.isSaving = false
         }
@@ -272,6 +319,13 @@ export class ClientEditDetails extends LitElement {
                         Redirect URLs
                     </wa-button>
                     <wa-button
+                        variant=${this.selectedSection === "postlogout" ? "brand" : "neutral"}
+                        appearance="filled"
+                        @click=${() => (this.selectedSection = "postlogout")}
+                    >
+                        Post logout URLs
+                    </wa-button>
+                    <wa-button
                         variant=${this.selectedSection === "cors" ? "brand" : "neutral"}
                         appearance="filled"
                         @click=${() => (this.selectedSection = "cors")}
@@ -297,7 +351,21 @@ export class ClientEditDetails extends LitElement {
                                   @input=${this.onInputRedirectUrl}
                               ></wa-input>
                           `
-                        : html`
+                        : this.selectedSection === "postlogout"
+                          ? html`
+                                <h4>Post logout redirect URLs</h4>
+                                <p class="help">
+                                    Add one post logout redirect URL for client <strong>${this.client?.clientId ?? ""}</strong>.
+                                </p>
+
+                                <wa-input
+                                    label="Post logout redirect URL"
+                                    placeholder="https://example.com/signout-callback-oidc"
+                                    .value=${this.postLogoutRedirectUrl}
+                                    @input=${this.onInputPostLogoutRedirectUrl}
+                                ></wa-input>
+                            `
+                          : html`
                               <h4>CORS origins</h4>
                               <p class="help">
                                   Add one CORS origin for client <strong>${this.client?.clientId ?? ""}</strong>.
@@ -319,7 +387,12 @@ export class ClientEditDetails extends LitElement {
                             variant="brand"
                             appearance="filled"
                             ?disabled=${this.isSaving}
-                            @click=${this.selectedSection === "redirect" ? this.saveRedirectUrl : this.saveCorsOrigin}
+                            @click=${
+                                this.selectedSection === "redirect"
+                                    ? this.saveRedirectUrl
+                                    : this.selectedSection === "postlogout"
+                                      ? this.savePostLogoutRedirectUrl
+                                      : this.saveCorsOrigin}
                         >
                             ${this.isSaving ? "Saving..." : "Save"}
                         </wa-button>
