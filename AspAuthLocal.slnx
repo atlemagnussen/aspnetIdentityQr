@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="AspAuth.ConsoleApp/AspAuth.ConsoleApp.csproj" />
+  <Project Path="AspAuth.Lib/AspAuth.Lib.csproj" />
+  <Project Path="AspAuth.Local/AspAuth.Local.csproj" />
+</Solution>
