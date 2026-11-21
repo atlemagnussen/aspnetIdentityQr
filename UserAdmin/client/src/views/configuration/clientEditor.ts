@@ -23,7 +23,12 @@ type ListKey = { [K in keyof ClientDto]-?: ClientDto[K] extends string[] ? K : n
 @customElement("client-editor")
 export class ClientEditor extends AdminElement {
     static styles = [adminStyles, css`
+        :host {
+            display: flex;
+            flex-direction: column;
+        }
         .savebar {
+            margin-top: auto;
             position: sticky;
             bottom: calc(-1 * var(--wa-space-m));
             display: flex;
@@ -33,7 +38,6 @@ export class ClientEditor extends AdminElement {
             padding: var(--wa-space-s) 0;
             background: var(--wa-color-surface-default);
             border-top: var(--wa-border-width-s) solid var(--wa-color-surface-border);
-            margin-top: var(--wa-space-s);
             z-index: 1;
         }
         .savebar .dirty {

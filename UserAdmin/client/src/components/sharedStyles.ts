@@ -9,6 +9,13 @@ export const adminStyles = css`
     h2, h3, h4 {
         margin: 0;
     }
+    /* keep tabs reachable while a long tab panel scrolls inside a dialog */
+    wa-tab-group::part(nav) {
+        position: sticky;
+        top: calc(-1 * var(--wa-space-m));
+        z-index: 2;
+        background: var(--wa-color-surface-default);
+    }
     .toolbar {
         display: flex;
         flex-wrap: wrap;
