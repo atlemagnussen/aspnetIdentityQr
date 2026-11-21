@@ -1,0 +1,30 @@
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
+USER app
+WORKDIR /app
+EXPOSE 8080
+
+
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY . .
+WORKDIR "/src/Id.Server"
+# Not VERSION/COMMIT: ARGs become env vars in RUN, and MSBuild reads env vars as properties
+# (case-insensitive), so VERSION would override $(Version) and break NuGet restore.
+ARG APP_VERSION=local
+ARG APP_COMMIT=
+ARG APP_BUILD_TIME=
+RUN dotnet build "./Id.Server.csproj" -c $BUILD_CONFIGURATION -o /app/build -p:BuildVersion="$APP_VERSION" -p:BuildCommit="$APP_COMMIT" -p:BuildTime="$APP_BUILD_TIME"
+
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+ARG APP_VERSION=local
+ARG APP_COMMIT=
+ARG APP_BUILD_TIME=
+RUN dotnet publish "./Id.Server.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false -p:BuildVersion="$APP_VERSION" -p:BuildCommit="$APP_COMMIT" -p:BuildTime="$APP_BUILD_TIME"
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "Id.Server.dll"]

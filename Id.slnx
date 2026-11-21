@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="Id.Lib/Id.Lib.csproj" />
+  <Project Path="Id.Server/Id.Server.csproj" />
   <Project Path="Id.Admin/server/Id.Admin.csproj" />
   <Project Path="Id.Tests/Id.Tests.csproj" />
 </Solution>

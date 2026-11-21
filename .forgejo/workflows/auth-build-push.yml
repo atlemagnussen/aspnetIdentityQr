@@ -1,4 +1,4 @@
-name: AspAuth Build and Push
+name: Id.Server Build and Push
 on:
   push:
     branches:
@@ -34,7 +34,7 @@ jobs:
           echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login dev.logout.work -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
       - name: Build
         run: >-
-          docker build -f AspAuth.Local/Containerfile
+          docker build -f Id.Server/Containerfile
           --build-arg APP_VERSION=${{ env.VERSION }}
           --build-arg APP_COMMIT=${{ env.COMMIT }}
           --build-arg APP_BUILD_TIME=${{ env.BUILD_TIME }}

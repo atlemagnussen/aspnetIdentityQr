@@ -8,11 +8,11 @@ An OAuth2/OIDC identity server and its admin app, sharing one PostgreSQL databas
 
 | Project | Role |
 |---|---|
-| `Id.Server/` | *(not built yet)* The new ID server: ASP.NET Core Identity UI (from `old/AspAuth.Local`) plus our own OIDC endpoints. Will deploy as `id.logout.work`. |
+| `Id.Server/` | The ID server: ASP.NET Core Identity UI (Razor Pages under `Areas/Identity`; Google + Microsoft logins, TOTP 2FA, passkeys) plus our own OIDC server in `Oidc/`. Deploys as `id.logout.work` (image `aspauth`). |
 | `Id.Admin/` | Admin app (users, roles, OAuth clients, read-only resources). Signs in *via* the ID server over OIDC. Deployed as `user.logout.work` (image name still `useradmin`). |
 | `Id.Lib/` | Shared: entities, `IdDbContext`, **all migrations**, Identity/Data Protection setup, OIDC constants, OTel, ops endpoints. No Duende reference. |
 | `Id.Tests/` | xunit v3 + Testcontainers (real Postgres). |
-| `old/` | The Duende-based `AspAuth.*` projects, kept for reference until `Id.Server` replaces them. Don't extend. |
+| `old/` | The Duende-based `AspAuth.*` projects, reference only. Not in the solution; delete after cutover. |
 
 Solution: `Id.slnx` (root). Stack: .NET 10, EF Core 10 + Npgsql, OpenTelemetry. Admin client: TypeScript + Lit + Vite, Web Awesome.
 
@@ -31,7 +31,7 @@ Rules:
 ## How auth ties the two apps together
 
 - Id.Admin authenticates with cookie + OIDC (`Id.Admin/server/Auth/AuthenticationStartup.cs`). Authority comes from env `AUTH_SERVER` (default `https://id.logout.work`) and client from `AUTH_CLIENT` (default `web`). Scopes: `openid profile roles`. `MapInboundClaims = false`, so claim types are raw JWT names (`role`, `name`, `sub`).
-- The ID server emits `role` claims (and `fullname`) from the user's ASP.NET Identity roles and `UserProfile` (old: `old/AspAuth.Lib/Services/ProfileService.cs`). `Id.Server` must emit the same claims.
+- The ID server emits `role` and `fullname` from the user's Identity roles and `UserProfile` (`Id.Server/Oidc/Users/UserClaimsService.cs`). Userinfo always includes them, as the old Duende profile service did.
 - Roles are free-form (managed on the Roles page). The `UserRoles` enum (`Id.Lib/Entities/Users.cs`, currently only `Admin`) lists the *system* roles, which can't be renamed or deleted.
 - Admin authorization: policy `Policies.RequiresAdmin` = authenticated + `role` claim `Admin`. **Every API controller and admin page must carry `[Authorize(Policies.RequiresAdmin)]`.** Logged-in non-admins land on `/AccessDenied`.
 - Challenges: API calls (`/api/*`) get plain 401/403 from the cookie handler. Pages are challenged with OIDC (a redirect to the ID server). A policy scheme in `AuthenticationStartup` does the routing. Don't call `options.Events.RedirectToX` from inside `OnRedirectToX`; that recursion crashes the process.
@@ -39,6 +39,22 @@ Rules:
 - Self-protection, enforced server-side: an admin can't delete or lock themselves or remove their own Admin role. The client Id.Admin signs in with (`AUTH_CLIENT`) can't be disabled or deleted.
 - The ID server reads clients from the DB on every request (no cache), so client/redirect/CORS changes made in Id.Admin apply immediately. Keep it that way.
 - Both apps sit behind a reverse proxy: forwarded headers trust all proxies (`KnownProxies/KnownIPNetworks` cleared).
+
+## Id.Server OIDC
+
+`Id.Server/Oidc/` is our own protocol code (no OIDC server library). Endpoints keep Duende's paths: `/.well-known/openid-configuration[/jwks]`, `/connect/authorize`, `/connect/token`, `/connect/userinfo`, `/connect/endsession`.
+
+Supported: authorization code (`response_type=code`, `response_mode` query/form_post), PKCE S256 only (`plain` is rejected), refresh tokens (`offline_access` + `AllowOfflineAccess`, rotation per `RefreshTokenUsage`), client_secret_basic/post, `prompt=none|login`, `max_age`, RP-initiated logout, CORS from `ClientCorsOrigins`.
+Not yet: client_credentials, consent screen (`RequireConsent` is ignored), front/back-channel logout, introspection/revocation. Clients with `RequirePushedAuthorization`, `RequireRequestObject` or `RequireDPoP` are refused (fail closed).
+
+Compatibility rules (existing clients, APIs and sessions depend on them):
+- Issuer comes from the request (lower case) unless `Oidc:IssuerUri` is set. Access tokens: typ `at+jwt`, aud `{issuer}/resources` + API resource names, `scope` as an array.
+- Signing key: newest valid row in `SigningKeys`. The production JWK has no `kid`, so tokens carry none. Keep it that way for that key.
+- The Identity cookie keeps Duende's shape: claim types `sub`/`name`/`role`, `auth_time`/`idp`/`amr` claims, session id in the `session_id` property (`Oidc/Session/SessionClaims.cs`).
+- Codes and refresh tokens live in `PersistedGrants` as SHA-256 hashes of the handle. Codes are single-use. A replayed code revokes that session's refresh tokens.
+- Only a user-facing error *code* reaches `/Error`. Details go to the log.
+
+Every protocol rule has a test in `Id.Tests/Server`. `OidcHandlerCompatibilityTests` runs Microsoft's OIDC handler with Id.Admin's settings against the server; it is the drop-in check, so keep it green.
 
 ## Id.Admin layout
 
@@ -105,6 +121,10 @@ JSON conventions: camelCase, case-insensitive input, enums as strings, strict nu
 dotnet build Id.slnx
 dotnet test --project Id.Tests          # needs Docker (Testcontainers starts postgres:17)
 
+# Run Id.Server (http://localhost:5095). Run from Id.Server/ (content root = appsettings.json).
+# Needs ConnectionStrings:AuthDb and the Google/EntraId secrets (user-secrets, same id as before).
+cd Id.Server && dotnet run
+
 # Run Id.Admin (http://localhost:5057). Set ConnectionStrings__AuthDb, optionally AUTH_SERVER/AUTH_CLIENT.
 cd Id.Admin/client && npm ci && npm run build      # or: npm run watch
 dotnet run --project Id.Admin/server
@@ -117,6 +137,7 @@ dotnet ef migrations add <Name> --project Id.Lib -o Migrations
 ConnectionStrings__AuthDb="..." dotnet ef database update --project Id.Lib
 
 # Containers (from repo root; build context is the root)
+podman build -f Id.Server/Containerfile --tag localhost/aspauth:latest .
 podman build -f Id.Admin/Containerfile --tag localhost/useradmin:latest .
 ```
 
@@ -129,14 +150,14 @@ These paths are excluded from OTel tracing. Add readiness-only checks with `tags
 
 Build stamp: CI passes `APP_VERSION` / `APP_COMMIT` / `APP_BUILD_TIME` as `--build-arg`s (never name them `VERSION` etc.: ARGs become env vars, which MSBuild reads as properties and which then override `$(Version)`). The Containerfiles forward them as `-p:BuildVersion/BuildCommit/BuildTime`, and the root `Directory.Build.props` writes them into the assemblies. `Id.Lib/Services/BuildInfo.cs` reads them, and both layouts show `BuildInfo.Current.Display` in the footer. Images also get OCI `version`/`revision`/`created` labels. Keep the ARGs in both the `build` and `publish` stages, because ARGs aren't inherited across `FROM`.
 
-CI: `.forgejo/workflows/*-build-push.yml` builds both images on push to `main` or on tags, and pushes them to `dev.logout.work/empire/{aspauth,useradmin}`. `auth-build-push.yml` still points at the old `AspAuth.Local/Containerfile` path; repoint it to `Id.Server` before merging. Remotes: `origin` (Forgejo, primary) and `github` (mirror).
+CI: `.forgejo/workflows/*-build-push.yml` builds both images on push to `main` or on tags, and pushes them to `dev.logout.work/empire/{aspauth,useradmin}`. Remotes: `origin` (Forgejo, primary) and `github` (mirror).
 
-Verify with `dotnet build Id.slnx`, `dotnet test --project Id.Tests`, `npm run ts`, and by exercising the app. Protocol behaviour (redirect URI matching, PKCE, code reuse, token claims) gets an integration test for every rule.
+Verify with `dotnet build Id.slnx`, `dotnet test --project Id.Tests`, `npm run ts`, and by exercising the app. 
 
 ## Configuration & secrets
 
 - `ConnectionStrings:AuthDb` is required by both apps (startup throws if empty).
-- ID server: `Authentication:Google:*`, `Authentication:EntraId:*`, and `Email:*` (MailKit SMTP). Secrets go in user-secrets or env vars, **never in `appsettings.json`**.
+- ID server: `Authentication:Google:*`, `Authentication:EntraId:*`, `Email:*` (MailKit SMTP), optional `Oidc:IssuerUri`. Secrets go in user-secrets or env vars, **never in `appsettings.json`**.
 - `OTEL_EXPORTER_OTLP_ENDPOINT` enables OTLP export. Without it, OTel is wired but nothing is exported.
 - Passkeys: `ServerDomain` is `logout.work` outside Development.
 

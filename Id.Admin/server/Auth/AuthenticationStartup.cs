@@ -38,7 +38,7 @@ public static class AuthenticationStartup
         })
         .AddCookie(CookieScheme, options =>
         {
-            options.Cookie.Name = ".Id.Admin.Auth";
+            options.Cookie.Name = ".UserAdmin.Auth";
             options.Cookie.SameSite = SameSiteMode.Lax;
             options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             options.Cookie.HttpOnly = true;

@@ -1,0 +1,6 @@
+@if (ViewContext.ModelState.IsValid == false)
+{
+    <div class="validation-messages">
+        <div asp-validation-summary="All" class="danger"></div>
+    </div>
+}

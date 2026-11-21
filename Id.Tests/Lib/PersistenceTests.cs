@@ -66,7 +66,7 @@ public class PersistenceTests(PostgresFixture pg)
         int id;
         await using (var db = pg.NewContext())
         {
-            var key = new CryptoSigningKey { StartDate = DateTime.UtcNow, ExpiryDate = DateTime.UtcNow.AddYears(1), Key = jwk };
+            var key = new CryptoSigningKey { StartDate = DateTime.UtcNow.AddDays(-30), ExpiryDate = DateTime.UtcNow.AddYears(1), Key = jwk };
             db.SigningKeys.Add(key);
             await db.SaveChangesAsync(Ct);
             id = key.Id;
