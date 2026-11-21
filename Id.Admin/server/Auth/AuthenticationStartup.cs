@@ -77,12 +77,13 @@ public static class AuthenticationStartup
             options.Scope.Add("roles");
 
             options.MapInboundClaims = false;
+            options.RequireHttpsMetadata = false;
 
             options.ClaimActions.Clear();
             options.ClaimActions.DeleteClaim("nonce");
             options.ClaimActions.DeleteClaim("at_hash");
 
-            options.ClaimActions.MapJsonKey("role", "role", "role"); 
+            options.ClaimActions.MapJsonKey("role", "role", "role");
             options.ClaimActions.MapUniqueJsonKey("name", "name", "name");
 
             options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters

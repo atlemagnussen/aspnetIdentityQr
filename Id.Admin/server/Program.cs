@@ -16,7 +16,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 
 builder.ConfigureOtel()
     .AddOtelExporters();
-    
+
 builder.Services.AddProblemDetails(configure =>
 {
     configure.CustomizeProblemDetails = context =>
@@ -27,7 +27,7 @@ builder.Services.AddProblemDetails(configure =>
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 var adminOptions = new AdminOptions(
-    AuthServer: Environment.GetEnvironmentVariable("AUTH_SERVER") ?? "https://id.logout.work",
+    AuthServer: Environment.GetEnvironmentVariable("AUTH_SERVER") ?? throw new ApplicationException("no auth server!"),
     AuthClient: Environment.GetEnvironmentVariable("AUTH_CLIENT") ?? "web");
 builder.Services.AddSingleton(adminOptions);
 
@@ -43,7 +43,7 @@ var app = builder.Build();
 // must be first
 app.UseForwardedHeaders();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseAuthentication();
