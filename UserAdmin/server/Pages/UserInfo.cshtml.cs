@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using UserAdmin.Api.Users.DataService;
 
 namespace UserAdmin.Pages;
 
@@ -13,12 +12,9 @@ namespace UserAdmin.Pages;
 public class UserInfoModel : PageModel
 {
     private readonly ApplicationDbContext _context;
-    private readonly UserDataService _userDataService;
-    public UserInfoModel(ApplicationDbContext applicationDbContext,
-        UserDataService userDataService)
+    public UserInfoModel(ApplicationDbContext applicationDbContext)
     {
         _context = applicationDbContext;
-        _userDataService = userDataService;
     }
     public AccountViewModel View { get; set; } = default!;
 
@@ -67,17 +63,5 @@ public class UserInfoModel : PageModel
         }
 
         return Page();
-    }
-
-    public async Task<IActionResult> OnPostMakeAdminAsync()
-    {
-        var userId = User.Identity?.GetSubjectId();
-        if (string.IsNullOrWhiteSpace(userId))
-        {
-            return RedirectToPage();
-        }
-
-        await _userDataService.AddRole(userId, UserRoles.Admin);
-        return RedirectToPage();
     }
 }
