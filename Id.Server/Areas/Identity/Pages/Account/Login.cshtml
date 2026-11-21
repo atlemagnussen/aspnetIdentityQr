@@ -1,88 +1,60 @@
 ﻿@page
 @model LoginModel
-
 @{
-  ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Log in";
 }
 
 <h1>@ViewData["Title"]</h1>
-<div class="row">
-  <div>
-    <section>
-      <form id="account" method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-        <div>
-          <wa-input label="Email" class="form-control" autocomplete="username webauthn" aria-required="true"
+
+@* No action: posts to the current URL, so ReturnUrl in the query string survives. *@
+<form id="account" method="post">
+    <div asp-validation-summary="ModelOnly" role="alert"></div>
+    <div class="field">
+        @* wa-input, not <input asp-for>: passkey autofill (autocomplete="webauthn") and passkeyLogin.js use it. *@
+        <wa-input label="Email" autocomplete="username webauthn" aria-required="true"
             placeholder="name@example.com" type="email" data-val="true"
             data-val-email="The Email field is not a valid e-mail address."
             data-val-required="The Email field is required." id="InputEmail" name="Input.Email">
             <wa-icon name="at" slot="start"></wa-icon>
-          </wa-input>
-          <wa-popover for="InputEmail" placement="top" distance="0">
-            <small>Passkey autofill available</small>
-          </wa-popover>
-        </div>
-        <div>
-          <wa-input label="Password" class="form-control" autocomplete="current-password" aria-required="true"
-            placeholder="password" type="password" data-val="true" data-val-required="The Password field is required."
-            id="InputPassword" name="Input.Password">
+        </wa-input>
+        <small class="passkey-hint" hidden><wa-icon name="fingerprint"></wa-icon> Select the email field to log in with a saved passkey.</small>
+    </div>
+    <div class="field">
+        <wa-input label="Password" autocomplete="current-password" aria-required="true"
+            placeholder="Password" type="password" password-toggle data-val="true"
+            data-val-required="The Password field is required." id="InputPassword" name="Input.Password">
             <wa-icon name="key" slot="start"></wa-icon>
-          </wa-input>
-          <span asp-validation-for="Input.Password" class="text-danger"></span>
-        </div>
-        <div class="login-helper">
-          <label asp-for="Input.RememberMe" class="form-label">
-            <wa-checkbox asp-for="Input.RememberMe"></wa-checkbox>
-            @Html.DisplayNameFor(m => m.Input.RememberMe)
-          </label>
-          <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-        </div>
-        <div class="login-helper">
-          <wa-button id="login-submit" type="submit" variant="brand">Login with password</wa-button>
-          <passkey-login id="__passkeySubmit" return-url="@Model.ReturnUrl"></passkey-login>
-        </div>
-      </form>
-      <partial name="_ValidationSummary" />
-    </section>
-  </div>
-  <div>
-    <section>
-      <h3>Or use third party</h3>
-      <hr />
-      @{
-        if ((Model.ExternalLogins?.Count ?? 0) == 0)
-        {
-          <div>
-            <p>
-              There are no external authentication services configured. See this <a
-                href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                about setting up this ASP.NET application to support logging in via external services</a>.
-            </p>
-          </div>
-        }
-        else
-        {
-          <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post"
-            class="form-horizontal">
-            <div>
-              <p>
-                @foreach (var provider in Model.ExternalLogins!)
-                {
-                  <wa-button type="submit" class="btn btn-primary" name="provider" appearance="outlined" variant="brand"
-                    value="@provider.Name" title="Log in using your @provider.DisplayName account">
+        </wa-input>
+        <span asp-validation-for="Input.Password"></span>
+    </div>
+    <div class="field-row">
+        <wa-checkbox name="Input.RememberMe" value="true">@Html.DisplayNameFor(m => m.Input.RememberMe)</wa-checkbox>
+        <a id="forgot-password" asp-page="./ForgotPassword">Forgot password?</a>
+    </div>
+    <div class="login-actions">
+        <wa-button id="login-submit" type="submit" variant="brand">Log in</wa-button>
+        <passkey-login id="__passkeySubmit" return-url="@Model.ReturnUrl"></passkey-login>
+    </div>
+</form>
+
+@if ((Model.ExternalLogins?.Count ?? 0) > 0)
+{
+    <div class="separator">or continue with</div>
+    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <div class="external-logins">
+            @foreach (var provider in Model.ExternalLogins!)
+            {
+                <wa-button type="submit" name="provider" value="@provider.Name" appearance="outlined"
+                    title="Log in using your @provider.DisplayName account">
+                    <partial name="_ProviderIcon" model="provider.Name" />
                     @provider.DisplayName
-                  </wa-button>
-                }
-              </p>
-            </div>
-          </form>
-        }
-      }
-    </section>
-  </div>
-</div>
+                </wa-button>
+            }
+        </div>
+    </form>
+}
 
 @section Scripts {
-  <script type="module" src="~/js/passkeyLogin.js"></script>
-  <partial name="_ValidationScriptsPartial" />
+    <script type="module" src="~/js/passkeyLogin.js"></script>
+    <partial name="_ValidationScriptsPartial" />
 }

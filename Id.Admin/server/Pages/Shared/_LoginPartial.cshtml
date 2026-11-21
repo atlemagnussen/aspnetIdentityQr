@@ -1,7 +1,7 @@
-<div id="login-partial">
-@if(User.Identity is not null && User.Identity.IsAuthenticated) {
-    <a href="/UserInfo">
-        <span>@User.Identity.Name</span>
-    </a>
+@if (User.Identity is { IsAuthenticated: true })
+{
+    <ul class="app-nav-user">
+        <li><a href="/UserInfo" aria-current="@((ViewContext.RouteData.Values["page"] as string) == "/UserInfo" ? "page" : null)"><wa-icon name="circle-user"></wa-icon>@User.Identity.Name</a></li>
+        <li><a href="/Logout"><wa-icon name="right-from-bracket"></wa-icon>Log out</a></li>
+    </ul>
 }
-</div>

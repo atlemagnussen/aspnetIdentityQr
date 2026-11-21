@@ -1,60 +1,61 @@
-﻿@page
+@page
 @model ExternalLoginsModel
 @{
-    ViewData["Title"] = "Manage your external logins";
+    ViewData["Title"] = "External logins";
     ViewData["ActivePage"] = ManageNavPages.ExternalLogins;
 }
 
+<h1>@ViewData["Title"]</h1>
 <partial name="_StatusMessage" for="StatusMessage" />
-@if (Model.CurrentLogins?.Count > 0)
-{
-    <h3>Registered Logins</h3>
-    <table class="table">
-        <tbody>
+
+<div class="section">
+    <h2>Linked accounts</h2>
+    @if (Model.CurrentLogins?.Count > 0)
+    {
+        <ul class="item-list">
             @foreach (var login in Model.CurrentLogins)
             {
-                <tr>
-                    <td id="@($"login-provider-{login.LoginProvider}")">@login.ProviderDisplayName</td>
-                    <td>
-                        @if (Model.ShowRemoveButton)
-                        {
-                            <form id="@($"remove-login-{login.LoginProvider}")" asp-page-handler="RemoveLogin" method="post">
-                                <div>
-                                    <input asp-for="@login.LoginProvider" name="LoginProvider" type="hidden" />
-                                    <input asp-for="@login.ProviderKey" name="ProviderKey" type="hidden" />
-                                    <wa-button type="submit" class="btn btn-primary" 
-                                        title="Remove this @login.ProviderDisplayName login from your account">
-                                        Remove
-                                    </wa-button>
-                                </div>
-                            </form>
-                        }
-                        else
-                        {
-                            @: &nbsp;
-                        }
-                    </td>
-                </tr>
+                <li>
+                    <span class="item-name" id="@($"login-provider-{login.LoginProvider}")">
+                        <partial name="_ProviderIcon" model="login.LoginProvider" />
+                        @login.ProviderDisplayName
+                    </span>
+                    @if (Model.ShowRemoveButton)
+                    {
+                        <form id="@($"remove-login-{login.LoginProvider}")" asp-page-handler="RemoveLogin" method="post">
+                            <input asp-for="@login.LoginProvider" name="LoginProvider" type="hidden" />
+                            <input asp-for="@login.ProviderKey" name="ProviderKey" type="hidden" />
+                            <button type="submit" class="wa-danger wa-outlined" title="Remove this @login.ProviderDisplayName login from your account">Remove</button>
+                        </form>
+                    }
+                </li>
             }
-        </tbody>
-    </table>
-}
+        </ul>
+        @if (!Model.ShowRemoveButton)
+        {
+            <p>This is your only way to log in, so it can't be removed. Set a password first.</p>
+        }
+    }
+    else
+    {
+        <p class="empty">No external accounts linked.</p>
+    }
+</div>
+
 @if (Model.OtherLogins?.Count > 0)
 {
-    <h4>Add another service to log in.</h4>
-    <hr />
-    <form id="link-login-form" asp-page-handler="LinkLogin" method="post" class="form-horizontal">
-        <div id="socialLoginList">
-            <p>
-                @foreach (var provider in Model.OtherLogins)
-                {
-                    <wa-button id="@($"link-login-button-{provider.Name}")" 
-                        type="submit" class="btn btn-primary" name="provider" value="@provider.Name" 
-                        title="Log in using your @provider.DisplayName account">
-                        @provider.DisplayName
-                    </wa-button>
-                }
-            </p>
+    <form id="link-login-form" asp-page-handler="LinkLogin" method="post" class="section">
+        <h2>Link another account</h2>
+        <p>Then you can log in with that account too.</p>
+        <div class="actions" id="socialLoginList">
+            @foreach (var provider in Model.OtherLogins)
+            {
+                <wa-button id="@($"link-login-button-{provider.Name}")" type="submit" name="provider" value="@provider.Name"
+                    appearance="outlined" title="Log in using your @provider.DisplayName account">
+                    <partial name="_ProviderIcon" model="provider.Name" />
+                    @provider.DisplayName
+                </wa-button>
+            }
         </div>
     </form>
 }

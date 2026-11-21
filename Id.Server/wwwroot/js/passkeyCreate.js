@@ -39,8 +39,11 @@ class PasskeyCreate extends HTMLElement {
     }
     // <wa-button slot="footer" variant="brand" id="btnSave">Save</wa-button>
     this.createBtn = document.createElement("wa-button")
-    this.createBtn.innerText = "Create new passkey"
     this.createBtn.variant = "brand"
+    const icon = document.createElement("wa-icon")
+    icon.slot = "start"
+    icon.name = "plus"
+    this.createBtn.append(icon, "Add passkey")
     this.createBtn.addEventListener("click", this.obtainAndSubmitNewKey)
     this.shadowRoot.appendChild(this.createBtn)
   }
@@ -53,7 +56,7 @@ class PasskeyCreate extends HTMLElement {
       const credential = await passkeyCreateOptions(signal)
       console.log("credential", credential)
       await createPasskey(signal, credential)
-      console.log("created")
+      location.reload() // show the new key in the server-rendered list
     } catch (error) {
       if (error.name === "AbortError") {
         // The user explicitly canceled the operation - return without error.

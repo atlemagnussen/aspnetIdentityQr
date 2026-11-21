@@ -1,0 +1,30 @@
+@using Id.Lib.Entities
+@using Id.Server.Areas.Identity.Pages.Account.Manage
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+    // Only the account (Manage) pages set ActivePage.
+    var active = ViewData["ActivePage"] as string;
+    string? Current(string page) => string.Equals(active, page, StringComparison.OrdinalIgnoreCase) ? "page" : null;
+}
+<ul>
+    <li class="nav-heading">Account</li>
+    <li><a id="profile" asp-area="Identity" asp-page="/Account/Manage/Index" aria-current="@Current(ManageNavPages.Index)"><wa-icon name="id-card"></wa-icon>Profile</a></li>
+    <li><a id="email" asp-area="Identity" asp-page="/Account/Manage/Email" aria-current="@Current(ManageNavPages.Email)"><wa-icon name="envelope"></wa-icon>Email</a></li>
+    <li><a id="change-password" asp-area="Identity" asp-page="/Account/Manage/ChangePassword" aria-current="@Current(ManageNavPages.ChangePassword)"><wa-icon name="key"></wa-icon>Password</a></li>
+    @if (hasExternalLogins)
+    {
+        <li><a id="external-login" asp-area="Identity" asp-page="/Account/Manage/ExternalLogins" aria-current="@Current(ManageNavPages.ExternalLogins)"><wa-icon name="link"></wa-icon>External logins</a></li>
+    }
+    <li><a id="two-factor" asp-area="Identity" asp-page="/Account/Manage/TwoFactorAuthentication" aria-current="@Current(ManageNavPages.TwoFactorAuthentication)"><wa-icon name="shield-halved"></wa-icon>Two-factor auth</a></li>
+    <li><a id="passkeys" asp-area="Identity" asp-page="/Account/Manage/Passkeys" aria-current="@Current(ManageNavPages.Passkeys)"><wa-icon name="fingerprint"></wa-icon>Passkeys</a></li>
+    <li><a id="personal-data" asp-area="Identity" asp-page="/Account/Manage/PersonalData" aria-current="@Current(ManageNavPages.PersonalData)"><wa-icon name="database"></wa-icon>Personal data</a></li>
+</ul>
+<ul class="app-nav-user">
+    <li><span class="nav-user" title="@User.Identity?.Name"><wa-icon name="circle-user"></wa-icon>@User.Identity?.Name</span></li>
+    <li>
+        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post">
+            <button type="submit"><wa-icon name="right-from-bracket"></wa-icon>Log out</button>
+        </form>
+    </li>
+</ul>

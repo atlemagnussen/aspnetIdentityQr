@@ -1,0 +1,307 @@
+/*
+  Shared look for Id.Server and Id.Admin, served at /_content/Id.Lib/shell.css.
+  Load after the Web Awesome theme (default.css) and native.css; this file is unlayered, so it wins over both.
+
+  Two page types:
+  - body.app-shell:  left nav on wide screens; top bar + slide-in nav (hamburger) below 768px.
+                     Markup: header.app-topbar, nav#app-nav.app-nav, div.nav-backdrop, main, footer.app-footer.
+  - body.auth-shell: signed-out pages (login, register, reset). One centred card, no nav.
+                     Markup: main > .auth-card (with .app-brand inside), footer.app-footer.
+  Toggle logic: shell.js.
+*/
+
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+body {
+    background: var(--wa-color-surface-default);
+    color: var(--wa-color-text-normal);
+    font-family: var(--wa-font-family-body);
+    height: 100svh;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: grid;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+main {
+    grid-area: main;
+    min-width: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* ---------- brand ---------- */
+
+.app-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--wa-space-xs);
+    color: var(--wa-color-text-normal);
+    text-decoration: none;
+    font-weight: var(--wa-font-weight-semibold);
+    font-size: var(--wa-font-size-l);
+    img {
+        width: 2.25rem;
+        height: 2.25rem;
+    }
+    &:hover {
+        color: var(--wa-color-text-normal);
+    }
+}
+
+/* ---------- app shell ---------- */
+
+body.app-shell {
+    grid-template-columns: 15rem 1fr;
+    grid-template-rows: 1fr auto;
+    grid-template-areas:
+        'nav main'
+        'nav footer';
+}
+
+.app-topbar {
+    display: none;
+}
+
+.app-nav {
+    grid-area: nav;
+    display: flex;
+    flex-direction: column;
+    gap: var(--wa-space-m);
+    padding: var(--wa-space-m) var(--wa-space-s);
+    background: var(--wa-color-surface-raised);
+    border-right: var(--wa-border-width-s) var(--wa-border-style) var(--wa-color-surface-border);
+    overflow-y: auto;
+    > .app-brand {
+        padding: 0 var(--wa-space-xs);
+    }
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--wa-space-3xs);
+    }
+    li {
+        margin: 0;
+    }
+    .nav-heading {
+        padding: var(--wa-space-xs) var(--wa-space-s) var(--wa-space-3xs);
+        font-size: var(--wa-font-size-xs);
+        font-weight: var(--wa-font-weight-semibold);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--wa-color-text-quiet);
+    }
+    /* Links and buttons (log out is a POST form) look the same. */
+    li :is(a, button) {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: var(--wa-space-s);
+        width: 100%;
+        height: auto;
+        min-height: auto;
+        line-height: inherit;
+        margin: 0;
+        padding: var(--wa-space-xs) var(--wa-space-s);
+        border: none;
+        border-radius: var(--wa-border-radius-m);
+        background: transparent;
+        color: var(--wa-color-text-quiet);
+        font: inherit;
+        font-weight: var(--wa-font-weight-normal);
+        text-align: start;
+        text-decoration: none;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: pointer;
+        &:hover {
+            background: var(--wa-color-neutral-fill-quiet);
+            color: var(--wa-color-text-normal);
+        }
+        &[aria-current="page"] {
+            background: var(--wa-color-brand-fill-quiet);
+            color: var(--wa-color-brand-on-quiet);
+            font-weight: var(--wa-font-weight-semibold);
+        }
+        wa-icon {
+            flex: none;
+            width: 1.25em;
+        }
+    }
+    li form {
+        margin: 0;
+    }
+    .app-nav-user {
+        margin-top: auto;
+        padding-top: var(--wa-space-s);
+        border-top: var(--wa-border-width-s) var(--wa-border-style) var(--wa-color-surface-border);
+    }
+}
+
+.nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    min-height: auto;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: var(--wa-border-radius-m);
+    background: transparent;
+    color: var(--wa-color-text-normal);
+    font-size: var(--wa-font-size-l);
+    cursor: pointer;
+    &:hover {
+        background: var(--wa-color-neutral-fill-quiet);
+    }
+    &:focus-visible {
+        outline: var(--wa-focus-ring);
+    }
+}
+
+@media (max-width: 767.98px) {
+    body.app-shell {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+        grid-template-areas:
+            'topbar'
+            'main'
+            'footer';
+    }
+    .app-topbar {
+        grid-area: topbar;
+        display: flex;
+        align-items: center;
+        gap: var(--wa-space-xs);
+        padding: var(--wa-space-2xs) var(--wa-space-xs);
+        background: var(--wa-color-surface-raised);
+        border-bottom: var(--wa-border-width-s) var(--wa-border-style) var(--wa-color-surface-border);
+    }
+    .app-nav {
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: min(17rem, 85vw);
+        z-index: 100;
+        transform: translateX(-100%);
+        visibility: hidden;
+        transition: transform 0.2s ease, visibility 0s linear 0.2s;
+        box-shadow: var(--wa-shadow-l);
+    }
+    body.nav-open .app-nav {
+        transform: none;
+        visibility: visible;
+        transition: transform 0.2s ease;
+    }
+    body.nav-open .nav-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 99;
+        background: var(--wa-color-overlay-modal);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .app-nav {
+        transition: none !important;
+    }
+}
+
+/* Content column of an app-shell page. */
+.page {
+    width: min(80rem, 100%);
+    margin: 0 auto;
+    padding: var(--wa-space-l) var(--wa-space-l) var(--wa-space-2xl);
+}
+.page.narrow {
+    width: min(42rem, 100%);
+    margin: 0;
+}
+@media (max-width: 767.98px) {
+    .page {
+        padding: var(--wa-space-m);
+    }
+}
+
+/* ---------- auth shell ---------- */
+
+body.auth-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    grid-template-areas:
+        'main'
+        'footer';
+    main {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 8svh var(--wa-space-m) var(--wa-space-xl);
+    }
+}
+
+.auth-card {
+    width: min(28rem, 100%);
+    padding: var(--wa-space-xl);
+    background: var(--wa-color-surface-raised);
+    border: var(--wa-border-width-s) var(--wa-border-style) var(--wa-color-surface-border);
+    border-radius: var(--wa-border-radius-l);
+    box-shadow: var(--wa-shadow-m);
+    > .app-brand {
+        justify-content: center;
+        margin-bottom: var(--wa-space-l);
+    }
+    h1 {
+        font-size: var(--wa-font-size-xl);
+        margin: 0 0 var(--wa-space-m);
+        text-align: center;
+    }
+}
+@media (max-width: 480px) {
+    body.auth-shell main {
+        padding: var(--wa-space-m);
+    }
+    .auth-card {
+        padding: var(--wa-space-l) var(--wa-space-m);
+        border: none;
+        box-shadow: none;
+        background: transparent;
+    }
+}
+
+/* ---------- footer ---------- */
+
+.app-footer {
+    grid-area: footer;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--wa-space-m);
+    padding: var(--wa-space-3xs) var(--wa-space-xs);
+    font-size: var(--wa-font-size-2xs);
+    color: var(--wa-color-text-quiet);
+    a {
+        color: inherit;
+    }
+    .build-info {
+        font-family: var(--wa-font-family-code);
+    }
+}

@@ -1,16 +1,24 @@
-﻿@page
-@using System.Security.Claims
+@page
 @model PrivacyModel
 @{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Privacy";
 }
 <h1>@ViewData["Title"]</h1>
 
-<h2>Claims</h2>
-
-<ul>
-    @foreach(var claim in Model.Claims)
-    {
-        <li>@claim.Key : @claim.Value</li>
-    }
-</ul>
+<p class="lead">This is the data about you in your current session.</p>
+@if (Model.Claims.Count == 0)
+{
+    <p class="empty">Not logged in: no session data.</p>
+}
+else
+{
+    <table>
+        <thead><tr><th>Claim</th><th>Value</th></tr></thead>
+        <tbody>
+            @foreach (var claim in Model.Claims)
+            {
+                <tr><td><code>@claim.Key</code></td><td>@claim.Value</td></tr>
+            }
+        </tbody>
+    </table>
+}

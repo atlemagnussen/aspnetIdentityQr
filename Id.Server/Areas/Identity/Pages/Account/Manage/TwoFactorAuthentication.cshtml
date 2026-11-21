@@ -1,71 +1,80 @@
-﻿@page
+@page
 @using Microsoft.AspNetCore.Http.Features
 @model TwoFactorAuthenticationModel
 @{
-    ViewData["Title"] = "Two-factor authentication (2FA)";
+    ViewData["Title"] = "Two-factor authentication";
     ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
+    var consentFeature = HttpContext.Features.Get<ITrackingConsentFeature>();
 }
 
+<h1>@ViewData["Title"]</h1>
 <partial name="_StatusMessage" for="StatusMessage" />
-<h3>@ViewData["Title"]</h3>
-@{
-    var consentFeature = HttpContext.Features.Get<ITrackingConsentFeature>();
-    @if (consentFeature?.CanTrack ?? true)
-    {
+
+@if (!(consentFeature?.CanTrack ?? true))
+{
+    <wa-callout variant="danger">
+        <wa-icon slot="icon" name="circle-exclamation"></wa-icon>
+        <p><strong>Privacy and cookie policy not accepted.</strong></p>
+        <p>Accept the policy before you enable two-factor authentication.</p>
+    </wa-callout>
+}
+else
+{
+    <div class="section">
+        <h2>Status</h2>
         @if (Model.Is2faEnabled)
         {
-            if (Model.RecoveryCodesLeft == 0)
+            <p><wa-tag variant="success" size="small"><wa-icon name="circle-check"></wa-icon>&nbsp;Enabled</wa-tag></p>
+
+            @if (Model.RecoveryCodesLeft == 0)
             {
-                <div class="alert alert-danger">
-                    <strong>You have no recovery codes left.</strong>
-                    <p>You must <a asp-page="./GenerateRecoveryCodes">generate a new set of recovery codes</a> before you can log in with a recovery code.</p>
-                </div>
-            }
-            else if (Model.RecoveryCodesLeft == 1)
-            {
-                <div class="alert alert-danger">
-                    <strong>You have 1 recovery code left.</strong>
-                    <p>You can <a asp-page="./GenerateRecoveryCodes">generate a new set of recovery codes</a>.</p>
-                </div>
+                <wa-callout variant="danger">
+                    <wa-icon slot="icon" name="circle-exclamation"></wa-icon>
+                    <p><strong>You have no recovery codes left.</strong></p>
+                    <p><a asp-page="./GenerateRecoveryCodes">Generate new recovery codes</a> before you can log in with a recovery code.</p>
+                </wa-callout>
             }
             else if (Model.RecoveryCodesLeft <= 3)
             {
-                <div class="alert alert-warning">
-                    <strong>You have @Model.RecoveryCodesLeft recovery codes left.</strong>
-                    <p>You should <a asp-page="./GenerateRecoveryCodes">generate a new set of recovery codes</a>.</p>
-                </div>
+                <wa-callout variant="@(Model.RecoveryCodesLeft == 1 ? "danger" : "warning")">
+                    <wa-icon slot="icon" name="triangle-exclamation"></wa-icon>
+                    <p><strong>You have @Model.RecoveryCodesLeft recovery code@(Model.RecoveryCodesLeft == 1 ? "" : "s") left.</strong></p>
+                    <p>You should <a asp-page="./GenerateRecoveryCodes">generate new recovery codes</a>.</p>
+                </wa-callout>
             }
 
-            if (Model.IsMachineRemembered)
-            {
-                <form method="post" style="display: inline-block">
-                    <wa-button type="submit" class="btn btn-primary">Forget this browser</wa-button>
-                </form>
-            }
-            <a asp-page="./Disable2fa" class="btn btn-primary">Disable 2FA</a>
-            <a asp-page="./GenerateRecoveryCodes" class="btn btn-primary">Reset recovery codes</a>
-        }
-
-        <h4>Authenticator app</h4>
-        @if (!Model.HasAuthenticator)
-        {
-            <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-primary">Add authenticator app</a>
+            <div class="actions">
+                <wa-button href="@Url.Page("./GenerateRecoveryCodes")" appearance="outlined">Reset recovery codes</wa-button>
+                @if (Model.IsMachineRemembered)
+                {
+                    <form method="post">
+                        <button type="submit" class="wa-outlined">Forget this browser</button>
+                    </form>
+                }
+                <wa-button href="@Url.Page("./Disable2fa")" variant="danger" appearance="outlined">Disable 2FA</wa-button>
+            </div>
         }
         else
         {
-            <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-primary">Set up authenticator app</a>
-            <a id="reset-authenticator" asp-page="./ResetAuthenticator" class="btn btn-primary">Reset authenticator app</a>
+            <p>Two-factor authentication is off. Add an authenticator app to turn it on.</p>
         }
-    }
-    else
-    {
-        <div class="alert alert-danger">
-            <strong>Privacy and cookie policy have not been accepted.</strong>
-            <p>You must accept the policy before you can enable two factor authentication.</p>
-        </div>
-    }
-}
+    </div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <div class="section">
+        <h2>Authenticator app</h2>
+        @if (!Model.HasAuthenticator)
+        {
+            <p>Use an app such as Microsoft Authenticator or Google Authenticator to get a code when you log in.</p>
+            <wa-button id="enable-authenticator" href="@Url.Page("./EnableAuthenticator")" variant="brand">
+                <wa-icon slot="start" name="plus"></wa-icon>Add authenticator app
+            </wa-button>
+        }
+        else
+        {
+            <div class="actions">
+                <wa-button id="enable-authenticator" href="@Url.Page("./EnableAuthenticator")" appearance="outlined">Set up authenticator app</wa-button>
+                <wa-button id="reset-authenticator" href="@Url.Page("./ResetAuthenticator")" variant="danger" appearance="outlined">Reset authenticator app</wa-button>
+            </div>
+        }
+    </div>
 }

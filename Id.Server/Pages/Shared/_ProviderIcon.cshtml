@@ -1,0 +1,14 @@
+@model string
+@* Brand icon for an external login scheme name; nothing for unknown schemes. *@
+@{
+    var icon = Model.ToLowerInvariant() switch
+    {
+        var n when n.Contains("google") => "google",
+        var n when n.Contains("microsoft") || n.Contains("entra") => "microsoft",
+        _ => null,
+    };
+}
+@if (icon is not null)
+{
+    <wa-icon slot="start" family="brands" name="@icon"></wa-icon>
+}

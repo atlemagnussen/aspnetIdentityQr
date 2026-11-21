@@ -1,23 +1,18 @@
-﻿@page
+@page
 @model RegisterConfirmationModel
 @{
-    ViewData["Title"] = "Register confirmation";
+    ViewData["Title"] = "Check your email";
 }
 
 <h1>@ViewData["Title"]</h1>
-@{
-    if (@Model.DisplayConfirmAccountLink)
-    {
-<p>
-    This app does not currently have a real email sender registered, see <a href="https://aka.ms/aspaccountconf">these docs</a> for how to configure a real email sender.
-    Normally this would be emailed: <a id="confirm-link" href="@Model.EmailConfirmationUrl">Click here to confirm your account</a>
-</p>
-    }
-    else
-    {
-<p>
-        Please check your email to confirm your account.
-</p>
-    }
+@if (Model.DisplayConfirmAccountLink)
+{
+    <wa-callout variant="neutral">
+        <wa-icon slot="icon" name="circle-info"></wa-icon>
+        No email sender is configured. <a id="confirm-link" href="@Model.EmailConfirmationUrl">Confirm your account here</a>.
+    </wa-callout>
 }
-
+else
+{
+    <p class="lead">We sent you a link to confirm your account.</p>
+}

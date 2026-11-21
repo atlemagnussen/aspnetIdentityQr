@@ -1,49 +1,49 @@
-﻿@page
+@page
 @model EmailModel
 @{
-    ViewData["Title"] = "Manage Email";
+    ViewData["Title"] = "Email";
     ViewData["ActivePage"] = ManageNavPages.Email;
 }
 
-<h3>@ViewData["Title"]</h3>
+<h1>@ViewData["Title"]</h1>
 <partial name="_StatusMessage" for="StatusMessage" />
-<div class="row">
-    <div class="col-md-6">
-        <form id="email-form" method="post">
-            <div asp-validation-summary="All" class="text-danger" role="alert"></div>
-            @if (Model.IsEmailConfirmed)
-            {
-                <div class="form-floating mb-3 input-group">
-                    <input asp-for="Email" class="form-control" placeholder="Please enter your email." disabled />
-                        <div class="input-group-append">
-                            <span class="h-100 input-group-text text-success font-weight-bold">✓</span>
-                        </div>
-                    <label asp-for="Email" class="form-label"></label>
-                </div>
-            }
-            else
-            {
-                <div class="form-floating mb-3">
-                    <input asp-for="Email" class="form-control" placeholder="Please enter your email." disabled />
-                    <label asp-for="Email" class="form-label"></label>
-                    <wa-button id="email-verification" type="submit" 
-                        asp-page-handler="SendVerificationEmail" class="btn btn-link">
-                        Send verification email
-                    </wa-button>
-                </div>
-            }
-            <div class="form-floating mb-3">
-                <input asp-for="Input.NewEmail" class="form-control" autocomplete="email" aria-required="true" placeholder="Please enter new email." />
-                <label asp-for="Input.NewEmail" class="form-label"></label>
-                <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
-            </div>
-            <wa-button id="change-email-button" type="submit" 
-                asp-page-handler="ChangeEmail" class="w-100 btn btn-lg btn-primary">
-                Change email
-            </wa-button>
-        </form>
+
+<form id="email-form" method="post">
+    <div asp-validation-summary="All" role="alert"></div>
+
+    <div class="section">
+        <h2>Current email</h2>
+        <div class="field">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" disabled />
+        </div>
+        @if (Model.IsEmailConfirmed)
+        {
+            <wa-tag variant="success" size="small"><wa-icon name="circle-check"></wa-icon>&nbsp;Confirmed</wa-tag>
+        }
+        else
+        {
+            <wa-callout variant="warning">
+                <wa-icon slot="icon" name="triangle-exclamation"></wa-icon>
+                This email is not confirmed.
+            </wa-callout>
+            <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" formnovalidate class="wa-outlined">
+                Send verification email
+            </button>
+        }
     </div>
-</div>
+
+    <div class="section">
+        <h2>Change email</h2>
+        <p>We send a confirmation link to the new address. The change applies when you open it.</p>
+        <div class="field">
+            <label asp-for="Input.NewEmail"></label>
+            <input asp-for="Input.NewEmail" autocomplete="email" aria-required="true" placeholder="name@example.com" />
+            <span asp-validation-for="Input.NewEmail"></span>
+        </div>
+        <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="wa-brand">Change email</button>
+    </div>
+</form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

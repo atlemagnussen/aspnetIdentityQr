@@ -1,35 +1,42 @@
 @page
 @model PasskeysModel
 @{
-  ViewData["Title"] = "Passkeys";
-  ViewData["ActivePage"] = ManageNavPages.Passkeys;
+    ViewData["Title"] = "Passkeys";
+    ViewData["ActivePage"] = ManageNavPages.Passkeys;
 }
 
-<h1>@ViewData["Title"]</h3>
+<h1>@ViewData["Title"]</h1>
 
-<h2>Existing keys</h2>
-@foreach(var key in Model.Keys) {
-  <p>
-    @key.Name
-    <wa-button variant="neutral" appearance="outlined" size="small"
-        data-credential-id="@key.CredentialId">
-      <wa-icon name="pen-to-square"></wa-icon>
-    </wa-button>
-  </p>
-}
-
-<div>
-  <passkey-create></passkey-create>
+<div class="section">
+    <h2>Your passkeys</h2>
+    <p>Log in with your fingerprint, face or device PIN instead of a password.</p>
+    @if (Model.Keys.Count == 0)
+    {
+        <p class="empty">No passkeys yet.</p>
+    }
+    else
+    {
+        <ul class="item-list">
+            @foreach (var key in Model.Keys)
+            {
+                <li>
+                    <span class="item-name"><wa-icon name="fingerprint"></wa-icon>@key.Name</span>
+                    <wa-button appearance="plain" size="small" data-credential-id="@key.CredentialId" data-name="@key.Name">
+                        <wa-icon name="pen-to-square" label="Rename @key.Name"></wa-icon>
+                    </wa-button>
+                </li>
+            }
+        </ul>
+    }
+    <passkey-create></passkey-create>
 </div>
-<div>
 
-<wa-dialog label="Edit key name" class="dialog-focus" id="passkeyEditDialog">
-  <wa-input autofocus placeholder="Type new key name"></wa-input>
-  <wa-button slot="footer" variant="brand" id="btnSave">Save</wa-button>
-  <wa-button slot="footer" variant="neutral" data-dialog="close">Cancel</wa-button>
+<wa-dialog label="Rename passkey" class="dialog-focus" id="passkeyEditDialog">
+    <wa-input autofocus placeholder="New name"></wa-input>
+    <wa-button slot="footer" variant="neutral" data-dialog="close">Cancel</wa-button>
+    <wa-button slot="footer" variant="brand" id="btnSave">Save</wa-button>
 </wa-dialog>
 
-</div>
 @section Scripts {
     <script type="module" src="~/js/passkeyCreate.js"></script>
     <script type="module" src="~/js/passkeyEdit.js"></script>

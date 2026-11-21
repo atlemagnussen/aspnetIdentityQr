@@ -1,34 +1,52 @@
 <!DOCTYPE html>
-<html lang="en" class="wa-theme-default wa-brand-blue wa-palette-default wa-dark">
+<html lang="en" class="wa-theme-default wa-brand-blue wa-palette-default">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg" href="/icon.svg" sizes="32x32">
     <title>@(ViewData["Title"] is string t && t.Length > 0 ? $"{t} - User Admin" : "User Admin")</title>
+    <link rel="stylesheet" href="https://static.logout.work/webawesome/3.2.1/dist/styles/themes/default.css" />
+    <link rel="stylesheet" href="https://static.logout.work/webawesome/3.2.1/dist/styles/native.css" />
+    <link rel="stylesheet" href="~/_content/Id.Lib/shell.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/site.css" asp-append-version="true" />
+    <script src="~/_content/Id.Lib/shell.js" asp-append-version="true"></script>
 </head>
-<body>
-    <header>
-        <nav class="navbar">
-            <a class="navbar-brand" asp-area="" asp-page="/Index">
-                <img class="logo" src="/icon.svg" alt="auth logo">
-            </a>
-            
-            <nav class="navbar-nav">
-                <a asp-page="/Users">Users</a>
-                <a asp-page="/Roles">Roles</a>
-                <a asp-page="/Clients">Clients</a>
-                <partial name="_LoginPartial" />
-
-            </nav>
-        </nav>
+@{
+    var currentPage = ViewContext.RouteData.Values["page"] as string;
+    string? Current(string page) => currentPage == page ? "page" : null;
+}
+<body class="app-shell">
+    <header class="app-topbar">
+        <button type="button" class="nav-toggle" aria-controls="app-nav" aria-expanded="false" aria-label="Open menu">
+            <wa-icon name="bars"></wa-icon>
+        </button>
+        <a class="app-brand" asp-page="/Index">
+            <img src="/icon.svg" alt="">
+            <span>User Admin</span>
+        </a>
     </header>
+
+    <nav id="app-nav" class="app-nav" aria-label="Main">
+        <a class="app-brand" asp-page="/Index">
+            <img src="/icon.svg" alt="">
+            <span>User Admin</span>
+        </a>
+        <ul>
+            <li><a asp-page="/Index" aria-current="@Current("/Index")"><wa-icon name="house"></wa-icon>Home</a></li>
+            <li><a asp-page="/Users" aria-current="@Current("/Users")"><wa-icon name="users"></wa-icon>Users</a></li>
+            <li><a asp-page="/Roles" aria-current="@Current("/Roles")"><wa-icon name="user-shield"></wa-icon>Roles</a></li>
+            <li><a asp-page="/Clients" aria-current="@Current("/Clients")"><wa-icon name="plug"></wa-icon>Clients</a></li>
+        </ul>
+        <partial name="_LoginPartial" />
+    </nav>
+    <div class="nav-backdrop" hidden></div>
+
     <main>
         <section class="centered-content">
             @RenderBody()
         </section>
     </main>
-    <footer>
+    <footer class="app-footer">
         <span class="build-info">@Id.Lib.Services.BuildInfo.Current.Display</span>
     </footer>
     <script src="~/main.js" asp-append-version="true" type="module"></script>

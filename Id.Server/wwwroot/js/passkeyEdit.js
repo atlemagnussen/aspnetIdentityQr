@@ -26,7 +26,7 @@ function openEditDialog(evt) {
         return
     }
     currentCredentialId = credentialId
-    const currentValue = el.previousSibling.textContent.trim()
+    const currentValue = el.dataset.name ?? ""
     dialogEl.querySelector("wa-input").value = currentValue
     dialogEl.open = true
 }

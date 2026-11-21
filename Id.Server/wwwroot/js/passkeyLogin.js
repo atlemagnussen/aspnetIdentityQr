@@ -22,7 +22,12 @@ class PasskeyLogin extends HTMLElement {
   static styles = css`
     :host {
       display: block;
-      min-height: 30px;
+    }
+    wa-button {
+      width: 100%;
+    }
+    wa-callout {
+      margin-top: var(--wa-space-s);
     }
   `
 
@@ -72,10 +77,8 @@ class PasskeyLogin extends HTMLElement {
     
     await this.obtainKeyOptions(true)
     if (this.options && this.options.userVerification === "required") {
-      // show wa-popover
-      const popover = this.internals.form.querySelector("wa-popover")
-      if (popover)
-        popover.open = "true"
+      // inline hint under the email field (Login.cshtml)
+      this.internals.form.querySelector(".passkey-hint")?.removeAttribute("hidden")
     }
     this.submitForm(true)  
   }
@@ -148,7 +151,8 @@ class PasskeyLogin extends HTMLElement {
       return
     }
     const signal = this.abortController.signal
-    this.loginBtn.setAttribute("loading", "")
+    // Conditional mediation (autofill) waits until the user picks a passkey, maybe never: no spinner for that.
+    if (!conditionalMediation) this.loginBtn.setAttribute("loading", "")
     try {
       const credential = await navigator.credentials.get({ 
         publicKey: this.options,

@@ -1,10 +1,29 @@
-﻿@page
+@page
+@using Id.Lib.Entities
 @model IndexModel
+@inject SignInManager<ApplicationUser> SignInManager
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "";
+    ViewData["PageClass"] = "narrow";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if (SignInManager.IsSignedIn(User))
+{
+    <h1>Welcome, @User.Identity?.Name</h1>
+    <p class="lead">This is your logout.work account. You use it to log in to the apps.</p>
+    <div class="section">
+        <h2>Account security</h2>
+        <p>Keep your account safe with a passkey or an authenticator app.</p>
+        <div class="actions">
+            <wa-button href="@Url.Page("/Account/Manage/Passkeys", new { area = "Identity" })" appearance="outlined"><wa-icon slot="start" name="fingerprint"></wa-icon>Passkeys</wa-button>
+            <wa-button href="@Url.Page("/Account/Manage/TwoFactorAuthentication", new { area = "Identity" })" appearance="outlined"><wa-icon slot="start" name="shield-halved"></wa-icon>Two-factor auth</wa-button>
+            <wa-button href="@Url.Page("/Account/Manage/ChangePassword", new { area = "Identity" })" appearance="outlined"><wa-icon slot="start" name="key"></wa-icon>Password</wa-button>
+        </div>
+    </div>
+}
+else
+{
+    <h1>Welcome</h1>
+    <p class="lead">Log in to manage your logout.work account.</p>
+    <wa-button href="@Url.Page("/Account/Login", new { area = "Identity" })" variant="brand" class="block">Log in</wa-button>
+}

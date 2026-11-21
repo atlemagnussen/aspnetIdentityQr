@@ -23,7 +23,6 @@ const modulesToLoad = [
 ]
 
 const baseUrlWa = "https://static.logout.work/webawesome/3.2.1/dist"
-const mainCssWa = "/styles/themes/default.css"
 
 const syntaxHighlighterJs = "https://cdn.jsdelivr.net/npm/syntax-highlight-element@1/+esm"
 const syntaxHighlighterCss = "https://cdn.jsdelivr.net/npm/syntax-highlight-element@1/dist/themes/prettylights.min.css"
@@ -36,8 +35,7 @@ function createCss(url: string) {
 }
 
 async function importWaComponents() {
-    createCss(`${baseUrlWa}${mainCssWa}`)
-
+    // Theme + native CSS are linked in _Layout.cshtml <head> (no flash of unstyled content).
     const promises = modulesToLoad.map(m => import(`${baseUrlWa}${m}`))
 
     await Promise.all(promises)

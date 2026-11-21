@@ -10,7 +10,7 @@ An OAuth2/OIDC identity server and its admin app, sharing one PostgreSQL databas
 |---|---|
 | `Id.Server/` | The ID server: ASP.NET Core Identity UI (Razor Pages under `Areas/Identity`; Google + Microsoft logins, TOTP 2FA, passkeys) plus our own OIDC server in `Oidc/`. Deploys as `id.logout.work` (image `aspauth`). |
 | `Id.Admin/` | Admin app (users, roles, OAuth clients, read-only resources). Signs in *via* the ID server over OIDC. Deployed as `user.logout.work` (image name still `useradmin`). |
-| `Id.Lib/` | Shared: entities, `IdDbContext`, **all migrations**, Identity/Data Protection setup, OIDC constants, OTel, ops endpoints. No Duende reference. |
+| `Id.Lib/` | Shared: entities, `IdDbContext`, **all migrations**, Identity/Data Protection setup, OIDC constants, OTel, ops endpoints, and the shared UI shell (`wwwroot/shell.css`, `shell.js`). No Duende reference. |
 | `Id.Tests/` | xunit v3 + Testcontainers (real Postgres). |
 | `old/` | The Duende-based `AspAuth.*` projects, reference only. Not in the solution; delete after cutover. |
 
@@ -55,6 +55,15 @@ Compatibility rules (existing clients, APIs and sessions depend on them):
 - Only a user-facing error *code* reaches `/Error`. Details go to the log.
 
 Every protocol rule has a test in `Id.Tests/Server`. `OidcHandlerCompatibilityTests` runs Microsoft's OIDC handler with Id.Admin's settings against the server; it is the drop-in check, so keep it green.
+
+## Shared look (both apps)
+
+One visual system: Web Awesome 3.2.1 default theme from `https://static.logout.work/webawesome/3.2.1`, colour scheme follows the OS.
+- Id.Lib is a Razor class library only to serve `wwwroot/shell.css` and `shell.js` at `/_content/Id.Lib/...` in both apps. They hold the app shell (left nav, hamburger below 768px, footer), the signed-out card, and the colour-scheme switch. Change the shell there, never per app.
+- Each `_Layout.cshtml` links, in this order: theme `default.css`, `native.css`, `shell.css`, then the app's own CSS. `shell.js` is a blocking script in `<head>` (it sets `wa-dark`/`wa-light` before first paint).
+- `native.css` styles plain `<input>`, `<button class="wa-brand|wa-danger|wa-outlined">`, labels and tables to match the `wa-*` components. Id.Server forms use native inputs so `asp-for`, `asp-page-handler` and validation keep working. Tag helpers don't run on `wa-*` elements: `<wa-button asp-page-handler>` silently posts to the default handler, so use a native `<button>` there, or `<wa-button href="@Url.Page(...)">` for links.
+- `native.css` is in a cascade layer, so any unlayered app CSS wins. It sets `dialog { align-items: start }`; Id.Admin's `dialog.css` resets that.
+- Id.Server: signed in gets the app shell with the account menu (`Pages/Shared/_AccountNav.cshtml`); signed out gets one centred `.auth-card`. Manage pages set `ViewData["ActivePage"]`.
 
 ## Id.Admin layout
 

@@ -1,4 +1,6 @@
 dialog {
+    /* native.css sets align-items: start, which shrinks header/article to their content */
+    align-items: stretch;
     position: fixed;
     top: 50%;
     left: 50%;

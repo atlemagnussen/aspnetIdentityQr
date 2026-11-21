@@ -1,25 +1,26 @@
-﻿@page
+@page
 @model ShowRecoveryCodesModel
 @{
     ViewData["Title"] = "Recovery codes";
-    ViewData["ActivePage"] = "TwoFactorAuthentication";
+    ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
 }
 
+<h1>@ViewData["Title"]</h1>
 <partial name="_StatusMessage" for="StatusMessage" />
-<h3>@ViewData["Title"]</h3>
-<div class="alert alert-warning" role="alert">
-    <p>
-        <strong>Put these codes in a safe place.</strong>
-    </p>
-    <p>
-        If you lose your device and don't have the recovery codes you will lose access to your account.
-    </p>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        @for (var row = 0; row < Model.RecoveryCodes.Length; row += 2)
+
+<wa-callout variant="warning">
+    <wa-icon slot="icon" name="triangle-exclamation"></wa-icon>
+    <p><strong>Put these codes in a safe place. They are shown only once.</strong></p>
+    <p>Without your device and these codes you lose access to your account.</p>
+</wa-callout>
+
+<div class="section">
+    <div class="recovery-codes">
+        @foreach (var code in Model.RecoveryCodes)
         {
-            <code class="recovery-code">@Model.RecoveryCodes[row]</code><text>&nbsp;</text><code class="recovery-code">@Model.RecoveryCodes[row + 1]</code><br />
+            <code class="recovery-code">@code</code>
         }
     </div>
+    <wa-copy-button value="@string.Join("\n", Model.RecoveryCodes)" copy-label="Copy all codes"></wa-copy-button>
+    <a asp-page="./TwoFactorAuthentication">Done</a>
 </div>

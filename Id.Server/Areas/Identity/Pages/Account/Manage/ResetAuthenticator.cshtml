@@ -1,24 +1,20 @@
-﻿@page
+@page
 @model ResetAuthenticatorModel
 @{
     ViewData["Title"] = "Reset authenticator key";
     ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
 }
 
+<h1>@ViewData["Title"]</h1>
 <partial name="_StatusMessage" for="StatusMessage" />
-<h3>@ViewData["Title"]</h3>
-<div class="alert alert-warning" role="alert">
-    <p>
-        <span class="glyphicon glyphicon-warning-sign"></span>
-        <strong>If you reset your authenticator key your authenticator app will not work until you reconfigure it.</strong>
-    </p>
-    <p>
-        This process disables 2FA until you verify your authenticator app.
-        If you do not complete your authenticator app configuration you may lose access to your account.
-    </p>
-</div>
-<div>
-    <form id="reset-authenticator-form" method="post">
-        <wa-button id="reset-authenticator-button" class="btn btn-danger" type="submit">Reset authenticator key</wa-button>
-    </form>
-</div>
+
+<wa-callout variant="warning">
+    <wa-icon slot="icon" name="triangle-exclamation"></wa-icon>
+    <p><strong>Your authenticator app stops working until you set it up again.</strong></p>
+    <p>This disables 2FA until you verify the app again. If you don't finish the setup, you can lose access to your account.</p>
+</wa-callout>
+
+<form id="reset-authenticator-form" method="post" class="actions">
+    <button id="reset-authenticator-button" type="submit" class="wa-danger">Reset authenticator key</button>
+    <wa-button href="@Url.Page("./TwoFactorAuthentication")" appearance="plain">Cancel</wa-button>
+</form>

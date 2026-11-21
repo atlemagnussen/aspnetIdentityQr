@@ -1,17 +1,12 @@
 @page
 @model LoginPasskeyModel
 @{
-    ViewData["Title"] = "Login Passkey";
+    ViewData["Title"] = "No access";
 }
 
 <h1>@ViewData["Title"]</h1>
-<hr />
-
-<p id="external-login-description" class="text-info">
-    You've successfully authenticated with <strong>Passkey</strong>.
-    But you dont have access here
-</p>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+<wa-callout id="external-login-description" variant="warning">
+    <wa-icon slot="icon" name="triangle-exclamation"></wa-icon>
+    You signed in with a <strong>passkey</strong>, but that account has no access here.
+</wa-callout>
+<p class="below-card"><a asp-page="./Login">Back to log in</a></p>

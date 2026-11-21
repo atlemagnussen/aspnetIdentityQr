@@ -1,27 +1,20 @@
-﻿@page
+@page
 @model PersonalDataModel
 @{
-    ViewData["Title"] = "Personal Data";
+    ViewData["Title"] = "Personal data";
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
 }
 
-<h3>@ViewData["Title"]</h3>
+<h1>@ViewData["Title"]</h1>
 
-<div class="row">
-    <div class="col-md-6">
-        <p>Your account contains personal data that you have given us. This page allows you to download or delete that data.</p>
-        <p>
-            <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
-        </p>
-        <form id="download-data" asp-page="DownloadPersonalData" method="post">
-            <wa-button class="btn btn-primary" type="submit">Download</wa-button>
-        </form>
-        <p>
-            <a id="delete" asp-page="DeletePersonalData" class="btn btn-danger">Delete</a>
-        </p>
-    </div>
+<form id="download-data" asp-page="DownloadPersonalData" method="post" class="section">
+    <h2>Download your data</h2>
+    <p>Get a JSON file with the personal data your account holds.</p>
+    <button type="submit" class="wa-outlined"><wa-icon name="download"></wa-icon>&nbsp;Download</button>
+</form>
+
+<div class="section danger">
+    <h2>Delete account</h2>
+    <p>This permanently removes your account and its data. You can't undo it.</p>
+    <wa-button id="delete" href="@Url.Page("DeletePersonalData")" variant="danger" appearance="outlined">Delete account</wa-button>
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}

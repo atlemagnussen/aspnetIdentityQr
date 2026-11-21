@@ -1,10 +1,11 @@
-﻿@page
+@page
 @model LockoutModel
 @{
     ViewData["Title"] = "Locked out";
 }
 
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">This account has been locked out, please try again later.</p>
-</header>
+<h1>@ViewData["Title"]</h1>
+<wa-callout variant="danger">
+    <wa-icon slot="icon" name="lock"></wa-icon>
+    This account is locked. Try again later.
+</wa-callout>

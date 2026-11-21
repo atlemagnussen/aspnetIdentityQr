@@ -1,41 +1,59 @@
-﻿<!DOCTYPE html>
+﻿@using Id.Lib.Entities
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    // Signed in: app shell with the account menu. Signed out (login, register, reset ...): one centred card.
+    var signedIn = SignInManager.IsSignedIn(User);
+    var title = ViewData["Title"] as string;
+}
+<!DOCTYPE html>
 <html lang="en" class="wa-theme-default wa-brand-blue wa-palette-default">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Logout</title>
+    <title>@(string.IsNullOrEmpty(title) ? "logout.work" : $"{title} - logout.work")</title>
     <link rel="icon" type="image/svg" href="/icon.svg" sizes="32x32">
-    <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/theme.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/light.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/dark.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/manage.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://static.logout.work/webawesome/3.2.1/dist/styles/themes/default.css" />
+    <link rel="stylesheet" href="https://static.logout.work/webawesome/3.2.1/dist/styles/native.css" />
+    <link rel="stylesheet" href="~/_content/Id.Lib/shell.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="~/_content/Id.Lib/shell.js" asp-append-version="true"></script>
 </head>
-<body>
-    <header>
-        <nav class="navbar">
-            <a class="navbar-brand" asp-area="" asp-page="/Index">
-                <img class="logo" src="/icon.svg" alt="auth logo">
-            </a>
-            <ul class="navbar-nav">
-                <partial name="_LoginPartial" />
-            </ul>
+@if (signedIn)
+{
+    <body class="app-shell">
+        <header class="app-topbar">
+            <button type="button" class="nav-toggle" aria-controls="app-nav" aria-expanded="false" aria-label="Open menu">
+                <wa-icon name="bars"></wa-icon>
+            </button>
+            <partial name="_Brand" />
+        </header>
+        <nav id="app-nav" class="app-nav" aria-label="Account">
+            <partial name="_Brand" />
+            <partial name="_AccountNav" />
         </nav>
-    </header>
-    <main role="main">
-        <section class="slot">
-            @RenderBody()
-        </section>
-    </main>
-    <footer>
-        <div class="container">
-            <a asp-area="" asp-page="/Privacy">Privacy</a>
-            <span class="build-info">@Id.Lib.Services.BuildInfo.Current.Display</span>
-        </div>
-    </footer>
-
-    <script src="~/js/site.js" asp-append-version="true" type="module"></script>
-
-    @await RenderSectionAsync("Scripts", required: false)
-</body>
+        <div class="nav-backdrop" hidden></div>
+        <main>
+            <div class="page @ViewData["PageClass"]">
+                @RenderBody()
+            </div>
+        </main>
+        <partial name="_Footer" />
+        <script src="~/js/site.js" asp-append-version="true" type="module"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+    </body>
+}
+else
+{
+    <body class="auth-shell">
+        <main>
+            <div class="auth-card">
+                <partial name="_Brand" />
+                @RenderBody()
+            </div>
+        </main>
+        <partial name="_Footer" />
+        <script src="~/js/site.js" asp-append-version="true" type="module"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+    </body>
+}
 </html>

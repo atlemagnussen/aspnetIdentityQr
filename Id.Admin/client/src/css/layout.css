@@ -1,66 +1,7 @@
-html {
-    font-size: 14px;
-}
-
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-}
-
-body {
-    background: var(--wa-color-surface-default);
-    color: var(--wa-color-text-normal);
-    font-family: open sans, Helvetica Neue, Helvetica, Arial, sans-serif;
-    font-size: 1rem;
-    height: 100svh;
-    width: 100svw;
-    max-width: 100svw;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr auto;
-    grid-template-areas:
-        'header'
-        'main'
-        'footer';
-}
-
-* {
-    box-sizing: border-box;
-}
-header {
-    grid-area: header;
-    display: flex;
-    flex-direction: row;
-    padding: var(--wa-space-2xs);
-    overflow: hidden;
-    nav {
-        background-color: var(--wa-color-surface-raised);
-        width: 100%;
-        display: flex;
-        justify-content: space-around;
-        flex-direction: row;
-    }
-    img {
-        width: 3rem;
-        height: 3rem;
-    }
-    figure {
-        width: 3rem;
-        height: 3rem;
-    }
-}
+/* App shell (nav, top bar, footer, colour scheme) comes from Id.Lib: /_content/Id.Lib/shell.css. */
 
 main {
-    overflow-x: hidden;
-    overflow-y: auto;
-    grid-area: main;
     padding: 0.5rem;
-    display: block;
-    height: 100%;
 }
 .centered-content {
     height: 100%;
@@ -76,16 +17,4 @@ main {
 .admin-page {
     width: min(80rem, 100%);
     padding: var(--wa-space-s);
-}
-
-footer {
-    grid-area: footer;
-    display: flex;
-    justify-content: flex-end;
-    padding: var(--wa-space-3xs) var(--wa-space-xs);
-    .build-info {
-        font-size: var(--wa-font-size-2xs);
-        font-family: var(--wa-font-family-code);
-        color: var(--wa-color-text-quiet);
-    }
 }

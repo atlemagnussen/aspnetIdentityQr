@@ -1,13 +1,16 @@
-﻿@page
+@page
 @model ErrorModel
 @{
     ViewData["Title"] = "Error";
 }
 
 <h1>Something went wrong</h1>
-<p>@(Model.Message ?? "An error occurred while processing your request.")</p>
+<wa-callout variant="danger">
+    <wa-icon slot="icon" name="circle-exclamation"></wa-icon>
+    @(Model.Message ?? "An error occurred while processing your request.")
+</wa-callout>
 
 @if (!string.IsNullOrEmpty(Model.RequestId))
 {
-    <p><small>Request ID: <code>@Model.RequestId</code></small></p>
+    <p class="below-card">Request ID: <code>@Model.RequestId</code></p>
 }
