@@ -36,7 +36,8 @@ public static class OpenTelemetryStartup
             })
             .WithTracing(tracing => 
                tracing
-                .AddAspNetCoreInstrumentation()
+                // don't trace Kubernetes probes / version polling
+                .AddAspNetCoreInstrumentation(o => o.Filter = ctx => !OpsEndpoints.IsOpsPath(ctx.Request.Path))
                 .AddHttpClientInstrumentation()
                 .AddEntityFrameworkCoreInstrumentation());
 

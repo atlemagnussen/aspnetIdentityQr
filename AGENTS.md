@@ -116,6 +116,15 @@ podman build -f AspAuth.Local/Containerfile --tag localhost/aspauth:latest .
 podman build -f UserAdmin/Containerfile    --tag localhost/useradmin:latest .
 ```
 
+Ops endpoints (both apps, anonymous, defined in `AspAuth.Lib/Observe/OpsEndpoints.cs`):
+- `/livez` is liveness. It checks no dependencies, so it never fails because of the DB.
+- `/readyz` is readiness. It includes an EF `CanConnect` check on `ApplicationDbContext` and returns 503 when unhealthy.
+- `/version` returns the build stamp as JSON.
+
+These paths are excluded from OTel tracing. Add readiness-only checks with `tags: ["ready"]`.
+
+Build stamp: CI passes `VERSION` / `COMMIT` / `BUILD_TIME` as `--build-arg`s. The Containerfiles forward them as `-p:BuildVersion/BuildCommit/BuildTime`, and the root `Directory.Build.props` writes them into the assemblies. `AspAuth.Lib/Services/BuildInfo.cs` reads them, and both layouts show `BuildInfo.Current.Display` in the footer. Images also get OCI `version`/`revision`/`created` labels. Keep the ARGs in both the `build` and `publish` stages, because ARGs aren't inherited across `FROM`.
+
 CI: `.forgejo/workflows/*-build-push.yml` builds both images on push to `main` or on tags, and pushes them to `dev.logout.work/empire/{aspauth,useradmin}`. Remotes: `origin` (Forgejo, primary) and `github` (mirror).
 
 There are **no automated tests**. Verify by building both solutions, `npm run ts`, and exercising the app.

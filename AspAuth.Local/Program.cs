@@ -21,6 +21,7 @@ builder.AddWebAuthn();
 builder.ConfigureIdentityServer();
 
 builder.Services.LoadServices();
+builder.Services.AddOpsHealthChecks();
 builder.Services.AddScoped<SeedIdentityServerSetup>();
 
 builder.Services.AddControllers();
@@ -54,5 +55,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapRazorPages();
+app.MapOpsEndpoints();
 
 app.Run();

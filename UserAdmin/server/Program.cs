@@ -33,6 +33,7 @@ var authClient = Environment.GetEnvironmentVariable("AUTH_CLIENT") ?? "web";
 builder.AddAuthentication(authServer, authClient);
 builder.AddPersistence();
 builder.AddApi();
+builder.Services.AddOpsHealthChecks();
 
 builder.Services.AddRazorPages();
 
@@ -59,5 +60,6 @@ app.UseExceptionHandler();
 
 app.MapControllers();
 app.MapRazorPages();
+app.MapOpsEndpoints();
 
 app.Run();

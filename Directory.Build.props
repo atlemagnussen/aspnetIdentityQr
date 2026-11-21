@@ -1,0 +1,12 @@
+<Project>
+  <!--
+    Build stamp, read at runtime by AspAuth.Lib.Services.BuildInfo.
+    Set by CI via the Containerfiles: -p:BuildVersion=... -p:BuildCommit=... -p:BuildTime=...
+    Left empty for local builds, so incremental builds are unaffected.
+  -->
+  <ItemGroup>
+    <AssemblyMetadata Include="BuildVersion" Value="$(BuildVersion)" Condition="'$(BuildVersion)' != ''" />
+    <AssemblyMetadata Include="BuildCommit" Value="$(BuildCommit)" Condition="'$(BuildCommit)' != ''" />
+    <AssemblyMetadata Include="BuildTime" Value="$(BuildTime)" Condition="'$(BuildTime)' != ''" />
+  </ItemGroup>
+</Project>

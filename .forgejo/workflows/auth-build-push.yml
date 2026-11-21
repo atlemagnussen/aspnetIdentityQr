@@ -23,6 +23,8 @@ jobs:
             VERSION="dev-${GITHUB_SHA::7}"
           fi
           echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "COMMIT=${GITHUB_SHA::7}" >> $GITHUB_ENV
+          echo "BUILD_TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_ENV
           IMAGE_NAME="dev.logout.work/empire/aspauth"
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
           echo "Building $IMAGE_NAME : $VERSION"
@@ -31,7 +33,15 @@ jobs:
         run: |
           echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login dev.logout.work -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
       - name: Build
-        run: docker build -f AspAuth.Local/Containerfile -t ${{ env.IMAGE_NAME }}:${{ env.VERSION }} -t ${{ env.IMAGE_NAME }}:latest .
+        run: >-
+          docker build -f AspAuth.Local/Containerfile
+          --build-arg VERSION=${{ env.VERSION }}
+          --build-arg COMMIT=${{ env.COMMIT }}
+          --build-arg BUILD_TIME=${{ env.BUILD_TIME }}
+          --label org.opencontainers.image.version=${{ env.VERSION }}
+          --label org.opencontainers.image.revision=${{ github.sha }}
+          --label org.opencontainers.image.created=${{ env.BUILD_TIME }}
+          -t ${{ env.IMAGE_NAME }}:${{ env.VERSION }} -t ${{ env.IMAGE_NAME }}:latest .
       - name: Push
         run: |
           docker push ${{ env.IMAGE_NAME }}:${{ env.VERSION }} 

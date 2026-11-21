@@ -24,11 +24,17 @@ WORKDIR "/src/UserAdmin/server/wwwroot"
 COPY --from=buildnode /usr/server/wwwroot .
 
 WORKDIR "/src/UserAdmin/server"
-RUN dotnet build "./UserAdmin.csproj" -c $BUILD_CONFIGURATION -o /app/build
+ARG VERSION=local
+ARG COMMIT=
+ARG BUILD_TIME=
+RUN dotnet build "./UserAdmin.csproj" -c $BUILD_CONFIGURATION -o /app/build -p:BuildVersion="$VERSION" -p:BuildCommit="$COMMIT" -p:BuildTime="$BUILD_TIME"
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./UserAdmin.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+ARG VERSION=local
+ARG COMMIT=
+ARG BUILD_TIME=
+RUN dotnet publish "./UserAdmin.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false -p:BuildVersion="$VERSION" -p:BuildCommit="$COMMIT" -p:BuildTime="$BUILD_TIME"
 
 FROM base AS final
 WORKDIR /app

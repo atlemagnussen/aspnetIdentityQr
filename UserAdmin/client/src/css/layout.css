@@ -71,5 +71,12 @@ main {
 }
 footer {
     grid-area: footer;
-    display: block;
+    display: flex;
+    justify-content: flex-end;
+    padding: var(--wa-space-3xs) var(--wa-space-xs);
+    .build-info {
+        font-size: var(--wa-font-size-2xs);
+        font-family: var(--wa-font-family-code);
+        color: var(--wa-color-text-quiet);
+    }
 }

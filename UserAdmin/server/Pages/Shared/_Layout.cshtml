@@ -31,6 +31,9 @@
             @RenderBody()
         </section>
     </main>
+    <footer>
+        <span class="build-info">@AspAuth.Lib.Services.BuildInfo.Current.Display</span>
+    </footer>
     <script src="~/main.js" asp-append-version="true" type="module"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
