@@ -10,17 +10,19 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY . .
 WORKDIR "/src/AspAuth.Local"
-ARG VERSION=local
-ARG COMMIT=
-ARG BUILD_TIME=
-RUN dotnet build "./AspAuth.Local.csproj" -c $BUILD_CONFIGURATION -o /app/build -p:BuildVersion="$VERSION" -p:BuildCommit="$COMMIT" -p:BuildTime="$BUILD_TIME"
+# Not VERSION/COMMIT: ARGs become env vars in RUN, and MSBuild reads env vars as properties
+# (case-insensitive), so VERSION would override $(Version) and break NuGet restore.
+ARG APP_VERSION=local
+ARG APP_COMMIT=
+ARG APP_BUILD_TIME=
+RUN dotnet build "./AspAuth.Local.csproj" -c $BUILD_CONFIGURATION -o /app/build -p:BuildVersion="$APP_VERSION" -p:BuildCommit="$APP_COMMIT" -p:BuildTime="$APP_BUILD_TIME"
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-ARG VERSION=local
-ARG COMMIT=
-ARG BUILD_TIME=
-RUN dotnet publish "./AspAuth.Local.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false -p:BuildVersion="$VERSION" -p:BuildCommit="$COMMIT" -p:BuildTime="$BUILD_TIME"
+ARG APP_VERSION=local
+ARG APP_COMMIT=
+ARG APP_BUILD_TIME=
+RUN dotnet publish "./AspAuth.Local.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false -p:BuildVersion="$APP_VERSION" -p:BuildCommit="$APP_COMMIT" -p:BuildTime="$APP_BUILD_TIME"
 
 FROM base AS final
 WORKDIR /app

@@ -123,7 +123,7 @@ Ops endpoints (both apps, anonymous, defined in `AspAuth.Lib/Observe/OpsEndpoint
 
 These paths are excluded from OTel tracing. Add readiness-only checks with `tags: ["ready"]`.
 
-Build stamp: CI passes `VERSION` / `COMMIT` / `BUILD_TIME` as `--build-arg`s. The Containerfiles forward them as `-p:BuildVersion/BuildCommit/BuildTime`, and the root `Directory.Build.props` writes them into the assemblies. `AspAuth.Lib/Services/BuildInfo.cs` reads them, and both layouts show `BuildInfo.Current.Display` in the footer. Images also get OCI `version`/`revision`/`created` labels. Keep the ARGs in both the `build` and `publish` stages, because ARGs aren't inherited across `FROM`.
+Build stamp: CI passes `APP_VERSION` / `APP_COMMIT` / `APP_BUILD_TIME` as `--build-arg`s (never name them `VERSION` etc.: ARGs become env vars, which MSBuild reads as properties and which then override `$(Version)`). The Containerfiles forward them as `-p:BuildVersion/BuildCommit/BuildTime`, and the root `Directory.Build.props` writes them into the assemblies. `AspAuth.Lib/Services/BuildInfo.cs` reads them, and both layouts show `BuildInfo.Current.Display` in the footer. Images also get OCI `version`/`revision`/`created` labels. Keep the ARGs in both the `build` and `publish` stages, because ARGs aren't inherited across `FROM`.
 
 CI: `.forgejo/workflows/*-build-push.yml` builds both images on push to `main` or on tags, and pushes them to `dev.logout.work/empire/{aspauth,useradmin}`. Remotes: `origin` (Forgejo, primary) and `github` (mirror).
 

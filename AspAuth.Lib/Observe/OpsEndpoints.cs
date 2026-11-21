@@ -14,6 +14,9 @@ namespace AspAuth.Lib.Observe;
 ///              so a database outage doesn't make Kubernetes restart every pod.
 ///   /readyz  - readiness: can we serve real traffic? Includes the database.
 ///   /version - build stamp as JSON (see <see cref="BuildInfo"/>).
+/// All are short-circuited at UseRouting, so auth/IdentityServer middleware never runs for them.
+/// That matters: the ID server's auth middleware loads Data Protection keys from Postgres, which
+/// would otherwise make /livez fail (and Kubernetes restart pods) whenever the DB is down.
 /// </summary>
 public static class OpsEndpoints
 {
@@ -37,17 +40,17 @@ public static class OpsEndpoints
     public static IEndpointRouteBuilder MapOpsEndpoints(this IEndpointRouteBuilder endpoints)
     {
         endpoints.MapHealthChecks(Live, new HealthCheckOptions { Predicate = _ => false })
-            .AllowAnonymous();
+            .ShortCircuit();
 
         endpoints.MapHealthChecks(Ready, new HealthCheckOptions { Predicate = c => c.Tags.Contains(ReadyTag) })
-            .AllowAnonymous();
+            .ShortCircuit();
 
         endpoints.MapGet(Version, () =>
             {
                 var info = BuildInfo.Current;
                 return Results.Ok(new { info.Version, info.Commit, info.BuildTime });
             })
-            .AllowAnonymous()
+            .ShortCircuit()
             .ExcludeFromDescription();
 
         return endpoints;
