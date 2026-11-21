@@ -1,3 +1,4 @@
 {
-    "workbench.colorTheme": "Dark Modern"
+    "workbench.colorTheme": "Dark Modern",
+    "dotnet.defaultSolution": "UserAdmin/UserAdmin.slnx"
 }
