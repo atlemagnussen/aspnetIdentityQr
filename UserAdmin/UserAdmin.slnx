@@ -1,6 +1,0 @@
-<Solution>
-  <Folder Name="/server/">
-    <Project Path="server/UserAdmin.csproj" />
-  </Folder>
-  <Project Path="../AspAuth.Lib/AspAuth.Lib.csproj" />
-</Solution>

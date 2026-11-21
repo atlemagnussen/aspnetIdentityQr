@@ -1,0 +1,16 @@
+@page
+@model Id.Admin.Pages.AccessDeniedModel
+@{
+    ViewData["Title"] = "Access denied";
+}
+
+<section id="home-page">
+    <div>
+        <h2>Access denied</h2>
+        <p>You're signed in as <strong>@User.Identity?.Name</strong>, but this admin app requires the <strong>Admin</strong> role.</p>
+        <p>Ask an existing admin to grant it, then sign out and in again so your token picks it up.</p>
+        <div class="login-link">
+            <a asp-page="/Logout">Log out</a>
+        </div>
+    </div>
+</section>
