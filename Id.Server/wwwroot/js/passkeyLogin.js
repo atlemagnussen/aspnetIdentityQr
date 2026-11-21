@@ -160,7 +160,7 @@ class PasskeyLogin extends HTMLElement {
 
       this.internals.setFormValue(formData)
 
-      this.internals.form.action = `/Identity/Account/LoginPasskey?returnUrl=${returnUrl}` // special form instead of complicating Login form even more
+      this.internals.form.action = `/Identity/Account/LoginPasskey?returnUrl=${encodeURIComponent(returnUrl ?? "")}` // special form instead of complicating Login form even more
       this.internals.form.submit()
     } catch (error) {
       if (error.name === "AbortError") {
