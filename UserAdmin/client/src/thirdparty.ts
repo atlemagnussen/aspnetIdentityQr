@@ -1,15 +1,25 @@
 const modulesToLoad = [
-    "/components/button/button.js",      // wa-button
-    "/components/icon/icon.js",          // wa-icon
-    "/components/tooltip/tooltip.js",    // wa-tooltip
-    "/components/checkbox/checkbox.js",   // wa-checkbox
-    "/components/popover/popover.js",    // wa-popover
-    "/components/avatar/avatar.js",      // wa-avatar
-    "/components/input/input.js",        // wa-input
-    "/components/dialog/dialog.js",      // wa-dialog 
-    "/components/callout/callout.js",     // wa-callout
-    "/components/dialog/dialog.js",      // wa-dialog
-    "/components/select/select.js",      // wa-select
+    "/components/button/button.js",          // wa-button
+    "/components/icon/icon.js",              // wa-icon
+    "/components/tooltip/tooltip.js",        // wa-tooltip
+    "/components/checkbox/checkbox.js",      // wa-checkbox
+    "/components/switch/switch.js",          // wa-switch
+    "/components/popover/popover.js",        // wa-popover
+    "/components/avatar/avatar.js",          // wa-avatar
+    "/components/input/input.js",            // wa-input
+    "/components/textarea/textarea.js",      // wa-textarea
+    "/components/dialog/dialog.js",          // wa-dialog
+    "/components/callout/callout.js",        // wa-callout
+    "/components/select/select.js",          // wa-select
+    "/components/option/option.js",          // wa-option (needed by wa-select)
+    "/components/tab-group/tab-group.js",    // wa-tab-group
+    "/components/tab/tab.js",                // wa-tab
+    "/components/tab-panel/tab-panel.js",    // wa-tab-panel
+    "/components/badge/badge.js",            // wa-badge
+    "/components/tag/tag.js",                // wa-tag
+    "/components/spinner/spinner.js",        // wa-spinner
+    "/components/copy-button/copy-button.js",// wa-copy-button
+    "/components/divider/divider.js",        // wa-divider
 ]
 
 const baseUrlWa = "https://static.logout.work/webawesome/3.2.1/dist"

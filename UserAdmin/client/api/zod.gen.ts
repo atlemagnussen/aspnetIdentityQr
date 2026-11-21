@@ -2,27 +2,87 @@
 
 import * as z from 'zod';
 
-export const zAccessTokenType = z.int();
+export const zAccessTokenType = z.enum(['Jwt', 'Reference']);
 
 export type AccessTokenTypeZodType = z.infer<typeof zAccessTokenType>;
 
-export const zClientClaim = z.object({
-    type: z.optional(z.string()),
-    value: z.optional(z.string()),
-    valueType: z.optional(z.string())
+export const zClaimDto = z.object({
+    type: z.string(),
+    value: z.string()
 });
 
-export type ClientClaimZodType = z.infer<typeof zClientClaim>;
+export type ClaimDtoZodType = z.infer<typeof zClaimDto>;
 
-export const zClientUrlPatch = z.object({
-    url: z.string()
+export const zClientClaimDto = z.object({
+    type: z.string(),
+    value: z.string()
 });
 
-export type ClientUrlPatchZodType = z.infer<typeof zClientUrlPatch>;
+export type ClientClaimDtoZodType = z.infer<typeof zClientClaimDto>;
 
-export const zDPoPTokenExpirationValidationMode = z.int();
+export const zClientPropertyDto = z.object({
+    key: z.string(),
+    value: z.string()
+});
 
-export type DPoPTokenExpirationValidationModeZodType = z.infer<typeof zDPoPTokenExpirationValidationMode>;
+export type ClientPropertyDtoZodType = z.infer<typeof zClientPropertyDto>;
+
+export const zClientSecretCreateDto = z.object({
+    description: z.optional(z.union([
+        z.null(),
+        z.string()
+    ])),
+    expiration: z.optional(z.union([
+        z.null(),
+        z.iso.datetime()
+    ]))
+});
+
+export type ClientSecretCreateDtoZodType = z.infer<typeof zClientSecretCreateDto>;
+
+export const zClientSecretDto = z.object({
+    id: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    description: z.optional(z.union([
+        z.null(),
+        z.string()
+    ])),
+    type: z.string(),
+    expiration: z.optional(z.union([
+        z.null(),
+        z.iso.datetime()
+    ])),
+    created: z.iso.datetime()
+});
+
+export type ClientSecretDtoZodType = z.infer<typeof zClientSecretDto>;
+
+export const zClientSecretCreatedDto = z.object({
+    secret: zClientSecretDto,
+    value: z.string()
+});
+
+export type ClientSecretCreatedDtoZodType = z.infer<typeof zClientSecretCreatedDto>;
+
+export const zClientSummaryDto = z.object({
+    clientId: z.string(),
+    clientName: z.optional(z.union([
+        z.null(),
+        z.string()
+    ])),
+    enabled: z.boolean(),
+    allowedGrantTypes: z.array(z.string()),
+    requireClientSecret: z.boolean(),
+    secretCount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    redirectUriCount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    allowedScopeCount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    lastAccessed: z.optional(z.union([
+        z.null(),
+        z.iso.datetime()
+    ])),
+    isProtected: z.boolean()
+});
+
+export type ClientSummaryDtoZodType = z.infer<typeof zClientSummaryDto>;
 
 export const zIdentityProvider = z.object({
     scheme: z.optional(z.string()),
@@ -56,6 +116,60 @@ export const zIdentityResource = z.object({
 });
 
 export type IdentityResourceZodType = z.infer<typeof zIdentityResource>;
+
+export const zLockUserDto = z.object({
+    until: z.optional(z.union([
+        z.null(),
+        z.iso.datetime()
+    ]))
+});
+
+export type LockUserDtoZodType = z.infer<typeof zLockUserDto>;
+
+export const zPasskeyDto = z.object({
+    credentialId: z.string(),
+    name: z.optional(z.union([
+        z.null(),
+        z.string()
+    ])),
+    createdAt: z.iso.datetime()
+});
+
+export type PasskeyDtoZodType = z.infer<typeof zPasskeyDto>;
+
+export const zPasswordLinkDto = z.object({
+    url: z.string(),
+    expiresAt: z.iso.datetime()
+});
+
+export type PasswordLinkDtoZodType = z.infer<typeof zPasswordLinkDto>;
+
+export const zRoleDto = z.object({
+    id: z.string(),
+    name: z.string(),
+    userCount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    isSystem: z.boolean()
+});
+
+export type RoleDtoZodType = z.infer<typeof zRoleDto>;
+
+export const zRoleNameDto = z.object({
+    name: z.string()
+});
+
+export type RoleNameDtoZodType = z.infer<typeof zRoleNameDto>;
+
+export const zScopeDto = z.object({
+    name: z.string(),
+    displayName: z.optional(z.union([
+        z.null(),
+        z.string()
+    ])),
+    kind: z.string(),
+    enabled: z.boolean()
+});
+
+export type ScopeDtoZodType = z.infer<typeof zScopeDto>;
 
 export const zSecret = z.object({
     description: z.optional(z.union([
@@ -94,20 +208,16 @@ export const zApiResource = z.object({
 
 export type ApiResourceZodType = z.infer<typeof zApiResource>;
 
-export const zTokenExpiration = z.int();
+export const zTokenExpiration = z.enum(['Sliding', 'Absolute']);
 
 export type TokenExpirationZodType = z.infer<typeof zTokenExpiration>;
 
-export const zTokenUsage = z.int();
+export const zTokenUsage = z.enum(['ReUse', 'OneTimeOnly']);
 
 export type TokenUsageZodType = z.infer<typeof zTokenUsage>;
 
-export const zClient = z.object({
-    enabled: z.optional(z.boolean()),
-    clientId: z.optional(z.string()),
-    protocolType: z.optional(z.string()),
-    clientSecrets: z.optional(z.array(zSecret)),
-    requireClientSecret: z.optional(z.boolean()),
+export const zClientDto = z.object({
+    clientId: z.string(),
     clientName: z.optional(z.union([
         z.null(),
         z.string()
@@ -124,72 +234,62 @@ export const zClient = z.object({
         z.null(),
         z.string()
     ])),
-    requireConsent: z.optional(z.boolean()),
-    allowRememberConsent: z.optional(z.boolean()),
-    allowedGrantTypes: z.optional(z.array(z.string())),
-    requirePkce: z.optional(z.boolean()),
-    allowPlainTextPkce: z.optional(z.boolean()),
-    requireRequestObject: z.optional(z.boolean()),
-    allowAccessTokensViaBrowser: z.optional(z.boolean()),
-    requireDPoP: z.optional(z.boolean()),
-    dPoPValidationMode: z.optional(zDPoPTokenExpirationValidationMode),
-    dPoPClockSkew: z.optional(z.string().regex(/^-?(\d+\.)?\d{2}:\d{2}:\d{2}(\.\d{1,7})?$/)),
-    redirectUris: z.optional(z.array(z.string())),
-    postLogoutRedirectUris: z.optional(z.array(z.string())),
+    enabled: z.boolean(),
+    protocolType: z.string(),
+    allowedGrantTypes: z.array(z.string()),
+    requireClientSecret: z.boolean(),
+    requirePkce: z.boolean(),
+    allowPlainTextPkce: z.boolean(),
+    requireRequestObject: z.boolean(),
+    requireDPoP: z.boolean(),
+    requirePushedAuthorization: z.boolean(),
+    allowAccessTokensViaBrowser: z.boolean(),
+    allowOfflineAccess: z.boolean(),
+    enableLocalLogin: z.boolean(),
+    identityProviderRestrictions: z.array(z.string()),
+    requireConsent: z.boolean(),
+    allowRememberConsent: z.boolean(),
+    consentLifetime: z.optional(z.union([
+        z.null(),
+        z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' })
+    ])),
+    redirectUris: z.array(z.string()),
+    postLogoutRedirectUris: z.array(z.string()),
+    allowedCorsOrigins: z.array(z.string()),
     frontChannelLogoutUri: z.optional(z.union([
         z.null(),
         z.string()
     ])),
-    frontChannelLogoutSessionRequired: z.optional(z.boolean()),
+    frontChannelLogoutSessionRequired: z.boolean(),
     backChannelLogoutUri: z.optional(z.union([
         z.null(),
         z.string()
     ])),
-    backChannelLogoutSessionRequired: z.optional(z.boolean()),
-    allowOfflineAccess: z.optional(z.boolean()),
-    allowedScopes: z.optional(z.array(z.string())),
-    alwaysIncludeUserClaimsInIdToken: z.optional(z.boolean()),
-    identityTokenLifetime: z.optional(z.union([
-        z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-        z.string().regex(/^-?(?:0|[1-9]\d*)$/)
-    ])),
-    allowedIdentityTokenSigningAlgorithms: z.optional(z.array(z.string())),
-    accessTokenLifetime: z.optional(z.union([
-        z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-        z.string().regex(/^-?(?:0|[1-9]\d*)$/)
-    ])),
-    authorizationCodeLifetime: z.optional(z.union([
-        z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-        z.string().regex(/^-?(?:0|[1-9]\d*)$/)
-    ])),
-    absoluteRefreshTokenLifetime: z.optional(z.union([
-        z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-        z.string().regex(/^-?(?:0|[1-9]\d*)$/)
-    ])),
-    slidingRefreshTokenLifetime: z.optional(z.union([
-        z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-        z.string().regex(/^-?(?:0|[1-9]\d*)$/)
-    ])),
-    consentLifetime: z.optional(z.union([
+    backChannelLogoutSessionRequired: z.boolean(),
+    initiateLoginUri: z.optional(z.union([
         z.null(),
-        z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-        z.string().regex(/^-?(?:0|[1-9]\d*)$/)
+        z.string()
     ])),
-    pushedAuthorizationLifetime: z.optional(z.union([
+    allowedScopes: z.array(z.string()),
+    accessTokenType: zAccessTokenType,
+    accessTokenLifetime: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    identityTokenLifetime: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    authorizationCodeLifetime: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    absoluteRefreshTokenLifetime: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    slidingRefreshTokenLifetime: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    refreshTokenUsage: zTokenUsage,
+    refreshTokenExpiration: zTokenExpiration,
+    updateAccessTokenClaimsOnRefresh: z.boolean(),
+    includeJwtId: z.boolean(),
+    alwaysIncludeUserClaimsInIdToken: z.boolean(),
+    userSsoLifetime: z.optional(z.union([
         z.null(),
-        z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-        z.string().regex(/^-?(?:0|[1-9]\d*)$/)
+        z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' })
     ])),
-    requirePushedAuthorization: z.optional(z.boolean()),
-    refreshTokenUsage: z.optional(zTokenUsage),
-    updateAccessTokenClaimsOnRefresh: z.optional(z.boolean()),
-    refreshTokenExpiration: z.optional(zTokenExpiration),
-    accessTokenType: z.optional(zAccessTokenType),
-    enableLocalLogin: z.optional(z.boolean()),
-    identityProviderRestrictions: z.optional(z.array(z.string())),
-    includeJwtId: z.optional(z.boolean()),
-    claims: z.optional(z.array(zClientClaim)),
-    alwaysSendClientClaims: z.optional(z.boolean()),
+    coordinateLifetimeWithUserSession: z.boolean(),
+    allowedIdentityTokenSigningAlgorithms: z.array(z.string()),
+    claims: z.array(zClientClaimDto),
+    alwaysSendClientClaims: z.boolean(),
     clientClaimsPrefix: z.optional(z.union([
         z.null(),
         z.string()
@@ -198,58 +298,136 @@ export const zClient = z.object({
         z.null(),
         z.string()
     ])),
-    userSsoLifetime: z.optional(z.union([
+    properties: z.array(zClientPropertyDto),
+    created: z.optional(z.union([
         z.null(),
-        z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-        z.string().regex(/^-?(?:0|[1-9]\d*)$/)
+        z.iso.datetime()
     ])),
-    userCodeType: z.optional(z.union([
+    updated: z.optional(z.union([
         z.null(),
-        z.string()
+        z.iso.datetime()
     ])),
-    deviceCodeLifetime: z.optional(z.union([
-        z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-        z.string().regex(/^-?(?:0|[1-9]\d*)$/)
-    ])),
-    cibaLifetime: z.optional(z.union([
+    lastAccessed: z.optional(z.union([
         z.null(),
-        z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-        z.string().regex(/^-?(?:0|[1-9]\d*)$/)
+        z.iso.datetime()
     ])),
-    pollingInterval: z.optional(z.union([
-        z.null(),
-        z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
-        z.string().regex(/^-?(?:0|[1-9]\d*)$/)
-    ])),
-    coordinateLifetimeWithUserSession: z.optional(z.union([
-        z.null(),
-        z.boolean()
-    ])),
-    allowedCorsOrigins: z.optional(z.array(z.string())),
-    initiateLoginUri: z.optional(z.union([
-        z.null(),
-        z.string()
-    ])),
-    properties: z.optional(z.record(z.string(), z.string()))
+    nonEditable: z.optional(z.boolean()),
+    isProtected: z.optional(z.boolean())
 });
 
-export type ClientZodType = z.infer<typeof zClient>;
+export type ClientDtoZodType = z.infer<typeof zClientDto>;
 
-export const zUserDto = z.object({
-    id: z.string(),
-    userName: z.string(),
+export const zUserCreateDto = z.object({
     email: z.string(),
+    userName: z.optional(z.union([
+        z.null(),
+        z.string()
+    ])),
     fullName: z.optional(z.union([
         z.null(),
         z.string()
     ]))
 });
 
-export type UserDtoZodType = z.infer<typeof zUserDto>;
+export type UserCreateDtoZodType = z.infer<typeof zUserCreateDto>;
 
-export const zUserRoles = z.enum(['Admin']);
+export const zUserListItemDto = z.object({
+    id: z.string(),
+    userName: z.string(),
+    email: z.optional(z.union([
+        z.null(),
+        z.string()
+    ])),
+    emailConfirmed: z.boolean(),
+    fullName: z.optional(z.union([
+        z.null(),
+        z.string()
+    ])),
+    roles: z.array(z.string()),
+    externalLogins: z.array(z.string()),
+    hasPassword: z.boolean(),
+    twoFactorEnabled: z.boolean(),
+    isLockedOut: z.boolean(),
+    lockoutEnd: z.optional(z.union([
+        z.null(),
+        z.iso.datetime()
+    ]))
+});
 
-export type UserRolesZodType = z.infer<typeof zUserRoles>;
+export type UserListItemDtoZodType = z.infer<typeof zUserListItemDto>;
+
+export const zUserLoginDto = z.object({
+    loginProvider: z.string(),
+    providerKey: z.string(),
+    providerDisplayName: z.optional(z.union([
+        z.null(),
+        z.string()
+    ]))
+});
+
+export type UserLoginDtoZodType = z.infer<typeof zUserLoginDto>;
+
+export const zUserDetailsDto = z.object({
+    phoneNumber: z.optional(z.union([
+        z.null(),
+        z.string()
+    ])),
+    phoneNumberConfirmed: z.boolean(),
+    lockoutEnabled: z.boolean(),
+    accessFailedCount: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+    claims: z.array(zClaimDto),
+    logins: z.array(zUserLoginDto),
+    passkeys: z.array(zPasskeyDto),
+    id: z.string(),
+    userName: z.string(),
+    email: z.optional(z.union([
+        z.null(),
+        z.string()
+    ])),
+    emailConfirmed: z.boolean(),
+    fullName: z.optional(z.union([
+        z.null(),
+        z.string()
+    ])),
+    roles: z.array(z.string()),
+    externalLogins: z.array(z.string()),
+    hasPassword: z.boolean(),
+    twoFactorEnabled: z.boolean(),
+    isLockedOut: z.boolean(),
+    lockoutEnd: z.optional(z.union([
+        z.null(),
+        z.iso.datetime()
+    ]))
+});
+
+export type UserDetailsDtoZodType = z.infer<typeof zUserDetailsDto>;
+
+export const zUserCreatedDto = z.object({
+    user: zUserDetailsDto,
+    passwordLink: zPasswordLinkDto
+});
+
+export type UserCreatedDtoZodType = z.infer<typeof zUserCreatedDto>;
+
+export const zUserUpdateDto = z.object({
+    userName: z.string(),
+    email: z.optional(z.union([
+        z.null(),
+        z.string()
+    ])),
+    emailConfirmed: z.boolean(),
+    fullName: z.optional(z.union([
+        z.null(),
+        z.string()
+    ])),
+    phoneNumber: z.optional(z.union([
+        z.null(),
+        z.string()
+    ])),
+    lockoutEnabled: z.boolean()
+});
+
+export type UserUpdateDtoZodType = z.infer<typeof zUserUpdateDto>;
 
 export const zGetApiUsersData = z.object({
     body: z.optional(z.never()),
@@ -262,11 +440,36 @@ export type GetApiUsersDataZodType = z.infer<typeof zGetApiUsersData>;
 /**
  * OK
  */
-export const zGetApiUsersResponse = z.array(zUserDto).register(z.globalRegistry, {
+export const zGetApiUsersResponse = z.array(zUserListItemDto).register(z.globalRegistry, {
     description: 'OK'
 });
 
 export type GetApiUsersResponseZodType = z.infer<typeof zGetApiUsersResponse>;
+
+export const zPostApiUsersData = z.object({
+    body: zUserCreateDto,
+    path: z.optional(z.never()),
+    query: z.optional(z.never())
+});
+
+export type PostApiUsersDataZodType = z.infer<typeof zPostApiUsersData>;
+
+/**
+ * OK
+ */
+export const zPostApiUsersResponse = zUserCreatedDto;
+
+export type PostApiUsersResponseZodType = z.infer<typeof zPostApiUsersResponse>;
+
+export const zDeleteApiUsersByIdData = z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+        id: z.string()
+    }),
+    query: z.optional(z.never())
+});
+
+export type DeleteApiUsersByIdDataZodType = z.infer<typeof zDeleteApiUsersByIdData>;
 
 export const zGetApiUsersByIdData = z.object({
     body: z.optional(z.never()),
@@ -281,11 +484,118 @@ export type GetApiUsersByIdDataZodType = z.infer<typeof zGetApiUsersByIdData>;
 /**
  * OK
  */
-export const zGetApiUsersByIdResponse = zUserDto;
+export const zGetApiUsersByIdResponse = zUserDetailsDto;
 
 export type GetApiUsersByIdResponseZodType = z.infer<typeof zGetApiUsersByIdResponse>;
 
-export const zGetApiUsersByIdRolesData = z.object({
+export const zPutApiUsersByIdData = z.object({
+    body: zUserUpdateDto,
+    path: z.object({
+        id: z.string()
+    }),
+    query: z.optional(z.never())
+});
+
+export type PutApiUsersByIdDataZodType = z.infer<typeof zPutApiUsersByIdData>;
+
+/**
+ * OK
+ */
+export const zPutApiUsersByIdResponse = zUserDetailsDto;
+
+export type PutApiUsersByIdResponseZodType = z.infer<typeof zPutApiUsersByIdResponse>;
+
+export const zDeleteApiUsersByIdRolesByRoleData = z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+        id: z.string(),
+        role: z.string()
+    }),
+    query: z.optional(z.never())
+});
+
+export type DeleteApiUsersByIdRolesByRoleDataZodType = z.infer<typeof zDeleteApiUsersByIdRolesByRoleData>;
+
+/**
+ * OK
+ */
+export const zDeleteApiUsersByIdRolesByRoleResponse = zUserDetailsDto;
+
+export type DeleteApiUsersByIdRolesByRoleResponseZodType = z.infer<typeof zDeleteApiUsersByIdRolesByRoleResponse>;
+
+export const zPutApiUsersByIdRolesByRoleData = z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+        id: z.string(),
+        role: z.string()
+    }),
+    query: z.optional(z.never())
+});
+
+export type PutApiUsersByIdRolesByRoleDataZodType = z.infer<typeof zPutApiUsersByIdRolesByRoleData>;
+
+/**
+ * OK
+ */
+export const zPutApiUsersByIdRolesByRoleResponse = zUserDetailsDto;
+
+export type PutApiUsersByIdRolesByRoleResponseZodType = z.infer<typeof zPutApiUsersByIdRolesByRoleResponse>;
+
+export const zDeleteApiUsersByIdClaimsData = z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+        id: z.string()
+    }),
+    query: z.optional(z.object({
+        type: z.optional(z.string()),
+        value: z.optional(z.string())
+    }))
+});
+
+export type DeleteApiUsersByIdClaimsDataZodType = z.infer<typeof zDeleteApiUsersByIdClaimsData>;
+
+/**
+ * OK
+ */
+export const zDeleteApiUsersByIdClaimsResponse = zUserDetailsDto;
+
+export type DeleteApiUsersByIdClaimsResponseZodType = z.infer<typeof zDeleteApiUsersByIdClaimsResponse>;
+
+export const zPostApiUsersByIdClaimsData = z.object({
+    body: zClaimDto,
+    path: z.object({
+        id: z.string()
+    }),
+    query: z.optional(z.never())
+});
+
+export type PostApiUsersByIdClaimsDataZodType = z.infer<typeof zPostApiUsersByIdClaimsData>;
+
+/**
+ * OK
+ */
+export const zPostApiUsersByIdClaimsResponse = zUserDetailsDto;
+
+export type PostApiUsersByIdClaimsResponseZodType = z.infer<typeof zPostApiUsersByIdClaimsResponse>;
+
+export const zPostApiUsersByIdLockData = z.object({
+    body: zLockUserDto,
+    path: z.object({
+        id: z.string()
+    }),
+    query: z.optional(z.never())
+});
+
+export type PostApiUsersByIdLockDataZodType = z.infer<typeof zPostApiUsersByIdLockData>;
+
+/**
+ * OK
+ */
+export const zPostApiUsersByIdLockResponse = zUserDetailsDto;
+
+export type PostApiUsersByIdLockResponseZodType = z.infer<typeof zPostApiUsersByIdLockResponse>;
+
+export const zPostApiUsersByIdUnlockData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         id: z.string()
@@ -293,28 +603,162 @@ export const zGetApiUsersByIdRolesData = z.object({
     query: z.optional(z.never())
 });
 
-export type GetApiUsersByIdRolesDataZodType = z.infer<typeof zGetApiUsersByIdRolesData>;
+export type PostApiUsersByIdUnlockDataZodType = z.infer<typeof zPostApiUsersByIdUnlockData>;
 
 /**
  * OK
  */
-export const zGetApiUsersByIdRolesResponse = z.array(z.string()).register(z.globalRegistry, {
-    description: 'OK'
+export const zPostApiUsersByIdUnlockResponse = zUserDetailsDto;
+
+export type PostApiUsersByIdUnlockResponseZodType = z.infer<typeof zPostApiUsersByIdUnlockResponse>;
+
+export const zPostApiUsersByIdReset2FaData = z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+        id: z.string()
+    }),
+    query: z.optional(z.never())
 });
 
-export type GetApiUsersByIdRolesResponseZodType = z.infer<typeof zGetApiUsersByIdRolesResponse>;
+export type PostApiUsersByIdReset2FaDataZodType = z.infer<typeof zPostApiUsersByIdReset2FaData>;
 
-export const zPutApiUsersByIdRolesData = z.object({
+/**
+ * OK
+ */
+export const zPostApiUsersByIdReset2FaResponse = zUserDetailsDto;
+
+export type PostApiUsersByIdReset2FaResponseZodType = z.infer<typeof zPostApiUsersByIdReset2FaResponse>;
+
+export const zDeleteApiUsersByIdLoginsData = z.object({
     body: z.optional(z.never()),
     path: z.object({
         id: z.string()
     }),
     query: z.optional(z.object({
-        role: z.optional(zUserRoles)
+        provider: z.optional(z.string()),
+        key: z.optional(z.string())
     }))
 });
 
-export type PutApiUsersByIdRolesDataZodType = z.infer<typeof zPutApiUsersByIdRolesData>;
+export type DeleteApiUsersByIdLoginsDataZodType = z.infer<typeof zDeleteApiUsersByIdLoginsData>;
+
+/**
+ * OK
+ */
+export const zDeleteApiUsersByIdLoginsResponse = zUserDetailsDto;
+
+export type DeleteApiUsersByIdLoginsResponseZodType = z.infer<typeof zDeleteApiUsersByIdLoginsResponse>;
+
+export const zDeleteApiUsersByIdPasskeysByCredentialIdData = z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+        id: z.string(),
+        credentialId: z.string()
+    }),
+    query: z.optional(z.never())
+});
+
+export type DeleteApiUsersByIdPasskeysByCredentialIdDataZodType = z.infer<typeof zDeleteApiUsersByIdPasskeysByCredentialIdData>;
+
+/**
+ * OK
+ */
+export const zDeleteApiUsersByIdPasskeysByCredentialIdResponse = zUserDetailsDto;
+
+export type DeleteApiUsersByIdPasskeysByCredentialIdResponseZodType = z.infer<typeof zDeleteApiUsersByIdPasskeysByCredentialIdResponse>;
+
+export const zPostApiUsersByIdSignOutEverywhereData = z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+        id: z.string()
+    }),
+    query: z.optional(z.never())
+});
+
+export type PostApiUsersByIdSignOutEverywhereDataZodType = z.infer<typeof zPostApiUsersByIdSignOutEverywhereData>;
+
+/**
+ * OK
+ */
+export const zPostApiUsersByIdSignOutEverywhereResponse = zUserDetailsDto;
+
+export type PostApiUsersByIdSignOutEverywhereResponseZodType = z.infer<typeof zPostApiUsersByIdSignOutEverywhereResponse>;
+
+export const zPostApiUsersByIdPasswordLinkData = z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+        id: z.string()
+    }),
+    query: z.optional(z.never())
+});
+
+export type PostApiUsersByIdPasswordLinkDataZodType = z.infer<typeof zPostApiUsersByIdPasswordLinkData>;
+
+/**
+ * OK
+ */
+export const zPostApiUsersByIdPasswordLinkResponse = zPasswordLinkDto;
+
+export type PostApiUsersByIdPasswordLinkResponseZodType = z.infer<typeof zPostApiUsersByIdPasswordLinkResponse>;
+
+export const zGetApiRolesData = z.object({
+    body: z.optional(z.never()),
+    path: z.optional(z.never()),
+    query: z.optional(z.never())
+});
+
+export type GetApiRolesDataZodType = z.infer<typeof zGetApiRolesData>;
+
+/**
+ * OK
+ */
+export const zGetApiRolesResponse = z.array(zRoleDto).register(z.globalRegistry, {
+    description: 'OK'
+});
+
+export type GetApiRolesResponseZodType = z.infer<typeof zGetApiRolesResponse>;
+
+export const zPostApiRolesData = z.object({
+    body: zRoleNameDto,
+    path: z.optional(z.never()),
+    query: z.optional(z.never())
+});
+
+export type PostApiRolesDataZodType = z.infer<typeof zPostApiRolesData>;
+
+/**
+ * OK
+ */
+export const zPostApiRolesResponse = zRoleDto;
+
+export type PostApiRolesResponseZodType = z.infer<typeof zPostApiRolesResponse>;
+
+export const zDeleteApiRolesByIdData = z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+        id: z.string()
+    }),
+    query: z.optional(z.never())
+});
+
+export type DeleteApiRolesByIdDataZodType = z.infer<typeof zDeleteApiRolesByIdData>;
+
+export const zPutApiRolesByIdData = z.object({
+    body: zRoleNameDto,
+    path: z.object({
+        id: z.string()
+    }),
+    query: z.optional(z.never())
+});
+
+export type PutApiRolesByIdDataZodType = z.infer<typeof zPutApiRolesByIdData>;
+
+/**
+ * OK
+ */
+export const zPutApiRolesByIdResponse = zRoleDto;
+
+export type PutApiRolesByIdResponseZodType = z.infer<typeof zPutApiRolesByIdResponse>;
 
 export const zGetApiIdentityResourcesData = z.object({
     body: z.optional(z.never()),
@@ -378,11 +822,36 @@ export type GetApiClientsDataZodType = z.infer<typeof zGetApiClientsData>;
 /**
  * OK
  */
-export const zGetApiClientsResponse = z.array(zClient).register(z.globalRegistry, {
+export const zGetApiClientsResponse = z.array(zClientSummaryDto).register(z.globalRegistry, {
     description: 'OK'
 });
 
 export type GetApiClientsResponseZodType = z.infer<typeof zGetApiClientsResponse>;
+
+export const zPostApiClientsData = z.object({
+    body: zClientDto,
+    path: z.optional(z.never()),
+    query: z.optional(z.never())
+});
+
+export type PostApiClientsDataZodType = z.infer<typeof zPostApiClientsData>;
+
+/**
+ * OK
+ */
+export const zPostApiClientsResponse = zClientDto;
+
+export type PostApiClientsResponseZodType = z.infer<typeof zPostApiClientsResponse>;
+
+export const zDeleteApiClientsByIdData = z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+        id: z.string()
+    }),
+    query: z.optional(z.never())
+});
+
+export type DeleteApiClientsByIdDataZodType = z.infer<typeof zDeleteApiClientsByIdData>;
 
 export const zGetApiClientsByIdData = z.object({
     body: z.optional(z.never()),
@@ -397,26 +866,90 @@ export type GetApiClientsByIdDataZodType = z.infer<typeof zGetApiClientsByIdData
 /**
  * OK
  */
-export const zGetApiClientsByIdResponse = zClient;
+export const zGetApiClientsByIdResponse = zClientDto;
 
 export type GetApiClientsByIdResponseZodType = z.infer<typeof zGetApiClientsByIdResponse>;
 
-export const zPutApiClientsByIdRedirecturlsData = z.object({
-    body: zClientUrlPatch,
+export const zPutApiClientsByIdData = z.object({
+    body: zClientDto,
     path: z.object({
         id: z.string()
     }),
     query: z.optional(z.never())
 });
 
-export type PutApiClientsByIdRedirecturlsDataZodType = z.infer<typeof zPutApiClientsByIdRedirecturlsData>;
+export type PutApiClientsByIdDataZodType = z.infer<typeof zPutApiClientsByIdData>;
 
 /**
  * OK
  */
-export const zPutApiClientsByIdRedirecturlsResponse = zClient;
+export const zPutApiClientsByIdResponse = zClientDto;
 
-export type PutApiClientsByIdRedirecturlsResponseZodType = z.infer<typeof zPutApiClientsByIdRedirecturlsResponse>;
+export type PutApiClientsByIdResponseZodType = z.infer<typeof zPutApiClientsByIdResponse>;
+
+export const zGetApiClientsByIdSecretsData = z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+        id: z.string()
+    }),
+    query: z.optional(z.never())
+});
+
+export type GetApiClientsByIdSecretsDataZodType = z.infer<typeof zGetApiClientsByIdSecretsData>;
+
+/**
+ * OK
+ */
+export const zGetApiClientsByIdSecretsResponse = z.array(zClientSecretDto).register(z.globalRegistry, {
+    description: 'OK'
+});
+
+export type GetApiClientsByIdSecretsResponseZodType = z.infer<typeof zGetApiClientsByIdSecretsResponse>;
+
+export const zPostApiClientsByIdSecretsData = z.object({
+    body: zClientSecretCreateDto,
+    path: z.object({
+        id: z.string()
+    }),
+    query: z.optional(z.never())
+});
+
+export type PostApiClientsByIdSecretsDataZodType = z.infer<typeof zPostApiClientsByIdSecretsData>;
+
+/**
+ * OK
+ */
+export const zPostApiClientsByIdSecretsResponse = zClientSecretCreatedDto;
+
+export type PostApiClientsByIdSecretsResponseZodType = z.infer<typeof zPostApiClientsByIdSecretsResponse>;
+
+export const zDeleteApiClientsByIdSecretsBySecretIdData = z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+        id: z.string(),
+        secretId: z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' })
+    }),
+    query: z.optional(z.never())
+});
+
+export type DeleteApiClientsByIdSecretsBySecretIdDataZodType = z.infer<typeof zDeleteApiClientsByIdSecretsBySecretIdData>;
+
+export const zGetApiScopesData = z.object({
+    body: z.optional(z.never()),
+    path: z.optional(z.never()),
+    query: z.optional(z.never())
+});
+
+export type GetApiScopesDataZodType = z.infer<typeof zGetApiScopesData>;
+
+/**
+ * OK
+ */
+export const zGetApiScopesResponse = z.array(zScopeDto).register(z.globalRegistry, {
+    description: 'OK'
+});
+
+export type GetApiScopesResponseZodType = z.infer<typeof zGetApiScopesResponse>;
 
 export const zGetApiApiResourcesData = z.object({
     body: z.optional(z.never()),

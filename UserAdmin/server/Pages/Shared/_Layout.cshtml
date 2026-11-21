@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg" href="/icon.svg" sizes="32x32">
-    <title>User Admin</title>
+    <title>@(ViewData["Title"] is string t && t.Length > 0 ? $"{t} - User Admin" : "User Admin")</title>
     <link rel="stylesheet" href="~/site.css" asp-append-version="true" />
 </head>
 <body>
@@ -15,12 +15,9 @@
             </a>
             
             <nav class="navbar-nav">
-                <a href="/Manager">
-                    <span>Manager</span>
-                </a>
-                <a href="/Permissions">
-                    <span>Permissions</span>
-                </a>
+                <a asp-page="/Users">Users</a>
+                <a asp-page="/Roles">Roles</a>
+                <a asp-page="/Clients">Clients</a>
                 <partial name="_LoginPartial" />
 
             </nav>

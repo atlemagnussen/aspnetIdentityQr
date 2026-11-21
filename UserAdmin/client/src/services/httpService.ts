@@ -23,7 +23,7 @@ export default class HttpService {
    * @param {any} data - payload
    * @returns {Promise}
    */
-  post<T>(urlPath: string, data: object) {
+  post<T>(urlPath: string, data: object = {}) {
     const req = this.createRequest(urlPath, "post", jsonContentType, data)
     return this.http<T>(req)
   }
@@ -38,9 +38,9 @@ export default class HttpService {
   /**
    * @param {string} urlPath - only path and not baseurl/host
    */
-  delete(urlPath: string) {
+  delete<T = void>(urlPath: string) {
     const req = this.createRequest(urlPath, "delete")
-    return this.http(req)
+    return this.http<T>(req)
   }
 
   /**
@@ -111,13 +111,30 @@ async function resHandler(res: Response) {
     let errorFetchMsg = "Server returned error"
 
     if (res.status == 401) {
-      errorFetchMsg = "Status 401, token might be expired"
-
+      errorFetchMsg = "Your session has expired. Reload the page to sign in again."
+    } else if (res.status == 403) {
+      errorFetchMsg = "You don't have access to this (Admin role required)."
     } else {
-      errorFetchMsg = await res.text()
+      errorFetchMsg = await problemMessage(res)
     }
     console.log(errorFetchMsg)
     throw new HttpServiceError(errorFetchMsg, res.status)
+  }
+}
+
+/** ProblemDetails (application/problem+json) -> its detail/title, otherwise the raw text */
+async function problemMessage(res: Response) {
+  const text = await res.text()
+  try {
+    const problem = JSON.parse(text)
+    if (problem?.errors && typeof problem.errors === "object") {
+      // model validation errors: { field: [messages] }
+      const messages = Object.values(problem.errors as Record<string, string[]>).flat()
+      if (messages.length) return messages.join(" ")
+    }
+    return problem?.detail || problem?.title || text || `${res.status} ${res.statusText}`
+  } catch {
+    return text || `${res.status} ${res.statusText}`
   }
 }
 

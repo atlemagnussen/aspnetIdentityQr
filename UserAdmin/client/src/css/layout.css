@@ -69,6 +69,15 @@ main {
     align-items: center;
     justify-content: center;
 }
+/* Users / Roles / Clients pages: full width, top aligned (not centered like the landing page) */
+.centered-content:has(> .admin-page) {
+    align-items: flex-start;
+}
+.admin-page {
+    width: min(80rem, 100%);
+    padding: var(--wa-space-s);
+}
+
 footer {
     grid-area: footer;
     display: flex;

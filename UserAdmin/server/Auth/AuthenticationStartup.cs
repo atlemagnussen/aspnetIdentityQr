@@ -1,27 +1,68 @@
 using AspAuth.Lib.Models;
 using Duende.IdentityModel;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace UserAdmin.Auth;
 
 public static class AuthenticationStartup
 {
-    public static void AddAuthentication(this WebApplicationBuilder builder, string authServer, string authClient)
+    /// <summary>
+    /// Own cookie scheme name (not Identity.Application): UserAdmin shares the Data Protection key ring with
+    /// the ID server (needed for password reset tokens), and the scheme name is part of the cookie protector
+    /// purpose. A distinct name means an ID server session cookie can never be accepted here.
+    /// </summary>
+    public const string CookieScheme = "UserAdmin";
+
+    /// <summary>Challenges API calls with the cookie handler (plain 401/403), pages with OIDC (redirect to the ID server).</summary>
+    private const string ChallengeScheme = "UserAdmin.Challenge";
+
+    private static bool IsApi(HttpRequest request) => request.Path.StartsWithSegments("/api");
+
+    public static void AddAuthentication(this WebApplicationBuilder builder, UserAdminOptions adminOptions)
     {
+        var authServer = adminOptions.AuthServer;
+        var authClient = adminOptions.AuthClient;
+
         builder.Services.AddAuthentication(options =>
         {
-            options.DefaultScheme = IdentityConstants.ApplicationScheme;
+            options.DefaultScheme = CookieScheme;
             //options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
             //options.DefaultChallengeScheme = IdentityConstants.ExternalScheme; 
             //options.DefaultScheme = "Cookies"; // The default authentication scheme for interactive users
-            options.DefaultChallengeScheme = "oidc"; // The scheme used to challenge unauthenticated users
+            options.DefaultChallengeScheme = ChallengeScheme;
         })
-        .AddCookie(IdentityConstants.ApplicationScheme, options =>
+        .AddPolicyScheme(ChallengeScheme, null, options =>
         {
+            options.ForwardDefaultSelector = context => IsApi(context.Request) ? CookieScheme : "oidc";
+        })
+        .AddCookie(CookieScheme, options =>
+        {
+            options.Cookie.Name = ".UserAdmin.Auth";
+            options.Cookie.SameSite = SameSiteMode.Lax;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            options.Cookie.HttpOnly = true;
             options.AccessDeniedPath = "/AccessDenied";
-            options.ExpireTimeSpan = TimeSpan.FromDays(14); 
+            options.ExpireTimeSpan = TimeSpan.FromDays(14);
             options.SlidingExpiration = true;
+
+            // API calls get status codes, not HTML redirects
+            options.Events.OnRedirectToLogin = context =>
+            {
+                if (IsApi(context.Request))
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                else
+                    context.Response.Redirect(context.RedirectUri);
+                return Task.CompletedTask;
+            };
+            options.Events.OnRedirectToAccessDenied = context =>
+            {
+                if (IsApi(context.Request))
+                    context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                else
+                    context.Response.Redirect(context.RedirectUri);
+                return Task.CompletedTask;
+            };
         })
         .AddOpenIdConnect("oidc", options =>
         {

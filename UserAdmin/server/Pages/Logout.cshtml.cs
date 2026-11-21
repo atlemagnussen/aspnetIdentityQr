@@ -19,14 +19,14 @@ public class LogoutModel : PageModel
 
     public async Task<IActionResult> OnGetAsync()
     {
-        await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+        await HttpContext.SignOutAsync(UserAdmin.Auth.AuthenticationStartup.CookieScheme);
         _logger.LogInformation("User logged out.");
 
         return LocalRedirect("/");
     }
     public async Task<IActionResult> OnPost(string returnUrl = null)
     {
-        await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+        await HttpContext.SignOutAsync(UserAdmin.Auth.AuthenticationStartup.CookieScheme);
         _logger.LogInformation("User logged out.");
         if (returnUrl != null)
         {

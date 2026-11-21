@@ -25,12 +25,13 @@ builder.Services.AddProblemDetails(configure =>
     };
 });
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.ConfigureCookies();
 
-var authServer = Environment.GetEnvironmentVariable("AUTH_SERVER") ?? "https://id.logout.work";
-var authClient = Environment.GetEnvironmentVariable("AUTH_CLIENT") ?? "web";
+var adminOptions = new UserAdminOptions(
+    AuthServer: Environment.GetEnvironmentVariable("AUTH_SERVER") ?? "https://id.logout.work",
+    AuthClient: Environment.GetEnvironmentVariable("AUTH_CLIENT") ?? "web");
+builder.Services.AddSingleton(adminOptions);
 
-builder.AddAuthentication(authServer, authClient);
+builder.AddAuthentication(adminOptions);
 builder.AddPersistence();
 builder.AddApi();
 builder.Services.AddOpsHealthChecks();

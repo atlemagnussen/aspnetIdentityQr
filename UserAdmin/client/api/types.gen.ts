@@ -4,7 +4,10 @@ export type ClientOptions = {
     baseUrl: 'http://localhost:5057/' | (string & {});
 };
 
-export type AccessTokenType = number;
+export enum AccessTokenType {
+    JWT = 'Jwt',
+    REFERENCE = 'Reference'
+}
 
 export type ApiResource = {
     requireResourceIndicator?: boolean;
@@ -22,79 +25,108 @@ export type ApiResource = {
     };
 };
 
-export type Client = {
-    enabled?: boolean;
-    clientId?: string;
-    protocolType?: string;
-    clientSecrets?: Array<Secret>;
-    requireClientSecret?: boolean;
+export type ClaimDto = {
+    type: string;
+    value: string;
+};
+
+export type ClientClaimDto = {
+    type: string;
+    value: string;
+};
+
+export type ClientDto = {
+    clientId: string;
     clientName?: null | string;
     description?: null | string;
     clientUri?: null | string;
     logoUri?: null | string;
-    requireConsent?: boolean;
-    allowRememberConsent?: boolean;
-    allowedGrantTypes?: Array<string>;
-    requirePkce?: boolean;
-    allowPlainTextPkce?: boolean;
-    requireRequestObject?: boolean;
-    allowAccessTokensViaBrowser?: boolean;
-    requireDPoP?: boolean;
-    dPoPValidationMode?: DPoPTokenExpirationValidationMode;
-    dPoPClockSkew?: string;
-    redirectUris?: Array<string>;
-    postLogoutRedirectUris?: Array<string>;
+    enabled: boolean;
+    protocolType: string;
+    allowedGrantTypes: Array<string>;
+    requireClientSecret: boolean;
+    requirePkce: boolean;
+    allowPlainTextPkce: boolean;
+    requireRequestObject: boolean;
+    requireDPoP: boolean;
+    requirePushedAuthorization: boolean;
+    allowAccessTokensViaBrowser: boolean;
+    allowOfflineAccess: boolean;
+    enableLocalLogin: boolean;
+    identityProviderRestrictions: Array<string>;
+    requireConsent: boolean;
+    allowRememberConsent: boolean;
+    consentLifetime?: null | number;
+    redirectUris: Array<string>;
+    postLogoutRedirectUris: Array<string>;
+    allowedCorsOrigins: Array<string>;
     frontChannelLogoutUri?: null | string;
-    frontChannelLogoutSessionRequired?: boolean;
+    frontChannelLogoutSessionRequired: boolean;
     backChannelLogoutUri?: null | string;
-    backChannelLogoutSessionRequired?: boolean;
-    allowOfflineAccess?: boolean;
-    allowedScopes?: Array<string>;
-    alwaysIncludeUserClaimsInIdToken?: boolean;
-    identityTokenLifetime?: number | string;
-    allowedIdentityTokenSigningAlgorithms?: Array<string>;
-    accessTokenLifetime?: number | string;
-    authorizationCodeLifetime?: number | string;
-    absoluteRefreshTokenLifetime?: number | string;
-    slidingRefreshTokenLifetime?: number | string;
-    consentLifetime?: null | number | string;
-    pushedAuthorizationLifetime?: null | number | string;
-    requirePushedAuthorization?: boolean;
-    refreshTokenUsage?: TokenUsage;
-    updateAccessTokenClaimsOnRefresh?: boolean;
-    refreshTokenExpiration?: TokenExpiration;
-    accessTokenType?: AccessTokenType;
-    enableLocalLogin?: boolean;
-    identityProviderRestrictions?: Array<string>;
-    includeJwtId?: boolean;
-    claims?: Array<ClientClaim>;
-    alwaysSendClientClaims?: boolean;
+    backChannelLogoutSessionRequired: boolean;
+    initiateLoginUri?: null | string;
+    allowedScopes: Array<string>;
+    accessTokenType: AccessTokenType;
+    accessTokenLifetime: number;
+    identityTokenLifetime: number;
+    authorizationCodeLifetime: number;
+    absoluteRefreshTokenLifetime: number;
+    slidingRefreshTokenLifetime: number;
+    refreshTokenUsage: TokenUsage;
+    refreshTokenExpiration: TokenExpiration;
+    updateAccessTokenClaimsOnRefresh: boolean;
+    includeJwtId: boolean;
+    alwaysIncludeUserClaimsInIdToken: boolean;
+    userSsoLifetime?: null | number;
+    coordinateLifetimeWithUserSession: boolean;
+    allowedIdentityTokenSigningAlgorithms: Array<string>;
+    claims: Array<ClientClaimDto>;
+    alwaysSendClientClaims: boolean;
     clientClaimsPrefix?: null | string;
     pairWiseSubjectSalt?: null | string;
-    userSsoLifetime?: null | number | string;
-    userCodeType?: null | string;
-    deviceCodeLifetime?: number | string;
-    cibaLifetime?: null | number | string;
-    pollingInterval?: null | number | string;
-    coordinateLifetimeWithUserSession?: null | boolean;
-    allowedCorsOrigins?: Array<string>;
-    initiateLoginUri?: null | string;
-    properties?: {
-        [key: string]: string;
-    };
+    properties: Array<ClientPropertyDto>;
+    created?: null | string;
+    updated?: null | string;
+    lastAccessed?: null | string;
+    nonEditable?: boolean;
+    isProtected?: boolean;
 };
 
-export type ClientClaim = {
-    type?: string;
-    value?: string;
-    valueType?: string;
+export type ClientPropertyDto = {
+    key: string;
+    value: string;
 };
 
-export type ClientUrlPatch = {
-    url: string;
+export type ClientSecretCreatedDto = {
+    secret: ClientSecretDto;
+    value: string;
 };
 
-export type DPoPTokenExpirationValidationMode = number;
+export type ClientSecretCreateDto = {
+    description?: null | string;
+    expiration?: null | string;
+};
+
+export type ClientSecretDto = {
+    id: number;
+    description?: null | string;
+    type: string;
+    expiration?: null | string;
+    created: string;
+};
+
+export type ClientSummaryDto = {
+    clientId: string;
+    clientName?: null | string;
+    enabled: boolean;
+    allowedGrantTypes: Array<string>;
+    requireClientSecret: boolean;
+    secretCount: number;
+    redirectUriCount: number;
+    allowedScopeCount: number;
+    lastAccessed?: null | string;
+    isProtected: boolean;
+};
 
 export type IdentityProvider = {
     scheme?: string;
@@ -120,6 +152,39 @@ export type IdentityResource = {
     };
 };
 
+export type LockUserDto = {
+    until?: null | string;
+};
+
+export type PasskeyDto = {
+    credentialId: string;
+    name?: null | string;
+    createdAt: string;
+};
+
+export type PasswordLinkDto = {
+    url: string;
+    expiresAt: string;
+};
+
+export type RoleDto = {
+    id: string;
+    name: string;
+    userCount: number;
+    isSystem: boolean;
+};
+
+export type RoleNameDto = {
+    name: string;
+};
+
+export type ScopeDto = {
+    name: string;
+    displayName?: null | string;
+    kind: string;
+    enabled: boolean;
+};
+
 export type Secret = {
     description?: null | string;
     value?: string;
@@ -127,20 +192,76 @@ export type Secret = {
     type?: string;
 };
 
-export type TokenExpiration = number;
+export enum TokenExpiration {
+    SLIDING = 'Sliding',
+    ABSOLUTE = 'Absolute'
+}
 
-export type TokenUsage = number;
+export enum TokenUsage {
+    RE_USE = 'ReUse',
+    ONE_TIME_ONLY = 'OneTimeOnly'
+}
 
-export type UserDto = {
-    id: string;
-    userName: string;
+export type UserCreatedDto = {
+    user: UserDetailsDto;
+    passwordLink: PasswordLinkDto;
+};
+
+export type UserCreateDto = {
     email: string;
+    userName?: null | string;
     fullName?: null | string;
 };
 
-export enum UserRoles {
-    ADMIN = 'Admin'
-}
+export type UserDetailsDto = {
+    phoneNumber?: null | string;
+    phoneNumberConfirmed: boolean;
+    lockoutEnabled: boolean;
+    accessFailedCount: number;
+    claims: Array<ClaimDto>;
+    logins: Array<UserLoginDto>;
+    passkeys: Array<PasskeyDto>;
+    id: string;
+    userName: string;
+    email?: null | string;
+    emailConfirmed: boolean;
+    fullName?: null | string;
+    roles: Array<string>;
+    externalLogins: Array<string>;
+    hasPassword: boolean;
+    twoFactorEnabled: boolean;
+    isLockedOut: boolean;
+    lockoutEnd?: null | string;
+};
+
+export type UserListItemDto = {
+    id: string;
+    userName: string;
+    email?: null | string;
+    emailConfirmed: boolean;
+    fullName?: null | string;
+    roles: Array<string>;
+    externalLogins: Array<string>;
+    hasPassword: boolean;
+    twoFactorEnabled: boolean;
+    isLockedOut: boolean;
+    lockoutEnd?: null | string;
+};
+
+export type UserLoginDto = {
+    loginProvider: string;
+    providerKey: string;
+    providerDisplayName?: null | string;
+};
+
+export type UserUpdateDto = {
+    userName: string;
+    email?: null | string;
+    emailConfirmed: boolean;
+    fullName?: null | string;
+    phoneNumber?: null | string;
+    lockoutEnabled: boolean;
+};
 
 export type GetApiUsersData = {
     body?: never;
@@ -153,10 +274,42 @@ export type GetApiUsersResponses = {
     /**
      * OK
      */
-    200: Array<UserDto>;
+    200: Array<UserListItemDto>;
 };
 
 export type GetApiUsersResponse = GetApiUsersResponses[keyof GetApiUsersResponses];
+
+export type PostApiUsersData = {
+    body: UserCreateDto;
+    path?: never;
+    query?: never;
+    url: '/api/Users';
+};
+
+export type PostApiUsersResponses = {
+    /**
+     * OK
+     */
+    200: UserCreatedDto;
+};
+
+export type PostApiUsersResponse = PostApiUsersResponses[keyof PostApiUsersResponses];
+
+export type DeleteApiUsersByIdData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/Users/{id}';
+};
+
+export type DeleteApiUsersByIdResponses = {
+    /**
+     * OK
+     */
+    200: unknown;
+};
 
 export type GetApiUsersByIdData = {
     body?: never;
@@ -171,46 +324,301 @@ export type GetApiUsersByIdResponses = {
     /**
      * OK
      */
-    200: UserDto;
+    200: UserDetailsDto;
 };
 
 export type GetApiUsersByIdResponse = GetApiUsersByIdResponses[keyof GetApiUsersByIdResponses];
 
-export type GetApiUsersByIdRolesData = {
-    body?: never;
+export type PutApiUsersByIdData = {
+    body: UserUpdateDto;
     path: {
         id: string;
     };
     query?: never;
-    url: '/api/Users/{id}/roles';
+    url: '/api/Users/{id}';
 };
 
-export type GetApiUsersByIdRolesResponses = {
+export type PutApiUsersByIdResponses = {
     /**
      * OK
      */
-    200: Array<string>;
+    200: UserDetailsDto;
 };
 
-export type GetApiUsersByIdRolesResponse = GetApiUsersByIdRolesResponses[keyof GetApiUsersByIdRolesResponses];
+export type PutApiUsersByIdResponse = PutApiUsersByIdResponses[keyof PutApiUsersByIdResponses];
 
-export type PutApiUsersByIdRolesData = {
+export type DeleteApiUsersByIdRolesByRoleData = {
+    body?: never;
+    path: {
+        id: string;
+        role: string;
+    };
+    query?: never;
+    url: '/api/Users/{id}/roles/{role}';
+};
+
+export type DeleteApiUsersByIdRolesByRoleResponses = {
+    /**
+     * OK
+     */
+    200: UserDetailsDto;
+};
+
+export type DeleteApiUsersByIdRolesByRoleResponse = DeleteApiUsersByIdRolesByRoleResponses[keyof DeleteApiUsersByIdRolesByRoleResponses];
+
+export type PutApiUsersByIdRolesByRoleData = {
+    body?: never;
+    path: {
+        id: string;
+        role: string;
+    };
+    query?: never;
+    url: '/api/Users/{id}/roles/{role}';
+};
+
+export type PutApiUsersByIdRolesByRoleResponses = {
+    /**
+     * OK
+     */
+    200: UserDetailsDto;
+};
+
+export type PutApiUsersByIdRolesByRoleResponse = PutApiUsersByIdRolesByRoleResponses[keyof PutApiUsersByIdRolesByRoleResponses];
+
+export type DeleteApiUsersByIdClaimsData = {
     body?: never;
     path: {
         id: string;
     };
     query?: {
-        role?: UserRoles;
+        type?: string;
+        value?: string;
     };
-    url: '/api/Users/{id}/roles';
+    url: '/api/Users/{id}/claims';
 };
 
-export type PutApiUsersByIdRolesResponses = {
+export type DeleteApiUsersByIdClaimsResponses = {
+    /**
+     * OK
+     */
+    200: UserDetailsDto;
+};
+
+export type DeleteApiUsersByIdClaimsResponse = DeleteApiUsersByIdClaimsResponses[keyof DeleteApiUsersByIdClaimsResponses];
+
+export type PostApiUsersByIdClaimsData = {
+    body: ClaimDto;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/Users/{id}/claims';
+};
+
+export type PostApiUsersByIdClaimsResponses = {
+    /**
+     * OK
+     */
+    200: UserDetailsDto;
+};
+
+export type PostApiUsersByIdClaimsResponse = PostApiUsersByIdClaimsResponses[keyof PostApiUsersByIdClaimsResponses];
+
+export type PostApiUsersByIdLockData = {
+    body: LockUserDto;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/Users/{id}/lock';
+};
+
+export type PostApiUsersByIdLockResponses = {
+    /**
+     * OK
+     */
+    200: UserDetailsDto;
+};
+
+export type PostApiUsersByIdLockResponse = PostApiUsersByIdLockResponses[keyof PostApiUsersByIdLockResponses];
+
+export type PostApiUsersByIdUnlockData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/Users/{id}/unlock';
+};
+
+export type PostApiUsersByIdUnlockResponses = {
+    /**
+     * OK
+     */
+    200: UserDetailsDto;
+};
+
+export type PostApiUsersByIdUnlockResponse = PostApiUsersByIdUnlockResponses[keyof PostApiUsersByIdUnlockResponses];
+
+export type PostApiUsersByIdReset2FaData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/Users/{id}/reset-2fa';
+};
+
+export type PostApiUsersByIdReset2FaResponses = {
+    /**
+     * OK
+     */
+    200: UserDetailsDto;
+};
+
+export type PostApiUsersByIdReset2FaResponse = PostApiUsersByIdReset2FaResponses[keyof PostApiUsersByIdReset2FaResponses];
+
+export type DeleteApiUsersByIdLoginsData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: {
+        provider?: string;
+        key?: string;
+    };
+    url: '/api/Users/{id}/logins';
+};
+
+export type DeleteApiUsersByIdLoginsResponses = {
+    /**
+     * OK
+     */
+    200: UserDetailsDto;
+};
+
+export type DeleteApiUsersByIdLoginsResponse = DeleteApiUsersByIdLoginsResponses[keyof DeleteApiUsersByIdLoginsResponses];
+
+export type DeleteApiUsersByIdPasskeysByCredentialIdData = {
+    body?: never;
+    path: {
+        id: string;
+        credentialId: string;
+    };
+    query?: never;
+    url: '/api/Users/{id}/passkeys/{credentialId}';
+};
+
+export type DeleteApiUsersByIdPasskeysByCredentialIdResponses = {
+    /**
+     * OK
+     */
+    200: UserDetailsDto;
+};
+
+export type DeleteApiUsersByIdPasskeysByCredentialIdResponse = DeleteApiUsersByIdPasskeysByCredentialIdResponses[keyof DeleteApiUsersByIdPasskeysByCredentialIdResponses];
+
+export type PostApiUsersByIdSignOutEverywhereData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/Users/{id}/sign-out-everywhere';
+};
+
+export type PostApiUsersByIdSignOutEverywhereResponses = {
+    /**
+     * OK
+     */
+    200: UserDetailsDto;
+};
+
+export type PostApiUsersByIdSignOutEverywhereResponse = PostApiUsersByIdSignOutEverywhereResponses[keyof PostApiUsersByIdSignOutEverywhereResponses];
+
+export type PostApiUsersByIdPasswordLinkData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/Users/{id}/password-link';
+};
+
+export type PostApiUsersByIdPasswordLinkResponses = {
+    /**
+     * OK
+     */
+    200: PasswordLinkDto;
+};
+
+export type PostApiUsersByIdPasswordLinkResponse = PostApiUsersByIdPasswordLinkResponses[keyof PostApiUsersByIdPasswordLinkResponses];
+
+export type GetApiRolesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/Roles';
+};
+
+export type GetApiRolesResponses = {
+    /**
+     * OK
+     */
+    200: Array<RoleDto>;
+};
+
+export type GetApiRolesResponse = GetApiRolesResponses[keyof GetApiRolesResponses];
+
+export type PostApiRolesData = {
+    body: RoleNameDto;
+    path?: never;
+    query?: never;
+    url: '/api/Roles';
+};
+
+export type PostApiRolesResponses = {
+    /**
+     * OK
+     */
+    200: RoleDto;
+};
+
+export type PostApiRolesResponse = PostApiRolesResponses[keyof PostApiRolesResponses];
+
+export type DeleteApiRolesByIdData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/Roles/{id}';
+};
+
+export type DeleteApiRolesByIdResponses = {
     /**
      * OK
      */
     200: unknown;
 };
+
+export type PutApiRolesByIdData = {
+    body: RoleNameDto;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/Roles/{id}';
+};
+
+export type PutApiRolesByIdResponses = {
+    /**
+     * OK
+     */
+    200: RoleDto;
+};
+
+export type PutApiRolesByIdResponse = PutApiRolesByIdResponses[keyof PutApiRolesByIdResponses];
 
 export type GetApiIdentityResourcesData = {
     body?: never;
@@ -273,10 +681,42 @@ export type GetApiClientsResponses = {
     /**
      * OK
      */
-    200: Array<Client>;
+    200: Array<ClientSummaryDto>;
 };
 
 export type GetApiClientsResponse = GetApiClientsResponses[keyof GetApiClientsResponses];
+
+export type PostApiClientsData = {
+    body: ClientDto;
+    path?: never;
+    query?: never;
+    url: '/api/Clients';
+};
+
+export type PostApiClientsResponses = {
+    /**
+     * OK
+     */
+    200: ClientDto;
+};
+
+export type PostApiClientsResponse = PostApiClientsResponses[keyof PostApiClientsResponses];
+
+export type DeleteApiClientsByIdData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/Clients/{id}';
+};
+
+export type DeleteApiClientsByIdResponses = {
+    /**
+     * OK
+     */
+    200: unknown;
+};
 
 export type GetApiClientsByIdData = {
     body?: never;
@@ -291,28 +731,97 @@ export type GetApiClientsByIdResponses = {
     /**
      * OK
      */
-    200: Client;
+    200: ClientDto;
 };
 
 export type GetApiClientsByIdResponse = GetApiClientsByIdResponses[keyof GetApiClientsByIdResponses];
 
-export type PutApiClientsByIdRedirecturlsData = {
-    body: ClientUrlPatch;
+export type PutApiClientsByIdData = {
+    body: ClientDto;
     path: {
         id: string;
     };
     query?: never;
-    url: '/api/Clients/{id}/redirecturls';
+    url: '/api/Clients/{id}';
 };
 
-export type PutApiClientsByIdRedirecturlsResponses = {
+export type PutApiClientsByIdResponses = {
     /**
      * OK
      */
-    200: Client;
+    200: ClientDto;
 };
 
-export type PutApiClientsByIdRedirecturlsResponse = PutApiClientsByIdRedirecturlsResponses[keyof PutApiClientsByIdRedirecturlsResponses];
+export type PutApiClientsByIdResponse = PutApiClientsByIdResponses[keyof PutApiClientsByIdResponses];
+
+export type GetApiClientsByIdSecretsData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/Clients/{id}/secrets';
+};
+
+export type GetApiClientsByIdSecretsResponses = {
+    /**
+     * OK
+     */
+    200: Array<ClientSecretDto>;
+};
+
+export type GetApiClientsByIdSecretsResponse = GetApiClientsByIdSecretsResponses[keyof GetApiClientsByIdSecretsResponses];
+
+export type PostApiClientsByIdSecretsData = {
+    body: ClientSecretCreateDto;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/Clients/{id}/secrets';
+};
+
+export type PostApiClientsByIdSecretsResponses = {
+    /**
+     * OK
+     */
+    200: ClientSecretCreatedDto;
+};
+
+export type PostApiClientsByIdSecretsResponse = PostApiClientsByIdSecretsResponses[keyof PostApiClientsByIdSecretsResponses];
+
+export type DeleteApiClientsByIdSecretsBySecretIdData = {
+    body?: never;
+    path: {
+        id: string;
+        secretId: number;
+    };
+    query?: never;
+    url: '/api/Clients/{id}/secrets/{secretId}';
+};
+
+export type DeleteApiClientsByIdSecretsBySecretIdResponses = {
+    /**
+     * OK
+     */
+    200: unknown;
+};
+
+export type GetApiScopesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/Scopes';
+};
+
+export type GetApiScopesResponses = {
+    /**
+     * OK
+     */
+    200: Array<ScopeDto>;
+};
+
+export type GetApiScopesResponse = GetApiScopesResponses[keyof GetApiScopesResponses];
 
 export type GetApiApiResourcesData = {
     body?: never;

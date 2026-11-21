@@ -23,7 +23,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UserDTO"
+                    "$ref": "#/components/schemas/UserListItemDto"
                   }
                 }
               },
@@ -31,7 +31,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UserDTO"
+                    "$ref": "#/components/schemas/UserListItemDto"
                   }
                 }
               },
@@ -39,8 +39,55 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UserDTO"
+                    "$ref": "#/components/schemas/UserListItemDto"
                   }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserCreatedDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserCreatedDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserCreatedDto"
                 }
               }
             }
@@ -69,17 +116,186 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserDTO"
+                  "$ref": "#/components/schemas/UserDetailsDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserDTO"
+                  "$ref": "#/components/schemas/UserDetailsDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserDTO"
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Users/{id}/roles/{role}": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "role",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "role",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
                 }
               }
             }
@@ -87,8 +303,177 @@
         }
       }
     },
-    "/api/Users/{id}/roles": {
-      "get": {
+    "/api/Users/{id}/claims": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClaimDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClaimDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClaimDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/{id}/lock": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LockUserDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LockUserDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LockUserDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/{id}/unlock": {
+      "post": {
         "tags": [
           "Users"
         ],
@@ -108,33 +493,65 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
+                  "$ref": "#/components/schemas/UserDetailsDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
+                  "$ref": "#/components/schemas/UserDetailsDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
+                  "$ref": "#/components/schemas/UserDetailsDto"
                 }
               }
             }
           }
         }
-      },
-      "put": {
+      }
+    },
+    "/api/Users/{id}/reset-2fa": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/{id}/logins": {
+      "delete": {
         "tags": [
           "Users"
         ],
@@ -148,10 +565,323 @@
             }
           },
           {
-            "name": "role",
+            "name": "provider",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/UserRoles"
+              "type": "string"
+            }
+          },
+          {
+            "name": "key",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/{id}/passkeys/{credentialId}": {
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "credentialId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/{id}/sign-out-everywhere": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/{id}/password-link": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PasswordLinkDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PasswordLinkDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PasswordLinkDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Roles": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RoleDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RoleDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RoleDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Roles"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleNameDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleNameDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleNameDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Roles/{id}": {
+      "put": {
+        "tags": [
+          "Roles"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleNameDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleNameDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleNameDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Roles"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -290,7 +1020,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Client"
+                    "$ref": "#/components/schemas/ClientSummaryDto"
                   }
                 }
               },
@@ -298,7 +1028,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Client"
+                    "$ref": "#/components/schemas/ClientSummaryDto"
                   }
                 }
               },
@@ -306,8 +1036,55 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Client"
+                    "$ref": "#/components/schemas/ClientSummaryDto"
                   }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Clients"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientDto"
                 }
               }
             }
@@ -336,25 +1113,23 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Client"
+                  "$ref": "#/components/schemas/ClientDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Client"
+                  "$ref": "#/components/schemas/ClientDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Client"
+                  "$ref": "#/components/schemas/ClientDto"
                 }
               }
             }
           }
         }
-      }
-    },
-    "/api/Clients/{id}/redirecturls": {
+      },
       "put": {
         "tags": [
           "Clients"
@@ -373,17 +1148,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ClientUrlPatch"
+                "$ref": "#/components/schemas/ClientDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/ClientUrlPatch"
+                "$ref": "#/components/schemas/ClientDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/ClientUrlPatch"
+                "$ref": "#/components/schemas/ClientDto"
               }
             }
           },
@@ -395,17 +1170,211 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Client"
+                  "$ref": "#/components/schemas/ClientDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Client"
+                  "$ref": "#/components/schemas/ClientDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Client"
+                  "$ref": "#/components/schemas/ClientDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Clients"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Clients/{id}/secrets": {
+      "get": {
+        "tags": [
+          "Clients"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientSecretDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientSecretDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientSecretDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Clients"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientSecretCreateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientSecretCreateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientSecretCreateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientSecretCreatedDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientSecretCreatedDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientSecretCreatedDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Clients/{id}/secrets/{secretId}": {
+      "delete": {
+        "tags": [
+          "Clients"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "secretId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Scopes": {
+      "get": {
+        "tags": [
+          "Scopes"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ScopeDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ScopeDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ScopeDto"
+                  }
                 }
               }
             }
@@ -494,7 +1463,10 @@
   "components": {
     "schemas": {
       "AccessTokenType": {
-        "type": "integer"
+        "enum": [
+          "Jwt",
+          "Reference"
+        ]
       },
       "ApiResource": {
         "type": "object",
@@ -555,26 +1527,81 @@
           }
         }
       },
-      "Client": {
+      "ClaimDto": {
+        "required": [
+          "type",
+          "value"
+        ],
         "type": "object",
         "properties": {
-          "enabled": {
-            "type": "boolean"
+          "type": {
+            "type": "string"
           },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "ClientClaimDto": {
+        "required": [
+          "type",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "ClientDto": {
+        "required": [
+          "clientId",
+          "enabled",
+          "protocolType",
+          "allowedGrantTypes",
+          "requireClientSecret",
+          "requirePkce",
+          "allowPlainTextPkce",
+          "requireRequestObject",
+          "requireDPoP",
+          "requirePushedAuthorization",
+          "allowAccessTokensViaBrowser",
+          "allowOfflineAccess",
+          "enableLocalLogin",
+          "identityProviderRestrictions",
+          "requireConsent",
+          "allowRememberConsent",
+          "redirectUris",
+          "postLogoutRedirectUris",
+          "allowedCorsOrigins",
+          "frontChannelLogoutSessionRequired",
+          "backChannelLogoutSessionRequired",
+          "allowedScopes",
+          "accessTokenType",
+          "accessTokenLifetime",
+          "identityTokenLifetime",
+          "authorizationCodeLifetime",
+          "absoluteRefreshTokenLifetime",
+          "slidingRefreshTokenLifetime",
+          "refreshTokenUsage",
+          "refreshTokenExpiration",
+          "updateAccessTokenClaimsOnRefresh",
+          "includeJwtId",
+          "alwaysIncludeUserClaimsInIdToken",
+          "coordinateLifetimeWithUserSession",
+          "allowedIdentityTokenSigningAlgorithms",
+          "claims",
+          "alwaysSendClientClaims",
+          "properties"
+        ],
+        "type": "object",
+        "properties": {
           "clientId": {
             "type": "string"
-          },
-          "protocolType": {
-            "type": "string"
-          },
-          "clientSecrets": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Secret"
-            }
-          },
-          "requireClientSecret": {
-            "type": "boolean"
           },
           "clientName": {
             "type": [
@@ -600,17 +1627,20 @@
               "string"
             ]
           },
-          "requireConsent": {
+          "enabled": {
             "type": "boolean"
           },
-          "allowRememberConsent": {
-            "type": "boolean"
+          "protocolType": {
+            "type": "string"
           },
           "allowedGrantTypes": {
             "type": "array",
             "items": {
               "type": "string"
             }
+          },
+          "requireClientSecret": {
+            "type": "boolean"
           },
           "requirePkce": {
             "type": "boolean"
@@ -621,18 +1651,39 @@
           "requireRequestObject": {
             "type": "boolean"
           },
-          "allowAccessTokensViaBrowser": {
-            "type": "boolean"
-          },
           "requireDPoP": {
             "type": "boolean"
           },
-          "dPoPValidationMode": {
-            "$ref": "#/components/schemas/DPoPTokenExpirationValidationMode"
+          "requirePushedAuthorization": {
+            "type": "boolean"
           },
-          "dPoPClockSkew": {
-            "pattern": "^-?(\\d+\\.)?\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,7})?$",
-            "type": "string"
+          "allowAccessTokensViaBrowser": {
+            "type": "boolean"
+          },
+          "allowOfflineAccess": {
+            "type": "boolean"
+          },
+          "enableLocalLogin": {
+            "type": "boolean"
+          },
+          "identityProviderRestrictions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "requireConsent": {
+            "type": "boolean"
+          },
+          "allowRememberConsent": {
+            "type": "boolean"
+          },
+          "consentLifetime": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
           },
           "redirectUris": {
             "type": "array",
@@ -641,6 +1692,12 @@
             }
           },
           "postLogoutRedirectUris": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "allowedCorsOrigins": {
             "type": "array",
             "items": {
               "type": "string"
@@ -664,8 +1721,11 @@
           "backChannelLogoutSessionRequired": {
             "type": "boolean"
           },
-          "allowOfflineAccess": {
-            "type": "boolean"
+          "initiateLoginUri": {
+            "type": [
+              "null",
+              "string"
+            ]
           },
           "allowedScopes": {
             "type": "array",
@@ -673,16 +1733,53 @@
               "type": "string"
             }
           },
+          "accessTokenType": {
+            "$ref": "#/components/schemas/AccessTokenType"
+          },
+          "accessTokenLifetime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "identityTokenLifetime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "authorizationCodeLifetime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "absoluteRefreshTokenLifetime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "slidingRefreshTokenLifetime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "refreshTokenUsage": {
+            "$ref": "#/components/schemas/TokenUsage"
+          },
+          "refreshTokenExpiration": {
+            "$ref": "#/components/schemas/TokenExpiration"
+          },
+          "updateAccessTokenClaimsOnRefresh": {
+            "type": "boolean"
+          },
+          "includeJwtId": {
+            "type": "boolean"
+          },
           "alwaysIncludeUserClaimsInIdToken": {
             "type": "boolean"
           },
-          "identityTokenLifetime": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
+          "userSsoLifetime": {
             "type": [
-              "integer",
-              "string"
+              "null",
+              "integer"
             ],
             "format": "int32"
+          },
+          "coordinateLifetimeWithUserSession": {
+            "type": "boolean"
           },
           "allowedIdentityTokenSigningAlgorithms": {
             "type": "array",
@@ -690,87 +1787,10 @@
               "type": "string"
             }
           },
-          "accessTokenLifetime": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
-            "format": "int32"
-          },
-          "authorizationCodeLifetime": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
-            "format": "int32"
-          },
-          "absoluteRefreshTokenLifetime": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
-            "format": "int32"
-          },
-          "slidingRefreshTokenLifetime": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
-            "format": "int32"
-          },
-          "consentLifetime": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "null",
-              "integer",
-              "string"
-            ],
-            "format": "int32"
-          },
-          "pushedAuthorizationLifetime": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "null",
-              "integer",
-              "string"
-            ],
-            "format": "int32"
-          },
-          "requirePushedAuthorization": {
-            "type": "boolean"
-          },
-          "refreshTokenUsage": {
-            "$ref": "#/components/schemas/TokenUsage"
-          },
-          "updateAccessTokenClaimsOnRefresh": {
-            "type": "boolean"
-          },
-          "refreshTokenExpiration": {
-            "$ref": "#/components/schemas/TokenExpiration"
-          },
-          "accessTokenType": {
-            "$ref": "#/components/schemas/AccessTokenType"
-          },
-          "enableLocalLogin": {
-            "type": "boolean"
-          },
-          "identityProviderRestrictions": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "includeJwtId": {
-            "type": "boolean"
-          },
           "claims": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ClientClaim"
+              "$ref": "#/components/schemas/ClientClaimDto"
             }
           },
           "alwaysSendClientClaims": {
@@ -788,100 +1808,180 @@
               "string"
             ]
           },
-          "userSsoLifetime": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
+          "properties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClientPropertyDto"
+            }
+          },
+          "created": {
             "type": [
               "null",
-              "integer",
               "string"
             ],
-            "format": "int32"
+            "format": "date-time"
           },
-          "userCodeType": {
+          "updated": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "lastAccessed": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "nonEditable": {
+            "type": "boolean"
+          },
+          "isProtected": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ClientPropertyDto": {
+        "required": [
+          "key",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "ClientSecretCreatedDto": {
+        "required": [
+          "secret",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "secret": {
+            "$ref": "#/components/schemas/ClientSecretDto"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "ClientSecretCreateDto": {
+        "type": "object",
+        "properties": {
+          "description": {
             "type": [
               "null",
               "string"
             ]
           },
-          "deviceCodeLifetime": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
-            "format": "int32"
-          },
-          "cibaLifetime": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
+          "expiration": {
             "type": [
               "null",
-              "integer",
               "string"
             ],
+            "format": "date-time"
+          }
+        }
+      },
+      "ClientSecretDto": {
+        "required": [
+          "id",
+          "type",
+          "created"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
             "format": "int32"
           },
-          "pollingInterval": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
+          "description": {
             "type": [
               "null",
-              "integer",
               "string"
-            ],
-            "format": "int32"
-          },
-          "coordinateLifetimeWithUserSession": {
-            "type": [
-              "null",
-              "boolean"
             ]
           },
-          "allowedCorsOrigins": {
+          "type": {
+            "type": "string"
+          },
+          "expiration": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ClientSummaryDto": {
+        "required": [
+          "clientId",
+          "enabled",
+          "allowedGrantTypes",
+          "requireClientSecret",
+          "secretCount",
+          "redirectUriCount",
+          "allowedScopeCount",
+          "isProtected"
+        ],
+        "type": "object",
+        "properties": {
+          "clientId": {
+            "type": "string"
+          },
+          "clientName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "allowedGrantTypes": {
             "type": "array",
             "items": {
               "type": "string"
             }
           },
-          "initiateLoginUri": {
+          "requireClientSecret": {
+            "type": "boolean"
+          },
+          "secretCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "redirectUriCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "allowedScopeCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastAccessed": {
             "type": [
               "null",
               "string"
-            ]
+            ],
+            "format": "date-time"
           },
-          "properties": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+          "isProtected": {
+            "type": "boolean"
           }
         }
-      },
-      "ClientClaim": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string"
-          },
-          "value": {
-            "type": "string"
-          },
-          "valueType": {
-            "type": "string"
-          }
-        }
-      },
-      "ClientUrlPatch": {
-        "required": [
-          "url"
-        ],
-        "type": "object",
-        "properties": {
-          "url": {
-            "type": "string"
-          }
-        }
-      },
-      "DPoPTokenExpirationValidationMode": {
-        "type": "integer"
       },
       "IdentityProvider": {
         "type": "object",
@@ -953,6 +2053,116 @@
           }
         }
       },
+      "LockUserDto": {
+        "type": "object",
+        "properties": {
+          "until": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
+      "PasskeyDto": {
+        "required": [
+          "credentialId",
+          "createdAt"
+        ],
+        "type": "object",
+        "properties": {
+          "credentialId": {
+            "type": "string"
+          },
+          "name": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PasswordLinkDto": {
+        "required": [
+          "url",
+          "expiresAt"
+        ],
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "RoleDto": {
+        "required": [
+          "id",
+          "name",
+          "userCount",
+          "isSystem"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "userCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isSystem": {
+            "type": "boolean"
+          }
+        }
+      },
+      "RoleNameDto": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "ScopeDto": {
+        "required": [
+          "name",
+          "kind",
+          "enabled"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "kind": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
       "Secret": {
         "type": "object",
         "properties": {
@@ -978,16 +2188,169 @@
         }
       },
       "TokenExpiration": {
-        "type": "integer"
+        "enum": [
+          "Sliding",
+          "Absolute"
+        ]
       },
       "TokenUsage": {
-        "type": "integer"
+        "enum": [
+          "ReUse",
+          "OneTimeOnly"
+        ]
       },
-      "UserDTO": {
+      "UserCreatedDto": {
+        "required": [
+          "user",
+          "passwordLink"
+        ],
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/UserDetailsDto"
+          },
+          "passwordLink": {
+            "$ref": "#/components/schemas/PasswordLinkDto"
+          }
+        }
+      },
+      "UserCreateDto": {
+        "required": [
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "userName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "fullName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "UserDetailsDto": {
+        "required": [
+          "phoneNumberConfirmed",
+          "lockoutEnabled",
+          "accessFailedCount",
+          "claims",
+          "logins",
+          "passkeys",
+          "id",
+          "userName",
+          "emailConfirmed",
+          "roles",
+          "externalLogins",
+          "hasPassword",
+          "twoFactorEnabled",
+          "isLockedOut"
+        ],
+        "type": "object",
+        "properties": {
+          "phoneNumber": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "phoneNumberConfirmed": {
+            "type": "boolean"
+          },
+          "lockoutEnabled": {
+            "type": "boolean"
+          },
+          "accessFailedCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "claims": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClaimDto"
+            }
+          },
+          "logins": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserLoginDto"
+            }
+          },
+          "passkeys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PasskeyDto"
+            }
+          },
+          "id": {
+            "type": "string"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "email": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "emailConfirmed": {
+            "type": "boolean"
+          },
+          "fullName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "externalLogins": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "hasPassword": {
+            "type": "boolean"
+          },
+          "twoFactorEnabled": {
+            "type": "boolean"
+          },
+          "isLockedOut": {
+            "type": "boolean"
+          },
+          "lockoutEnd": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
+      "UserListItemDto": {
         "required": [
           "id",
           "userName",
-          "email"
+          "emailConfirmed",
+          "roles",
+          "externalLogins",
+          "hasPassword",
+          "twoFactorEnabled",
+          "isLockedOut"
         ],
         "type": "object",
         "properties": {
@@ -998,9 +2361,64 @@
             "type": "string"
           },
           "email": {
-            "type": "string"
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "emailConfirmed": {
+            "type": "boolean"
           },
           "fullName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "externalLogins": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "hasPassword": {
+            "type": "boolean"
+          },
+          "twoFactorEnabled": {
+            "type": "boolean"
+          },
+          "isLockedOut": {
+            "type": "boolean"
+          },
+          "lockoutEnd": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
+      "UserLoginDto": {
+        "required": [
+          "loginProvider",
+          "providerKey"
+        ],
+        "type": "object",
+        "properties": {
+          "loginProvider": {
+            "type": "string"
+          },
+          "providerKey": {
+            "type": "string"
+          },
+          "providerDisplayName": {
             "type": [
               "null",
               "string"
@@ -1008,16 +2426,51 @@
           }
         }
       },
-      "UserRoles": {
-        "enum": [
-          "Admin"
-        ]
+      "UserUpdateDto": {
+        "required": [
+          "userName",
+          "emailConfirmed",
+          "lockoutEnabled"
+        ],
+        "type": "object",
+        "properties": {
+          "userName": {
+            "type": "string"
+          },
+          "email": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "emailConfirmed": {
+            "type": "boolean"
+          },
+          "fullName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "phoneNumber": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "lockoutEnabled": {
+            "type": "boolean"
+          }
+        }
       }
     }
   },
   "tags": [
     {
       "name": "Users"
+    },
+    {
+      "name": "Roles"
     },
     {
       "name": "IdentityResources"
@@ -1027,6 +2480,9 @@
     },
     {
       "name": "Clients"
+    },
+    {
+      "name": "Scopes"
     },
     {
       "name": "ApiResources"
